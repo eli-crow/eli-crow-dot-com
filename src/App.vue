@@ -219,6 +219,21 @@ a:not(:hover) {
 strong {
   color: var(--text-strong);
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface-0);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--text-weak);  
+  border-radius: 99999px;     
+  border: solid 3px var(--surface-0);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text);  
+}
 </style>
 
 <style scoped>
@@ -407,7 +422,7 @@ strong {
 p {
   line-height: 1.75rem;
   font-size: 18px;
-  opacity: 0.5;
+  opacity: 0.65;
 }
 
 hr {
