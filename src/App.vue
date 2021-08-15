@@ -106,6 +106,10 @@
           </a>
         </LinkContainer>
 
+        <div class="card">
+
+        </div>
+
         <div class="card is-fake">
           <p>Imagine this is one of the 30 blog posts I never finished.</p>
         </div>
@@ -123,7 +127,7 @@
 
 
 <script>
-import Crow from '@/components/Crow.vue';
+import Crow from '@/components/Crow/Crow.vue';
 import LinkContainer from '@/components/LinkContainer.vue';
 import AlleyOoper from "./components/AlleyOoper.vue";
 export default {

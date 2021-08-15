@@ -11,12 +11,12 @@
 <script>
 import * as PIXI from "pixi.js";
 
-import textureSnake from "../assets/snake.png";
-import textureBlob from "../assets/blob.png";
-import textureDing from "../assets/ding.png";
-import texturePeepis from "../assets/peepis.png";
-import textureStick from "../assets/stick.png";
-import textureTilde from "../assets/tilde.png";
+import textureSnake from "./assets/snake.png";
+import textureBlob from "./assets/blob.png";
+import textureDing from "./assets/ding.png";
+import texturePeepis from "./assets/peepis.png";
+import textureStick from "./assets/stick.png";
+import textureTilde from "./assets/tilde.png";
 
 import gsap, { MotionPathPlugin, PixiPlugin } from "gsap/all";
 
