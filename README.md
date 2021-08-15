@@ -1,6 +1,24 @@
-# elicrow.com
+# eli-crow.github.io
 
-- ⚠️ name of repo must be `eli-crow.github.io` in order to work for GitHub Pages
-- ⚠️ `master` branch is reserved for deployed, built site.
-- `develop` branch is the main development branch
-- pushing to `deploy` deploys the changes to the site.
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

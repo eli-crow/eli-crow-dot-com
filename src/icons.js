@@ -1,4 +1,0 @@
-// generated from Figma document "elicrow.com" using the "Awesome Icon Export" plugin
-export const faExternalLink = {"prefix":"fas","iconName":"external-link","icon":[24,24,[],"e000","M-0.01123,24v-24h10v2h-8v20h20v-8h2v10zM22,3.41421l-16.22624,16.22624l-1.41421,-1.41422l16.22624,-16.22624h-5.58579v-2h9v9h-2z"]};
-export const faChevronRight = {"prefix":"fas","iconName":"chevron-right","icon":[12,24,[],"e001","M0.70711,-0.4908l12.49054,12.49054l-12.49054,12.49054l-1.41421,-1.41421l11.07633,-11.07633l-11.07633,-11.07633z"]};
-export const faCursor = {"prefix":"fas","iconName":"cursor","icon":[15,24,[],"e002","M16.18668,15.3516h-6.94631l3.26906,7.15165l-4.64473,2.03915l-3.27673,-6.91747l-4.58797,4.58797v-23.04797zM5.03239,15.05919l3.56394,7.52381l1.91581,-0.84109l-3.60671,-7.89032h5.65993l-11.06536,-11.06536v15.80533z"]};

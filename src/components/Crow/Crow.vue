@@ -54,7 +54,7 @@ export default {
     const app = new PIXI.Application({
       view: this.$refs.canvas,
       antialias: true,
-      transparent: true,
+      backgroundAlpha: 0,
       autoDensity: true,
       resolution: window.devicePixelRatio,
       autoResize: true,

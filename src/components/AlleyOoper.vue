@@ -13,11 +13,13 @@ import { BezierCurve } from '../bezier.js';
 import * as V from '../v.js';
 
 export default {
+  emits: ["update:modelValue"],
+
   props: {
     min: { type: [Number, String], default: 0 },
     max: { type: [Number, String], default: 1 },
     step: { type: [Number, String], default: 0.0001 },
-    value: { type: Number, default: 0 },
+    modelValue: { type: Number, default: 0 },
     curvePoints: { type: Array, required: true },
   },
 
@@ -31,13 +33,10 @@ export default {
     };
   },
 
-  //non-reactive
-  trackCurve: null,
-
   mounted() {
     this.mounted = true;
     this.updateCurve();
-    window.addEventListener('resize', e => {
+    window.addEventListener('resize', () => {
       this.updateCurve();
     });
   },
@@ -51,7 +50,7 @@ export default {
         }
       }
     },
-    value(nv) {
+    modelValue() {
       this.updateOffset();
       this.updateThumb();
     }
@@ -59,20 +58,21 @@ export default {
 
   methods: {
     getCurrentT() {
-      if (this.$options.trackCurve === null) return 0;
+      if (this.trackCurve === null) return 0;
       const min = Number(this.min);
       const max = Number(this.max);
       const range = max - min;
-      const nLength = range === 0 ? 0 : (this.value - min) / range;
-      const t = this.$options.trackCurve.getTAtNormalizedLength(nLength);
+      const nLength = range === 0 ? 0 : (this.modelValue - min) / range;
+      const t = this.trackCurve.getTAtNormalizedLength(nLength);
       return t;
     },
     updateOffset() {
       //need to allow svg to render before measuring.
       //OPTIMIZE: could remove dependency on svg api by mapping internal representation to expected width and height
       this.$nextTick(() => {
+        console.log(this.$refs.track);
         const totalLengthSvgUnits = this.$refs.track?.getTotalLength();
-        const length = this.$options.trackCurve.getNormalizedLengthAt(this.getCurrentT()) * totalLengthSvgUnits;
+        const length = this.trackCurve.getNormalizedLengthAt(this.getCurrentT()) * totalLengthSvgUnits;
         const offset = 99999 - length;
         this.progressDashOffset = offset;
       });
@@ -80,26 +80,26 @@ export default {
     updateCurve() {
       const { width, height } = this.$el.getBoundingClientRect();
       const [p0x, p0y, c0x, c0y, c1x, c1y, p1x, p1y] = this.curvePoints;
-      this.$options.trackCurve = new BezierCurve(
+      this.trackCurve = new BezierCurve(
         p0x * width, p0y * height,
         c0x * width, c0y * height,
         c1x * width, c1y * height,
         p1x * width, p1y * height,
       );
-      this.pathData = this.$options.trackCurve.getSvgPathData();
+      this.pathData = this.trackCurve.getSvgPathData();
       this.updateOffset();
       this.updateThumb();
     },
     updateThumb() {
-      this.thumbPosition = this.$options.trackCurve.getPointAt(this.getCurrentT());
+      this.thumbPosition = this.trackCurve.getPointAt(this.getCurrentT());
     },
     emitInput(pt) {
       const min = Number(this.min);
       const max = Number(this.max);
-      const newT = this.$options.trackCurve.getNearestTInWindingOrder(this.getCurrentT(), pt);
-      const newNormalizedLength = this.$options.trackCurve.getNormalizedLengthAt(newT);
+      const newT = this.trackCurve.getNearestTInWindingOrder(this.getCurrentT(), pt);
+      const newNormalizedLength = this.trackCurve.getNormalizedLengthAt(newT);
       const newVal = newNormalizedLength * max - min;
-      this.$emit('input', newVal);
+      this.$emit('update:modelValue', newVal);
     },
     handleThumbDown(ev) {
       const bb = this.$el.getBoundingClientRect();
@@ -114,7 +114,7 @@ export default {
         this.emitInput(newPos);
       };
 
-      const up = ev => {
+      const up = () => {
         window.removeEventListener('pointermove', move);
         window.removeEventListener('pointercancel', up);
         window.removeEventListener('pointerup', up);

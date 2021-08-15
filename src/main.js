@@ -1,17 +1,11 @@
 import "reset-css";
 
-import Vue from 'vue';
+import { createApp } from 'vue';
 import App from './App.vue';
+import Icon from './components/Icon/Icon.vue';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import * as icons from './icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-library.add(icons);
+const app = createApp(App);
 
-Vue.component('Icon', FontAwesomeIcon);
+app.component('Icon', Icon);
 
-Vue.config.productionTip = false;
-
-new Vue({
-  render: h => h(App),
-}).$mount('#app');
+app.mount('#app');

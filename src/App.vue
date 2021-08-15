@@ -53,7 +53,7 @@
             <p><time>2021</time></p>
           </div>
           <a data-main-link href="#" class="card-corner-decoration is-page" aria-label="Read Article" @click.stop>
-            <Icon icon="chevron-right" />
+            <Icon icon="chevronRight" />
           </a>
         </LinkContainer> -->
 
@@ -102,12 +102,12 @@
             aria-label="Visit Site"
             data-main-link
             @click.stop>
-            <Icon icon="external-link" />
+            <Icon icon="externalLink" />
           </a>
         </LinkContainer>
 
         <div class="card">
-
+          
         </div>
 
         <div class="card is-fake">
