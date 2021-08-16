@@ -139,6 +139,8 @@ function next() {
 .close {
   grid-area: close;
   align-self: center;
+  padding: 0.5rem;
+  margin: -0.5rem;
 }
 .image-container {
   position: relative;

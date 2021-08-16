@@ -121,8 +121,8 @@ const alleyOopers = reactive([25, 50, 75, 100])
           <LightboxPreview
             title="Yikes Dog – Blender"
             :images="[
-              {key: 0, src: require('@/assets/dog-yikes.jpg'), thumbnailSrc: require('@/assets/dog-yikes.jpg')},
-              {key: 1, src: require('@/assets/dog-boned.jpg'), thumbnailSrc: require('@/assets/dog-boned.jpg')},
+              {key: 0, src: require('@/assets/dog-yikes.jpg'), thumbnailSrc: require('@/assets/dog-yikes-thumb.jpg')},
+              {key: 1, src: require('@/assets/dog-boned.jpg'), thumbnailSrc: require('@/assets/dog-boned-thumb.jpg')},
             ]"
             v-slot="{images, open}">
             <img class="thumbnail" v-for="image in images" :key="image.key" :src="image.thumbnailSrc" @click="open(image.key)" />
