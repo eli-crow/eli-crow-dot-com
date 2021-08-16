@@ -70,7 +70,6 @@ export default {
       //need to allow svg to render before measuring.
       //OPTIMIZE: could remove dependency on svg api by mapping internal representation to expected width and height
       this.$nextTick(() => {
-        console.log(this.$refs.track);
         const totalLengthSvgUnits = this.$refs.track?.getTotalLength();
         const length = this.trackCurve.getNormalizedLengthAt(this.getCurrentT()) * totalLengthSvgUnits;
         const offset = 99999 - length;

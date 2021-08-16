@@ -1,3 +1,14 @@
+<script setup>
+import Crow from './components/Crow/Crow.vue';
+import LinkContainer from './components/LinkContainer.vue';
+import AlleyOoper from "./components/AlleyOoper.vue";
+import LightboxPreview from "./components/LightboxPreview.vue";
+
+import { reactive } from "vue";
+
+const alleyOopers = reactive([25, 50, 75, 100])
+</script>
+
 <template>
   <div class="App">
     <!-- Filter: https://css-tricks.com/gooey-effect/ -->
@@ -107,7 +118,15 @@
         </LinkContainer>
 
         <div class="card">
-          
+          <LightboxPreview
+            title="Yikes Dog – Blender"
+            :images="[
+              {key: 0, src: require('@/assets/dog-yikes.jpg'), thumbnailSrc: require('@/assets/dog-yikes.jpg')},
+              {key: 1, src: require('@/assets/dog-boned.jpg'), thumbnailSrc: require('@/assets/dog-boned.jpg')},
+            ]"
+            v-slot="{images, open}">
+            <img class="thumbnail" v-for="image in images" :key="image.key" :src="image.thumbnailSrc" @click="open(image.key)" />
+          </LightboxPreview>
         </div>
 
         <div class="card is-fake">
@@ -123,118 +142,6 @@
     </div>
   </div>
 </template>
-
-
-
-<script>
-import Crow from '@/components/Crow/Crow.vue';
-import LinkContainer from '@/components/LinkContainer.vue';
-import AlleyOoper from "./components/AlleyOoper.vue";
-export default {
-  components: {
-    Crow,
-    LinkContainer,
-    AlleyOoper,
-  },
-  data() {
-    return {
-      alleyOopers: [25, 50, 75, 100]
-    };
-  }
-};
-</script>
-
-
-
-<style>
-@import url("https://use.typekit.net/gwp5zpe.css");
-
-:root {
-  --surface-0: hsl(216, 24%, 4%);
-  --surface-1: hsl(216, 11%, 10%);
-  --surface-2: hsl(216, 8%, 14%);
-  --text-weak: hsl(216, 8%, 28%);
-  --text: hsl(217, 8%, 56%);
-  --text-strong: hsl(216, 31%, 93%);
-  --blue: hsl(209, 90%, 56%);
-  --teal: hsl(176, 75%, 47%);
-  --yellow: hsl(43, 100%, 50%);
-  --purple: hsl(269, 54%, 49%);
-
-  /* --surface-0: hsl(220, 16%, 93%);
-  --surface-1: hsl(0, 0%, 100%);
-  --surface-2: hsl(0, 0%, 81%);
-  --text: hsl(217, 7%, 44%);
-  --text-strong: hsl(0, 0%, 0%);
-  --teal: hsl(176, 75%, 47%);
-  --yellow: hsl(43, 100%, 50%); */
-
-  --proxima-nova: "proxima-nova", "Open Sans", "Gill Sans MT", "Gill Sans",
-    Corbel, Helvetica, Arial, sans-serif;
-}
-
-html {
-  height: 100%;
-}
-
-::selection {
-  background-color: var(--teal);
-  opacity: 1 !important;
-  color: var(--surface-0);
-  padding-left: 4px;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-family: var(--proxima-nova);
-  line-height: 1.3;
-  color: var(--text);
-  background-color: var(--surface-0);
-}
-body > * {
-  flex: 1 0 0;
-}
-em {
-  font-weight: 700;
-}
-
-a {
-  color: var(--teal);
-}
-a:not(:hover) {
-  text-decoration: none;
-}
-
-strong {
-  color: var(--text-strong);
-}
-
-::-webkit-scrollbar {
-  width: 12px;
-}
-::-webkit-scrollbar-track {
-  background: var(--surface-0);
-}
-::-webkit-scrollbar-thumb {
-  background-color: var(--text-weak);  
-  border-radius: 99999px;     
-  border: solid 3px var(--surface-0);
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--text);  
-}
-</style>
 
 <style scoped>
 .site {
@@ -291,6 +198,13 @@ strong {
   flex-direction: column;
   background-color: var(--surface-1);
   height: 520px;
+  overflow: hidden;
+}
+.card.is-scroll {
+  scrollbar-gutter: always;
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: overlay;
 }
 .card.is-fake {
   padding: var(--content-padding);
@@ -430,5 +344,9 @@ hr {
   border: 0;
   height: 2px;
   background-color: var(--surface-2);
+}
+
+.thumbnail:hover {
+  filter: brightness(1.2);
 }
 </style>
