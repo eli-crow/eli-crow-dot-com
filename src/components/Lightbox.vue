@@ -1,6 +1,6 @@
 
 <script setup>
-import { defineEmits, defineProps, computed } from 'vue';
+import { defineEmits, defineProps, computed, ref, watch } from 'vue';
 
 const props = defineProps({
   title: {
@@ -20,6 +20,15 @@ const emit = defineEmits([
 
 const selectedImageIndex = computed(() => props.selectedImageKey === null ? null : props.images.findIndex(i => i.key === props.selectedImageKey));
 const selectedImage = computed(() => props.selectedImageKey === null ? null : props.images[selectedImageIndex.value]);
+const selectedSrc = ref();
+const loader = new Image();
+watch(selectedImage, () => {
+  selectedSrc.value = selectedImage.value.thumbnailSrc;
+  loader.src = selectedImage.value.src;
+  loader.onload = () => {
+    selectedSrc.value = selectedImage.value.src;
+  };
+});
 
 function mod(a, b) {
   return ((a % b) + b) % b;
@@ -62,7 +71,7 @@ function next() {
             <Icon icon="close" />
           </button>
           <div class="image-container">
-            <img class="image" :src="selectedImage.src" />
+            <img class="image" :src="selectedSrc" />
             <button class="previous pager" @click="previous">
               <Icon icon="chevronLeft" />
             </button>
@@ -174,7 +183,7 @@ function next() {
   color: white;
 }
 .pager > * {
-  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.35));
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
 }
 .previous {
   left: 0;
