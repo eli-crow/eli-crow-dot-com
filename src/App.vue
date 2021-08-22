@@ -258,7 +258,8 @@ const alleyOopers = reactive([25, 50, 75, 100])
   object-position: left;
 }
 .card-image-bones-live {
-  padding-right: var(--content-padding);
+  padding: var(--content-padding) var(--content-padding) 0;
+  width: 14rem;
   object-fit: cover;
   object-position: left;
 }
