@@ -256,7 +256,7 @@ export class BezierSpline {
 
         const lengthAlongCurve = lengthAtT - curveStartsAtLength
         return curve.getPointAtLength(lengthAlongCurve)
-    }
+        }
 
     getTAtLength(len) {
         return len / this._length

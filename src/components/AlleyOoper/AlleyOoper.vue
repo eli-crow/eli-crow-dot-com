@@ -2,7 +2,7 @@
 import { BezierSpline } from '../../lib/bezier.js';
 import * as V from '../../lib/v.js';
 
-import { defineEmits, defineProps, onMounted, nextTick, reactive, ref, watch, computed } from 'vue';
+import { defineEmits, defineProps, onMounted, nextTick, reactive, ref, watch, computed, onBeforeUnmount } from 'vue';
 
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
@@ -43,6 +43,7 @@ const currentT = computed(() => {
 });
 
 function updateCurve() {
+  if (!root.value) return;
   const { width, height } = root.value.getBoundingClientRect();
   const spline = props.spline.map(curve => {
     const sizedCurve = curve.map((v, i) => i % 2 === 0 ? v * width : v * height);
@@ -65,6 +66,10 @@ function handleThumbDown(ev) {
   const downThumbPt = [...state.thumbPosition];
 
   const move = ev => {
+    if (!root.value) {
+      up();
+      return;
+    }
     const bb = root.value.getBoundingClientRect();
     const movePt = [ev.clientX - bb.left, ev.clientY - bb.top];
     const diff = V.sub(movePt, downPt);

@@ -121,16 +121,16 @@ strong {
   opacity: 0;
 }
 .fade-enter-active {
-  transition: 0.75s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 2.5s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
 }
 .fade-leave-active {
-  transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
   position: absolute;
 }
 .fade-move {
-  transition: 0.75s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: transform;
 }
 
