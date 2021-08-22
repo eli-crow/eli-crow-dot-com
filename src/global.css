@@ -123,11 +123,12 @@ strong {
 .fade-enter-active {
   transition: 2.5s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
+  overflow: visible;
 }
 .fade-leave-active {
   transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
-  position: absolute;
+  overflow: visible;
 }
 .fade-move {
   transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
