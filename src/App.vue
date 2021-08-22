@@ -1,12 +1,8 @@
 <script setup>
 import Crow from './components/Crow/Crow.vue';
 import LinkContainer from './components/LinkContainer.vue';
-import AlleyOoper from "./components/AlleyOoper.vue";
 import LightboxPreview from "./components/LightboxPreview.vue";
-
-import { reactive } from "vue";
-
-const alleyOopers = reactive([25, 50, 75, 100])
+import AlleyOoperCard from './components/AlleyOoper/AlleyOoperCard.vue';
 </script>
 
 <template>
@@ -68,35 +64,7 @@ const alleyOopers = reactive([25, 50, 75, 100])
           </a>
         </LinkContainer> -->
 
-        <div class="card">
-          <div class="card-padding">
-            <div class="alley-ooper-group">
-              <label class="alley-ooper">
-                <span class="alley-ooper-label">Slider</span>
-                <span class="alley-ooper-value">{{ alleyOopers[0].toFixed(0) }}</span>
-                <AlleyOoper class="alley-ooper-input" v-model="alleyOopers[0]" min="0" max="100" :curve-points="[0,0, .33,0, .66,0, 1,0]" style="height: 1rem;" />
-              </label>
-              <label class="alley-ooper">
-                <span class="alley-ooper-label">Swooper</span>
-                <span class="alley-ooper-value">{{ alleyOopers[1].toFixed(0) }}</span>
-                <AlleyOoper class="alley-ooper-input" v-model="alleyOopers[1]" min="0" max="100" :curve-points="[0,0, .33,1, .66,1, 1,0]" style="height: 1.5rem;" />
-              </label>
-              <label class="alley-ooper">
-                <span class="alley-ooper-label">Swisher</span>
-                <span class="alley-ooper-value">{{ alleyOopers[2].toFixed(0) }}</span>
-                <AlleyOoper class="alley-ooper-input" v-model="alleyOopers[2]" min="0" max="100" :curve-points="[0,1, 1.75,1.5, -0.2,-0.15, 1,0]" style="height: 3rem;" />
-              </label>
-              <label class="alley-ooper">
-                <span class="alley-ooper-label">Looper</span>
-                <span class="alley-ooper-value">{{ alleyOopers[3].toFixed(0) }}</span>
-                <AlleyOoper class="alley-ooper-input" v-model="alleyOopers[3]" min="0" max="100" :curve-points="[0,1, 2,-0.85, -0.5,-1.33, 1,1]" style="height: 3rem;" />
-              </label>
-            </div>
-          </div>
-          <div class="card-corner-decoration">
-            <Icon icon="cursor" />
-          </div>
-        </div>
+        <AlleyOoperCard />
 
         <LinkContainer tag="article" class="card is-link is-bones-live">
           <img class="card-image-bones-live" src="@/assets/bones-live-dice.svg" />
@@ -190,66 +158,6 @@ const alleyOopers = reactive([25, 50, 75, 100])
     padding-right: 0;
   }
 }
-
-.card {
-  --content-padding: 32px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--surface-1);
-  height: 520px;
-  overflow: hidden;
-}
-.card.is-scroll {
-  scrollbar-gutter: always;
-  overflow: scroll;
-  overflow-x: hidden;
-  overflow-y: overlay;
-}
-.card.is-fake {
-  padding: var(--content-padding);
-}
-.card.is-link {
-}
-.card.is-link:hover {
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-}
-.card.is-bones-live {
-  background-image: linear-gradient(
-    220deg,
-    var(--purple) 0%,
-    var(--surface-1) 30%
-  );
-}
-.card-padding {
-  padding: var(--content-padding);
-}
-.card-title {
-  font-size: 28px;
-  font-weight: 300;
-  color: var(--text-strong);
-  margin-bottom: 1rem;
-}
-.is-high-leading {
-  line-height: 1.8;
-}
-.card-corner-decoration {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  text-decoration: none;
-  font-size: 1.25rem;
-  color: var(--text-weak);
-  cursor: default;
-  pointer-events: none;
-  padding: var(--content-padding);
-}
-.card-corner-decoration.is-link {
-  pointer-events: all;
-}
-.card:hover .card-corner-decoration {
-  color: var(--text-strong);
-}
 .card-image-typography {
   padding-top: var(--content-padding);
   padding-left: var(--content-padding);
@@ -303,35 +211,6 @@ const alleyOopers = reactive([25, 50, 75, 100])
   top: 0;
   width: 100%;
   height: 100%;
-}
-
-.alley-ooper-group {
-  display: flex;
-  flex-direction: column;
-}
-.alley-ooper-group > .alley-ooper:not(:last-child) {
-  margin-bottom: 32px;
-}
-.alley-ooper {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: auto auto;
-  gap: 10px;
-}
-.alley-ooper-label {
-  grid-column: 1;
-  grid-row: 1;
-}
-.alley-ooper-value {
-  color: var(--text-weak);
-  grid-column: 2;
-  grid-row: 1;
-}
-.alley-ooper-input {
-  grid-column: 1 / span 2;
-  grid-row: 2;
-  margin: 4px;
-  /* height: in html */
 }
 
 p {

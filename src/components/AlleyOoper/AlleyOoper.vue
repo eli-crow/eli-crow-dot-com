@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import { BezierCurve } from '../bezier.js';
-import * as V from '../v.js';
+import { BezierCurve } from '../../bezier.js';
+import * as V from '../../v.js';
 
 export default {
   emits: ["update:modelValue"],
