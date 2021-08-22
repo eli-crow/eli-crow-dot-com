@@ -3,7 +3,6 @@ import * as V from './v.js';
 const CURVETIME_EPSILON = 1e-4; // true curvetime epsilon is ie-8, but this is (generally) close enough for pixel precision
 
 const lerp = (start, end, t) => start + (end - start) * t;
-const progress = (v, min, max) => (v - min) / (max - min);
 
 // class for getting info about the bezier curve
 export class BezierCurve {
@@ -16,7 +15,9 @@ export class BezierCurve {
         this._initLengths();
     }
 
-    get length() { return this._length; }
+    getLength() { 
+        return this._length; 
+    }
 
     getPointAt(t) {
         t = Math.min(Math.max(t, 0), 1);
@@ -25,6 +26,11 @@ export class BezierCurve {
         const x = (omt ** 3 * p0x) + (3 * omt ** 2 * t * c0x) + (3 * omt * t ** 2 * c1x) + (t ** 3 * p1x);
         const y = (omt ** 3 * p0y) + (3 * omt ** 2 * t * c0y) + (3 * omt * t ** 2 * c1y) + (t ** 3 * p1y);
         return [x, y];
+    }
+
+    getPointAtLength(len) {
+        const t = this.getTAtLength(len)
+        return this.getPointAt(t)
     }
 
     getWeightedTangentAt(t) {
@@ -54,12 +60,12 @@ export class BezierCurve {
     getTAtNormalizedLength(nLength) {
         if (nLength <= 0) return 0;
         if (nLength >= 1) return 1;
-        return this.getTAtLength(nLength * this.length);
+        return this.getTAtLength(nLength * this.getLength());
     }
 
     getTAtLength(len) {
         if (len <= 0) return 0;
-        if (len >= this.length) return 1;
+        if (len >= this.getLength()) return 1;
 
         let lastTLength = this._tLengths[0];
         let accumulatedLength = lastTLength[1];
@@ -83,7 +89,7 @@ export class BezierCurve {
     // Look for two cached T-lengths, one on either side of `t`. Lerp between them. tLengths are assumed to be sorted in ascending T order
     getLengthAt(t) {
         if (t <= 0) return 0;
-        if (t >= 1) return this.length;
+        if (t >= 1) return this.getLength();
 
         let lastTLength = this._tLengths[0];
         let accumulatedLength = lastTLength[1];
@@ -105,40 +111,7 @@ export class BezierCurve {
     }
 
     getNormalizedLengthAt(t) {
-        return this.getLengthAt(t) / this.length;
-    }
-
-    // Cache a number of roughly equidistant lengths
-    _initLengths() {
-        const tLengths = [];
-
-        const minLen = 0.05;
-        // TODO: not quite sure why the loop is happening exactly 1000 times here,
-        const incrementT = 0.006;
-        let totalLength = 0;
-
-        let lastPoint = this.getPointAt(0);
-        let t = incrementT;
-        while (true) {
-            if (t >= 1) t = 1;
-            const pt = this.getPointAt(t);
-            const len = V.distance(pt, lastPoint);
-            if (len >= minLen) {
-                tLengths.push([t, len]);
-                totalLength += len;
-                lastPoint = pt;
-            }
-            if (t >= 1) break;
-            t += incrementT;
-        }
-
-        this._tLengths = tLengths;
-        this._length = totalLength;
-    }
-
-    getSvgPathData() {
-        const { p0x, p0y, c0x, c0y, c1x, c1y, p1x, p1y } = this;
-        return `M${p0x},${p0y} C${c0x},${c0y} ${c1x},${c1y} ${p1x},${p1y}`;
+        return this.getLengthAt(t) / this.getLength();
     }
 
     getNearestTInWindingOrder(currentT, pt) {
@@ -212,8 +185,91 @@ export class BezierCurve {
 
         return nt;
     }
+
+    getSvgPathData(first = true) {
+        const { p0x, p0y, c0x, c0y, c1x, c1y, p1x, p1y } = this;
+        if (first) {
+            return `M${p0x},${p0y} C${c0x},${c0y} ${c1x},${c1y} ${p1x},${p1y}`;
+        } else {
+            return `C${c0x},${c0y} ${c1x},${c1y} ${p1x},${p1y}`;
+        }
+    }
+
+    // Cache a number of roughly equidistant lengths
+    _initLengths() {
+        const tLengths = [];
+
+        const minLen = 0.05;
+        // TODO: not quite sure why the loop is happening exactly 1000 times here,
+        const incrementT = 0.006;
+        let totalLength = 0;
+
+        let lastPoint = this.getPointAt(0);
+        let t = incrementT;
+        while (true) {
+            if (t >= 1) t = 1;
+            const pt = this.getPointAt(t);
+            const len = V.distance(pt, lastPoint);
+            if (len >= minLen) {
+                tLengths.push([t, len]);
+                totalLength += len;
+                lastPoint = pt;
+            }
+            if (t >= 1) break;
+            t += incrementT;
+        }
+
+        this._tLengths = tLengths;
+        this._length = totalLength;
+    }
 }
 
-// TODO: bezier spline to allow multiple curves to be joined together
-// class BezierSpline {
-// }
+export class BezierSpline {
+    constructor(curveDescriptions) {
+        this.curves = this._createCurves(curveDescriptions)
+    }
+
+    getLength () { 
+        return this.curves.reduce((acc, curve) => acc + curve.getLength(), 0)
+    }
+
+    getPointAt(t) {
+        if (t <= 0) return this.curves[0].getPointAt(0)
+        if (t >= 1) return this.curves[this.curves.length - 1].getPointAt(1)
+
+        const length = this.getLength()
+        const lengthAtT = length * t
+
+        let lengthBeforeCorrectCurve = 0
+        const curveWhichContainsPoint = this.curves.find(c => {
+            const cLen = c.getLength()
+            if (lengthBeforeCorrectCurve + cLen > lengthAtT) {
+                return c
+            } else {
+                lengthBeforeCorrectCurve += cLen
+            }
+        })
+
+        const lengthAlongCurve = lengthAtT - lengthBeforeCorrectCurve
+        return curveWhichContainsPoint.getPointAtLength(lengthAlongCurve)
+    }
+
+    getSvgPathData() {
+        return this.curves
+            .map((curve, i) => curve.getSvgPathData(i === 0))
+            .join('')
+    }
+
+    _createCurves(curveDescriptors) {
+        return curveDescriptors.map((curve, i, a) => {
+            if (i === 0) {
+                return new BezierCurve(...curve)
+            } else {
+                const previous = a[i - 1]
+                const p0x = previous[6]
+                const p0y = previous[7]
+                return new BezierCurve(p0x, p0y, ...curve)
+            }
+        })
+    }
+}

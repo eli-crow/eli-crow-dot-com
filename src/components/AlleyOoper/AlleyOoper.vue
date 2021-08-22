@@ -1,6 +1,6 @@
 <script setup>
-import { BezierCurve } from '../../bezier.js';
-import * as V from '../../v.js';
+import { BezierCurve } from '../../lib/bezier.js';
+import * as V from '../../lib/v.js';
 
 import { defineEmits, defineProps, onMounted, nextTick, reactive, ref, watch } from 'vue';
 
@@ -106,11 +106,28 @@ function handleThumbDown(ev) {
 </script>
 
 <template>
-  <div class="AlleyOoper" ref="root">
-    <svg v-if="state.mounted" class="svg" xmlns="http://www.w3.org/2000/svg" version="1.1">
-      <path tab-index="0" class="track" :d="state.pathData" ref="track" />
-      <path class="track-progress" :d="state.pathData" stroke-dasharray="99999" :stroke-dashoffset="state.progressDashOffset" />
-      <circle class="thumb" :cx="state.thumbPosition[0]" :cy="state.thumbPosition[1]" r="12" @pointerdown.stop.prevent="handleThumbDown" @touchstart.stop.prevent.capture />
+  <div
+    class="AlleyOoper"
+    ref="root">
+    <svg
+      v-if="state.mounted"
+      class="svg">
+      <path tab-index="0"
+        class="track"
+        :d="state.pathData"
+        ref="track" />
+      <path
+        class="track-progress"
+        :d="state.pathData"
+        stroke-dasharray="99999"
+        :stroke-dashoffset="state.progressDashOffset" />
+      <circle
+        class="thumb"
+        :cx="state.thumbPosition[0]"
+        :cy="state.thumbPosition[1]"
+        r="12"
+        @pointerdown.stop.prevent="handleThumbDown"
+        @touchstart.stop.prevent.capture />
     </svg>
   </div>
 </template>
