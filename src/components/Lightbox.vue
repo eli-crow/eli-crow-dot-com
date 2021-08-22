@@ -134,6 +134,9 @@ function next() {
   }
 }
 @media not screen and (max-width: 700px) {
+  .content-container {
+    padding: 0 1.5rem;
+  }
   .content {
     display: grid;
     grid-template:
