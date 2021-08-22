@@ -127,13 +127,10 @@ function handleThumbDown(ev) {
 </template>
 
 <style scoped>
-.AlleyOoper {
-}
 .svg {
   overflow: visible;
   width: 100%;
 }
-
 .track {
   fill: none;
   stroke: white;
@@ -155,7 +152,5 @@ function handleThumbDown(ev) {
 }
 .thumb:active {
   stroke: var(--blue);
-}
-.thumb:focus {
 }
 </style>
