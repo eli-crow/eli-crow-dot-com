@@ -1,8 +1,8 @@
 <script setup>
-import { BezierCurve, BezierSpline } from '../../lib/bezier.js';
+import { BezierSpline } from '../../lib/bezier.js';
 import * as V from '../../lib/v.js';
 
-import { defineEmits, defineProps, onMounted, nextTick, reactive, ref, watch } from 'vue';
+import { defineEmits, defineProps, onMounted, nextTick, reactive, ref, watch, computed } from 'vue';
 
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
@@ -10,7 +10,7 @@ const props = defineProps({
   max: { type: [Number, String], default: 1 },
   step: { type: [Number, String], default: 0.0001 },
   modelValue: { type: Number, default: 0 },
-  curvePoints: { type: Array, required: true },
+  spline: { type: Array, required: true },
 });
 const state = reactive({
   mounted: false,
@@ -21,7 +21,7 @@ const state = reactive({
 });
 const trackSpline = ref();
 const root = ref();
-const track = ref();
+const trackRef = ref();
 
 onMounted(() => {
   state.mounted = true;
@@ -32,53 +32,31 @@ onMounted(() => {
     updateThumbAndOffset();
   });
 });
-watch(() => props.curvePoints, updateCurve, { deep: true });
+watch(() => props.spline, updateCurve, { deep: true });
 watch(() => props.modelValue, updateThumbAndOffset);
-
-function getCurrentT() {
-  if (trackSpline.value === null) return 0;
+const currentT = computed(() => {
   const min = Number(props.min);
   const max = Number(props.max);
   const range = max - min;
-  const nLength = range === 0 ? 0 : (props.modelValue - min) / range;
-  const t = trackSpline.value.getTAtNormalizedLength(nLength);
-  return t;
-}
+  if (range === 0) return 0;
+  else return (props.modelValue - min) / range;
+});
 
 function updateCurve() {
   const { width, height } = root.value.getBoundingClientRect();
-  const [p0x, p0y, c0x, c0y, c1x, c1y, p1x, p1y] = props.curvePoints;
-  trackSpline.value = new BezierSpline([
-    [
-      p0x * width, p0y * height,
-      c0x * width, c0y * height,
-      c1x * width, c1y * height,
-      p1x * width, p1y * height,
-    ]
-  ]);
+  const spline = props.spline.map(curve => {
+    const sizedCurve = curve.map((v, i) => i % 2 === 0 ? v * width : v * height);
+    return sizedCurve;
+  });
+  trackSpline.value = new BezierSpline(spline);
   state.pathData = trackSpline.value.getSvgPathData();
   updateThumbAndOffset();
 }
 
 function updateThumbAndOffset() {
-  //need to allow svg to render before measuring.
-  nextTick(() => {
-    //OPTIMIZE: could remove dependency on svg api by mapping internal representation to expected width and height
-    const totalLengthSvgUnits = track.value?.getTotalLength();
-    const length = getCurrentT() * totalLengthSvgUnits;
-    const offset = 99999 - length;
-    state.progressDashOffset = offset;
-
-    state.thumbPosition = trackSpline.value.getPointAt(getCurrentT());
-  });
-}
-
-function emitInput(pt) {
-  const min = Number(props.min);
-  const max = Number(props.max);
-  const newNormalizedLength = trackSpline.value.getNearestTInWindingOrder(getCurrentT(), pt);
-  const newVal = newNormalizedLength * max - min;
-  emit('update:modelValue', newVal);
+  const splineLength = trackSpline.value.getLength();
+  state.progressDashOffset = 99999 - splineLength;
+  state.thumbPosition = trackSpline.value.getPointAt(currentT.value);
 }
 
 function handleThumbDown(ev) {
@@ -91,7 +69,12 @@ function handleThumbDown(ev) {
     const movePt = [ev.clientX - bb.left, ev.clientY - bb.top];
     const diff = V.sub(movePt, downPt);
     const newPos = V.add(downThumbPt, diff);
-    emitInput(newPos);
+
+    const min = Number(props.min);
+    const max = Number(props.max);
+    const nearestT = trackSpline.value.getNearestTInWindingOrder(currentT.value, newPos);
+    const newVal = nearestT * max - min;
+    emit('update:modelValue', newVal);
   };
 
   const up = () => {
@@ -116,7 +99,7 @@ function handleThumbDown(ev) {
       <path tab-index="0"
         class="track"
         :d="state.pathData"
-        ref="track" />
+        ref="trackRef" />
       <path
         class="track-progress"
         :d="state.pathData"

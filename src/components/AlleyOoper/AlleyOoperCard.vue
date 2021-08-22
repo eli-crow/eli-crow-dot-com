@@ -1,14 +1,8 @@
 <script setup>
-import { computed, reactive, ref } from "vue";
-import { BezierSpline } from "../../lib/bezier";
+import { reactive } from "vue";
 import AlleyOoper from "./AlleyOoper.vue";
 
 const alleyOopers = reactive([25, 50, 75, 100]);
-
-const state = reactive({
-  t: 0.2
-});
-const thumbPosition = computed(() => spline.getPointAt(state.t))
 </script>
 
 <template>
@@ -29,17 +23,31 @@ const thumbPosition = computed(() => spline.getPointAt(state.t))
           <span class="alley-ooper-label">Swisher</span>
           <span class="alley-ooper-value">{{ alleyOopers[2].toFixed(0) }}</span>
           <AlleyOoper class="alley-ooper-input" v-model="alleyOopers[2]" min="0" max="100" :curve-points="[0,1, 1.75,1.5, -0.2,-0.15, 1,0]" style="height: 3rem;" />
-        </label>
+        </label>-->
         <label class="alley-ooper">
           <span class="alley-ooper-label">Looper</span>
-          <span class="alley-ooper-value">{{ alleyOopers[3].toFixed(0) }}</span>
-          <AlleyOoper class="alley-ooper-input" v-model="alleyOopers[3]" min="0" max="100" :curve-points="[0,1, 2,-0.85, -0.5,-1.33, 1,1]" style="height: 3rem;" />
-        </label>-->
-        {{state.t}}
+          <span class="alley-ooper-value">{{ alleyOopers[0].toFixed(0) }}</span>
+          <AlleyOoper class="alley-ooper-input"
+            v-model="alleyOopers[0]"
+            min="0"
+            max="100"
+            :spline="[[0,1, 2,-0.85, -0.5,-1.33, 1,1]]"
+            style="height: 3rem;" />
+        </label>
+
         <label class="alley-ooper">
           <span class="alley-ooper-label">Swooper</span>
-          <span class="alley-ooper-value">{{ state.t.toFixed(0) }}</span>
-          <AlleyOoper class="alley-ooper-input" v-model="state.t" min="0" max="1" :curve-points="[0,0, .33,1, .66,1, 1,0]" style="height: 1.5rem;" />
+          <span class="alley-ooper-value">{{ alleyOopers[1].toFixed(0) }}</span>
+          <AlleyOoper
+            class="alley-ooper-input"
+            v-model="alleyOopers[1]"
+            min="0"
+            max="100"
+            :spline="[
+              [0,0, .05,-.2, .15,0.5, 0.25, 0],
+              [1.5, 1, 0.25, 1, 0, 1.1],
+            ]"
+            style="height: 1.5rem;" />
         </label>
       </div>
     </div>

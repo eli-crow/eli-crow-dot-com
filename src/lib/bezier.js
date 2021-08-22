@@ -258,26 +258,28 @@ export class BezierSpline {
         return curve.getPointAtLength(lengthAlongCurve)
     }
 
-    getTAtNormalizedLength(nLength) {
-        if (nLength <= 0) return 0;
-        if (nLength >= 1) return 1;
-        return this.getTAtLength(nLength * this.getLength());
+    getTAtLength(len) {
+        return len / this._length
     }
 
-    getTAtLength(len) {
-        return len / this.getLength()
+    getLengthAt(t) {
+        return t * this._length
     }
 
     getCurveIndexAt(t) {
         if (t <= 0) return 0
         if (t >= 1) this._curveStartTs.length - 1
-       return this._curveStartTs.findIndex(ct => ct < t)
+        for (let i = this._curveStartTs.length-1 ; i >= 0; i--) {
+            if (this._curveStartTs[i] < t) return i
+        }
     }
 
     getCurveIndexAtLength(l) {
         if (l <= 0) return 0
         if (l >= this._length) this._curveStartLengths.length - 1
-        return this._curveStartLengths.findIndex(cl => cl < l)
+        for (let i = this._curveStartLengths.length-1 ; i >= 0; i--) {
+            if (this._curveStartLengths[i] < l) return i
+        }
     }
 
     getSvgPathData() {
@@ -286,32 +288,52 @@ export class BezierSpline {
             .join('')
     }
 
-    getNearestTInWindingOrder(currentT, pt) {
-        let curveIndex = this.getCurveIndexAt(currentT)
+    getNearestTInWindingOrder(splineCurrentT, pt) {
+        const lenAtSplineCurrentT = this.getLengthAt(splineCurrentT)
 
+        let curveIndex = this.getCurveIndexAt(splineCurrentT)
+        let lastCurveNearestT
+        let curveNearestT
+        let curveLengthBefore
+        let curve
         for (;;) {
-            const curve = this.curves[curveIndex]
-            const nearestT = curve.getNearestTInWindingOrder(currentT, pt)
-            if (nearestT === 0) {
+            curve = this.curves[curveIndex]
+            curveLengthBefore = this._curveStartLengths[curveIndex]
+            const curveNLen = lenAtSplineCurrentT - curveLengthBefore
+            const curveCurrentT = curve.getTAtLength(curveNLen)
+            curveNearestT = curve.getNearestTInWindingOrder(curveCurrentT, pt)
+
+            if (curveNearestT <= 0) {
                 if (curveIndex === 0) {
-                    return 0
-                } else {
+                    break
+                } 
+                else if (lastCurveNearestT >= 1) {
+                    //we're at a sharp vertex or perfectly along the normal at a vertex
+                    break
+                } 
+                else {
+                    lastCurveNearestT = curveNearestT
                     curveIndex--
-                    continue
                 }
-            } else if (nearestT === 1 ) {
+            } 
+            else if (curveNearestT >= 1) {
                 if (curveIndex === this.curves.length - 1) {
-                    return 1
-                } else {
+                    break
+                }
+                else if (lastCurveNearestT <= 0) {
+                    //we're at a sharp vertex or perfectly along the normal at a vertex
+                    break
+                } 
+                else {
+                    lastCurveNearestT = curveNearestT
                     curveIndex++
-                    continue
                 }
             } else {
-                const lengthBeforeCurve = this._curveStartLengths[curveIndex]
-                const lengthAtT = curve.getLengthAt(nearestT)
-                return (lengthBeforeCurve + lengthAtT) / this._length
+                break
             }
         }
+
+        return (curveLengthBefore + curve.getLengthAt(curveNearestT)) / this._length
     }
 
     _initCurves(curveDescriptors) {
@@ -321,10 +343,15 @@ export class BezierSpline {
             let curve
             if (i === 0) {
                 curve = new BezierCurve(...c)
-            } else {
+            } else if (i === 1) {
                 const previous = a[i - 1]
                 const p0x = previous[6]
                 const p0y = previous[7]
+                curve = new BezierCurve(p0x, p0y, ...c)
+            } else {
+                const previous = a[i - 1]
+                const p0x = previous[4]
+                const p0y = previous[5]
                 curve = new BezierCurve(p0x, p0y, ...c)
             }
             
