@@ -1,5 +1,5 @@
 <script setup>
-import { BezierCurve } from '../../lib/bezier.js';
+import { BezierCurve, BezierSpline } from '../../lib/bezier.js';
 import * as V from '../../lib/v.js';
 
 import { defineEmits, defineProps, onMounted, nextTick, reactive, ref, watch } from 'vue';
@@ -19,7 +19,7 @@ const state = reactive({
   thumbPosition: [0, 0],
   currentT: 0,
 });
-const trackCurve = ref(null);
+const trackSpline = ref();
 const root = ref();
 const track = ref();
 
@@ -36,25 +36,27 @@ watch(() => props.curvePoints, updateCurve, { deep: true });
 watch(() => props.modelValue, updateThumbAndOffset);
 
 function getCurrentT() {
-  if (trackCurve.value === null) return 0;
+  if (trackSpline.value === null) return 0;
   const min = Number(props.min);
   const max = Number(props.max);
   const range = max - min;
   const nLength = range === 0 ? 0 : (props.modelValue - min) / range;
-  const t = trackCurve.value.getTAtNormalizedLength(nLength);
+  const t = trackSpline.value.getTAtNormalizedLength(nLength);
   return t;
 }
 
 function updateCurve() {
   const { width, height } = root.value.getBoundingClientRect();
   const [p0x, p0y, c0x, c0y, c1x, c1y, p1x, p1y] = props.curvePoints;
-  trackCurve.value = new BezierCurve(
-    p0x * width, p0y * height,
-    c0x * width, c0y * height,
-    c1x * width, c1y * height,
-    p1x * width, p1y * height,
-  );
-  state.pathData = trackCurve.value.getSvgPathData();
+  trackSpline.value = new BezierSpline([
+    [
+      p0x * width, p0y * height,
+      c0x * width, c0y * height,
+      c1x * width, c1y * height,
+      p1x * width, p1y * height,
+    ]
+  ]);
+  state.pathData = trackSpline.value.getSvgPathData();
   updateThumbAndOffset();
 }
 
@@ -63,19 +65,18 @@ function updateThumbAndOffset() {
   nextTick(() => {
     //OPTIMIZE: could remove dependency on svg api by mapping internal representation to expected width and height
     const totalLengthSvgUnits = track.value?.getTotalLength();
-    const length = trackCurve.value.getNormalizedLengthAt(getCurrentT()) * totalLengthSvgUnits;
+    const length = getCurrentT() * totalLengthSvgUnits;
     const offset = 99999 - length;
     state.progressDashOffset = offset;
 
-    state.thumbPosition = trackCurve.value.getPointAt(getCurrentT());
+    state.thumbPosition = trackSpline.value.getPointAt(getCurrentT());
   });
 }
 
 function emitInput(pt) {
   const min = Number(props.min);
   const max = Number(props.max);
-  const newT = trackCurve.value.getNearestTInWindingOrder(getCurrentT(), pt);
-  const newNormalizedLength = trackCurve.value.getNormalizedLengthAt(newT);
+  const newNormalizedLength = trackSpline.value.getNearestTInWindingOrder(getCurrentT(), pt);
   const newVal = newNormalizedLength * max - min;
   emit('update:modelValue', newVal);
 }

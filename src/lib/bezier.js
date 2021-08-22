@@ -33,6 +33,10 @@ export class BezierCurve {
         return this.getPointAt(t)
     }
 
+    getPointAtNormalizedLength(nLen) {
+        return this.getPointAtLength(this._length * nLen)
+    }
+
     getWeightedTangentAt(t) {
         t = Math.min(Math.max(t, 0), 1);
         const { p0x, p0y, c0x, c0y, c1x, c1y, p1x, p1y } = this;
@@ -226,32 +230,54 @@ export class BezierCurve {
 
 export class BezierSpline {
     constructor(curveDescriptions) {
-        this.curves = this._createCurves(curveDescriptions)
+        this.curves = []
+        this._curveStartLengths = []
+        this._curveStartTs = []
+        this._length = 0
+
+        this._initCurves(curveDescriptions)
     }
 
     getLength () { 
-        return this.curves.reduce((acc, curve) => acc + curve.getLength(), 0)
+        return this._length
     }
 
     getPointAt(t) {
         if (t <= 0) return this.curves[0].getPointAt(0)
         if (t >= 1) return this.curves[this.curves.length - 1].getPointAt(1)
+        if (this.curves.length === 1) return this.curves[0].getPointAtNormalizedLength(t)
 
         const length = this.getLength()
         const lengthAtT = length * t
+        
+        const curveIndex = this.getCurveIndexAtLength(lengthAtT)
+        const curveStartsAtLength = this._curveStartLengths[curveIndex]
+        const curve = this.curves[curveIndex]
 
-        let lengthBeforeCorrectCurve = 0
-        const curveWhichContainsPoint = this.curves.find(c => {
-            const cLen = c.getLength()
-            if (lengthBeforeCorrectCurve + cLen > lengthAtT) {
-                return c
-            } else {
-                lengthBeforeCorrectCurve += cLen
-            }
-        })
+        const lengthAlongCurve = lengthAtT - curveStartsAtLength
+        return curve.getPointAtLength(lengthAlongCurve)
+    }
 
-        const lengthAlongCurve = lengthAtT - lengthBeforeCorrectCurve
-        return curveWhichContainsPoint.getPointAtLength(lengthAlongCurve)
+    getTAtNormalizedLength(nLength) {
+        if (nLength <= 0) return 0;
+        if (nLength >= 1) return 1;
+        return this.getTAtLength(nLength * this.getLength());
+    }
+
+    getTAtLength(len) {
+        return len / this.getLength()
+    }
+
+    getCurveIndexAt(t) {
+        if (t <= 0) return 0
+        if (t >= 1) this._curveStartTs.length - 1
+       return this._curveStartTs.findIndex(ct => ct < t)
+    }
+
+    getCurveIndexAtLength(l) {
+        if (l <= 0) return 0
+        if (l >= this._length) this._curveStartLengths.length - 1
+        return this._curveStartLengths.findIndex(cl => cl < l)
     }
 
     getSvgPathData() {
@@ -260,16 +286,53 @@ export class BezierSpline {
             .join('')
     }
 
-    _createCurves(curveDescriptors) {
-        return curveDescriptors.map((curve, i, a) => {
+    getNearestTInWindingOrder(currentT, pt) {
+        let curveIndex = this.getCurveIndexAt(currentT)
+
+        for (;;) {
+            const curve = this.curves[curveIndex]
+            const nearestT = curve.getNearestTInWindingOrder(currentT, pt)
+            if (nearestT === 0) {
+                if (curveIndex === 0) {
+                    return 0
+                } else {
+                    curveIndex--
+                    continue
+                }
+            } else if (nearestT === 1 ) {
+                if (curveIndex === this.curves.length - 1) {
+                    return 1
+                } else {
+                    curveIndex++
+                    continue
+                }
+            } else {
+                const lengthBeforeCurve = this._curveStartLengths[curveIndex]
+                const lengthAtT = curve.getLengthAt(nearestT)
+                return (lengthBeforeCurve + lengthAtT) / this._length
+            }
+        }
+    }
+
+    _initCurves(curveDescriptors) {
+        this._length = 0
+
+        curveDescriptors.forEach((c, i, a) => {
+            let curve
             if (i === 0) {
-                return new BezierCurve(...curve)
+                curve = new BezierCurve(...c)
             } else {
                 const previous = a[i - 1]
                 const p0x = previous[6]
                 const p0y = previous[7]
-                return new BezierCurve(p0x, p0y, ...curve)
+                curve = new BezierCurve(p0x, p0y, ...c)
             }
+            
+            this.curves.push(curve)
+            this._curveStartLengths.push(this._length)
+            this._length += curve.getLength()
         })
+
+        this._curveStartTs = this._curveStartLengths.map(l => l / this._length)
     }
 }
