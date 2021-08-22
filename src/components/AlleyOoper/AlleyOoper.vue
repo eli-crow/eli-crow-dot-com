@@ -2,7 +2,7 @@
 import { BezierSpline } from '../../lib/bezier.js';
 import * as V from '../../lib/v.js';
 
-import { defineEmits, defineProps, onMounted, nextTick, reactive, ref, watch, computed, onBeforeUnmount } from 'vue';
+import { defineEmits, defineProps, onMounted, reactive, ref, watch, computed } from 'vue';
 
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
@@ -15,6 +15,7 @@ const props = defineProps({
 const state = reactive({
   mounted: false,
   progressDashOffset: 0,
+  thumbRadius: 12,
   pathData: '',
   thumbPosition: [0, 0],
   currentT: 0,
@@ -25,12 +26,8 @@ const trackRef = ref();
 
 onMounted(() => {
   state.mounted = true;
-  updateCurve();
-  updateThumbAndOffset();
-  window.addEventListener('resize', () => {
-    updateCurve();
-    updateThumbAndOffset();
-  });
+  redraw();
+  window.addEventListener('resize', redraw);
 });
 watch(() => props.spline, updateCurve, { deep: true });
 watch(() => props.modelValue, updateThumbAndOffset);
@@ -41,6 +38,14 @@ const currentT = computed(() => {
   if (range === 0) return 0;
   else return (props.modelValue - min) / range;
 });
+
+function redraw() {
+  updateCurve();
+  updateThumbAndOffset();
+  state.thumbRadius = window.innerWidth < 700
+    ? 16
+    : 12;
+}
 
 function updateCurve() {
   if (!root.value) return;
@@ -114,7 +119,7 @@ function handleThumbDown(ev) {
         class="thumb"
         :cx="state.thumbPosition[0]"
         :cy="state.thumbPosition[1]"
-        r="12"
+        :r="state.thumbRadius"
         @pointerdown.stop.prevent="handleThumbDown"
         @touchstart.stop.prevent.capture />
     </svg>
