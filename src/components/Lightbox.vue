@@ -46,8 +46,6 @@ function next() {
 }
 </script>
 
-
-
 <template>
   <teleport to="#overlay">
     <transition name="fade">
@@ -85,8 +83,6 @@ function next() {
     </transition>
   </teleport>
 </template>
-
-
 
 <style scoped>
 .backdrop {
