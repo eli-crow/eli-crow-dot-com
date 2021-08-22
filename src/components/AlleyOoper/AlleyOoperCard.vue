@@ -49,6 +49,22 @@ const alleyOopers = reactive([25, 50, 75, 100]);
             ]"
             style="height: 1.5rem;" />
         </label>
+
+        <label class="alley-ooper">
+          <span class="alley-ooper-label">Swooper</span>
+          <span class="alley-ooper-value">{{ alleyOopers[2].toFixed(0) }}</span>
+          <AlleyOoper
+            class="alley-ooper-input"
+            v-model="alleyOopers[2]"
+            min="0"
+            max="100"
+            :spline="[
+              [0,0, .05,-.2, .15,0.5, 0.25, 0],
+              [1.5, 1, 0.25, 1, 0, 1],
+              [0, 2.5, 0.25, 1.5, 1, 1.1],
+            ]"
+            style="height: 1.5rem;" />
+        </label>
       </div>
     </div>
     <div class="card-corner-decoration">
