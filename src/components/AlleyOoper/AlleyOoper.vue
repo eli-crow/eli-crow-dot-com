@@ -55,7 +55,7 @@ function updateCurve() {
 
 function updateThumbAndOffset() {
   const splineLength = trackSpline.value.getLength();
-  state.progressDashOffset = 99999 - splineLength;
+  state.progressDashOffset = 99999 - splineLength * currentT.value;
   state.thumbPosition = trackSpline.value.getPointAt(currentT.value);
 }
 
