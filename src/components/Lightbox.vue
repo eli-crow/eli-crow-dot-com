@@ -55,8 +55,6 @@ function next() {
 }
 </script>
 
-
-
 <template>
   <teleport to="#overlay">
     <transition name="fade">
@@ -95,8 +93,6 @@ function next() {
   </teleport>
 </template>
 
-
-
 <style scoped>
 .backdrop {
   overscroll-behavior: contain;
@@ -118,7 +114,6 @@ function next() {
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 0 1rem;
   will-change: opacity, transform;
   pointer-events: none;
 }
@@ -128,16 +123,37 @@ function next() {
   height: 100%;
   pointer-events: all;
   min-height: 0;
-  display: grid;
-  grid-template:
-    ". . ." 1.25rem
-    "title . close" 2rem
-    ". . ." 1.25rem
-    "image image image" 1fr
-    ". . ." 1.5rem
-    "thumbnails thumbnails thumbnails" 4rem
-    ". . ." 1.5rem
-    / 1fr 1rem auto;
+}
+@media screen and (max-width: 700px) {
+  .content {
+    display: grid;
+    grid-template:
+      ". . . . ." 1.25rem
+      ". title . close ." 2rem
+      ". . . . ." 1.25rem
+      "image image image image image" 1fr
+      ". . . . ." 1.5rem
+      ". thumbnails thumbnails thumbnails ." 4rem
+      ". . . . ." 1.5rem
+      / 1.5rem 1fr 1rem auto 1.5rem;
+  }
+}
+@media not screen and (max-width: 700px) {
+  .content-container {
+    padding: 0 1.5rem;
+  }
+  .content {
+    display: grid;
+    grid-template:
+      ". . ." 1.25rem
+      "title . close" 2rem
+      ". . ." 1.25rem
+      "image image image" 1fr
+      ". . ." 1.5rem
+      "thumbnails thumbnails thumbnails" 4rem
+      ". . ." 1.5rem
+      / 1fr 1rem auto;
+  }
 }
 .title {
   grid-area: title;

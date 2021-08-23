@@ -1,4 +1,3 @@
-
 @import url("https://use.typekit.net/gwp5zpe.css");
 
 :root {
@@ -43,7 +42,7 @@ html {
 }
 
 img {
-    width: 100%;
+  width: 100%;
 }
 
 body {
@@ -80,7 +79,7 @@ strong {
   width: 14px;
 }
 ::-webkit-scrollbar-track {
-    /* background: var(--surface-0); */
+  /* background: var(--surface-0); */
 }
 ::-webkit-scrollbar-thumb {
   background-color: hsla(217, 8%, 56%, 0.75);
@@ -122,16 +121,17 @@ strong {
   opacity: 0;
 }
 .fade-enter-active {
-  transition: 0.75s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 2.5s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
+  overflow: visible;
 }
 .fade-leave-active {
-  transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
-  position: absolute;
+  overflow: visible;
 }
 .fade-move {
-  transition: 0.75s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: transform;
 }
 
@@ -147,4 +147,64 @@ strong {
 }
 .icon-button:hover {
   color: white;
+}
+
+.card {
+  --content-padding: 32px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-1);
+  height: 520px;
+  overflow: hidden;
+}
+.card.is-scroll {
+  scrollbar-gutter: always;
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: overlay;
+}
+.card.is-fake {
+  padding: var(--content-padding);
+}
+.card.is-link {
+}
+.card.is-link:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.card.is-bones-live {
+  background-image: linear-gradient(
+    220deg,
+    var(--purple) 0%,
+    var(--surface-1) 30%
+  );
+}
+.card-padding {
+  padding: var(--content-padding);
+}
+.card-title {
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--text-strong);
+  margin-bottom: 1rem;
+}
+.is-high-leading {
+  line-height: 1.8;
+}
+.card-corner-decoration {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  text-decoration: none;
+  font-size: 1.25rem;
+  color: var(--text-weak);
+  cursor: default;
+  pointer-events: none;
+  padding: var(--content-padding);
+}
+.card-corner-decoration.is-link {
+  pointer-events: all;
+}
+.card:hover .card-corner-decoration {
+  color: var(--text-strong);
 }

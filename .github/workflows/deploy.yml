@@ -30,3 +30,11 @@ jobs:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           publish_branch: master
           publish_dir: ./dist
+          
+      - name: Merge Deploy into Develop
+        uses: devmasx/merge-branch@v1.3.1
+        with:
+          type: now
+          from_branch: deploy
+          target_branch: develop
+          github_token: ${{ github.token }}
