@@ -1,6 +1,6 @@
-
 <script setup>
 import { defineEmits, defineProps, computed, ref, watch } from 'vue';
+import { FocusTrap } from 'focus-trap-vue';
 
 const props = defineProps({
   title: {
@@ -18,15 +18,25 @@ const emit = defineEmits([
   'update:selected-image-key'
 ]);
 
+const focusRoot = ref();
+watch(focusRoot, newValue => {
+  newValue?.focus();
+});
+const focusableElements = computed(() => {
+  return [...focusRoot.value.querySelectorAll('a, button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])')]
+    .filter(el => !el.hasAttribute('disabled'));
+});
+
 const selectedImageIndex = computed(() => props.selectedImageKey === null ? null : props.images.findIndex(i => i.key === props.selectedImageKey));
 const selectedImage = computed(() => props.selectedImageKey === null ? null : props.images[selectedImageIndex.value]);
 const selectedSrc = ref();
 const loader = new Image();
-watch(selectedImage, () => {
-  selectedSrc.value = selectedImage.value.thumbnailSrc;
-  loader.src = selectedImage.value.src;
+watch(selectedImage, (newValue) => {
+  if (newValue === null) return;
+  selectedSrc.value = newValue.thumbnailSrc;
+  loader.src = newValue.src;
   loader.onload = () => {
-    selectedSrc.value = selectedImage.value.src;
+    selectedSrc.value = newValue.src;
   };
 });
 
@@ -53,6 +63,19 @@ function next() {
   const nextIndex = mod(selectedImageIndex.value + 1, props.images.length);
   emit('update:selected-image-key', nextIndex);
 }
+
+function handleKeyboard(e) {
+  switch (e.key) {
+    case 'ArrowLeft':
+      previous();
+      e.preventDefault();
+      break;
+    case 'ArrowRight':
+      next();
+      e.preventDefault();
+      break;
+  }
+}
 </script>
 
 <template>
@@ -63,31 +86,47 @@ function next() {
 
     <transition name="lift">
       <div class="content-container" v-if="props.selectedImageKey !== null">
-        <div class="content" @click.stop>
-          <h2 class="title">{{props.title}} {{selectedImageIndex + 1}}/{{props.images.length}}</h2>
-          <button class="close icon-button" @click.prevent="close">
-            <Icon icon="close" />
-          </button>
-          <div class="image-container">
-            <img class="image" :src="selectedSrc" />
-            <button class="previous pager" @click="previous">
-              <Icon icon="chevronLeft" />
+        <FocusTrap :active="props.selectedImageKey !== null" @deactivate="close">
+          <div
+            class="content"
+            @click.stop
+            tabindex="-1"
+            ref="focusRoot"
+            @keydown="handleKeyboard">
+
+            <h2 class="title">{{props.title}} {{selectedImageIndex + 1}}/{{props.images.length}}</h2>
+            <button class="close icon-button" @click.prevent="close">
+              <Icon icon="close" />
             </button>
-            <button class="next pager" @click="next">
-              <Icon icon="chevronRight" />
-            </button>
+            <div class="image-container">
+              <img
+                class="image"
+                :src="selectedSrc"
+                :alt="selectedImage.alt" />
+              <button class="previous pager" @click="previous">
+                <Icon icon="chevronLeft" />
+              </button>
+              <button class="next pager" @click="next">
+                <Icon icon="chevronRight" />
+              </button>
+            </div>
+            <div class="thumbnails">
+              <img
+                v-for="image in images"
+                class="thumbnail"
+                draggable="false"
+                :key="image.key"
+                :src="image.thumbnailSrc"
+                :alt="image.alt"
+                :data-selected="image.key === selectedImageKey"
+                tabindex="0"
+                @keydown.enter="changeImage(image.key)"
+                @keydown.space="changeImage(image.key)"
+                @click.prevent="changeImage(image.key)" />
+            </div>
+
           </div>
-          <div class="thumbnails">
-            <img
-              class="thumbnail"
-              v-for="image in images"
-              draggable="false"
-              :key="image.key"
-              :src="image.thumbnailSrc"
-              :data-selected="image.key === selectedImageKey"
-              @click.prevent="changeImage(image.key)" />
-          </div>
-        </div>
+        </FocusTrap>
       </div>
     </transition>
   </teleport>
@@ -123,6 +162,7 @@ function next() {
   height: 100%;
   pointer-events: all;
   min-height: 0;
+  outline: none;
 }
 @media screen and (max-width: 700px) {
   .content {

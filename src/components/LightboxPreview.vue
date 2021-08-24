@@ -15,6 +15,7 @@ const props = defineProps({
 });
 
 function open(key) {
+  console.log(key)
   selectedImageKey.value = key;
 }
 </script>

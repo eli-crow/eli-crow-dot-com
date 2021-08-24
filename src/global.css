@@ -108,6 +108,7 @@ strong {
   transition: 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: transform, opacity;
   position: absolute;
+  pointer-events: none;
 }
 .lift-move {
   transition: 0.75s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -129,6 +130,7 @@ strong {
   transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
   overflow: visible;
+  pointer-events: none;
 }
 .fade-move {
   transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);

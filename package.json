@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "focus-trap": "^6.6.1",
+    "focus-trap-vue": "^3.2.1",
     "gsap": "^3.7.1",
     "pixi.js": "^6.1.2",
     "reset-css": "^5.0.1",
