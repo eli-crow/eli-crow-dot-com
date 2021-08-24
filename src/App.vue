@@ -89,11 +89,27 @@ import AlleyOoperCard from './components/AlleyOoper/AlleyOoperCard.vue';
           <LightboxPreview
             title="Yikes Dog – Blender"
             :images="[
-              {key: 0, src: require('@/assets/dog-yikes.jpg'), thumbnailSrc: require('@/assets/dog-yikes-thumb.jpg')},
-              {key: 1, src: require('@/assets/dog-boned.jpg'), thumbnailSrc: require('@/assets/dog-boned-thumb.jpg')},
+              {
+                key: 0, 
+                src: require('@/assets/dog-yikes.jpg'), 
+                thumbnailSrc: require('@/assets/dog-yikes-thumb.jpg'), 
+                alt: 'A satin blue dog, beset by bones. The word “Yikes!” explodes vibrantly in the foreground. He gives a sidelong stare, frightened, as if to say “That is not my problem.”'
+              },
+              {
+                key: 1, 
+                src: require('@/assets/dog-boned.jpg'), 
+                thumbnailSrc: require('@/assets/dog-boned-thumb.jpg'), 
+                alt: 'A satin blue dog peers down at you, desperate. Two bones cross behind him like the Jolly Roger. The word “Boned!” floats before him. He leans back, resigned to his fate.' 
+              },
             ]"
             v-slot="{images, open}">
-            <img class="thumbnail" v-for="image in images" :key="image.key" :src="image.thumbnailSrc" @click="open(image.key)" />
+            <img
+              class="thumbnail"
+              v-for="image in images"
+              :key="image.key"
+              :src="image.thumbnailSrc"
+              :alt="image.alt"
+              @click="open(image.key)" />
           </LightboxPreview>
         </div>
 
