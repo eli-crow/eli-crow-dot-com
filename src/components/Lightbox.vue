@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits, defineProps, computed, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { FocusTrap } from 'focus-trap-vue';
 
 const props = defineProps({
@@ -21,10 +21,6 @@ const emit = defineEmits([
 const focusRoot = ref();
 watch(focusRoot, newValue => {
   newValue?.focus();
-});
-const focusableElements = computed(() => {
-  return [...focusRoot.value.querySelectorAll('a, button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])')]
-    .filter(el => !el.hasAttribute('disabled'));
 });
 
 const selectedImageIndex = computed(() => props.selectedImageKey === null ? null : props.images.findIndex(i => i.key === props.selectedImageKey));

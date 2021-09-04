@@ -53,7 +53,7 @@ import AlleyOoperCard from './components/AlleyOoper/AlleyOoperCard.vue';
         </div>
 
         <!-- <LinkContainer tag="article" class="card is-link is-bones-live">
-          <img class="card-image-typography" src="@/assets/typography.svg" />
+          <img class="card-image-typography" src="/assets/typography.svg" />
 
           <div class="card-padding">
             <h2 class="card-title is-high-leading"><span contenteditable class="gooey-text is-subtle"><span class="gooey-text-inner">A call for a typographic box model that actually makes sense</span></span></h2>
@@ -67,7 +67,7 @@ import AlleyOoperCard from './components/AlleyOoper/AlleyOoperCard.vue';
         <AlleyOoperCard />
 
         <LinkContainer tag="article" class="card is-link is-bones-live">
-          <img class="card-image-bones-live" src="@/assets/bones-live-dice.svg" />
+          <img class="card-image-bones-live" src="/assets/bones-live-dice.svg" />
 
           <div class="card-padding">
             <h2 class="card-title">Bones.live, a multiplayer dice box. Throw the bones. Embrace your destiny.</h2>
@@ -91,14 +91,14 @@ import AlleyOoperCard from './components/AlleyOoper/AlleyOoperCard.vue';
             :images="[
               {
                 key: 0, 
-                src: require('@/assets/dog-yikes.jpg'), 
-                thumbnailSrc: require('@/assets/dog-yikes-thumb.jpg'), 
+                src: '/assets/dog-yikes.jpg', 
+                thumbnailSrc: '/assets/dog-yikes-thumb.jpg', 
                 alt: 'A satin blue dog, beset by bones. The word “Yikes!” explodes vibrantly in the foreground. He gives a sidelong stare, frightened, as if to say “That is not my problem.”'
               },
               {
                 key: 1, 
-                src: require('@/assets/dog-boned.jpg'), 
-                thumbnailSrc: require('@/assets/dog-boned-thumb.jpg'), 
+                src: '/assets/dog-boned.jpg', 
+                thumbnailSrc: '/assets/dog-boned-thumb.jpg', 
                 alt: 'A satin blue dog peers down at you, desperate. Two bones cross behind him like the Jolly Roger. The word “Boned!” floats before him. He leans back, resigned to his fate.' 
               },
             ]"

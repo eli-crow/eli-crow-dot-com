@@ -2,7 +2,7 @@
 import { BezierSpline } from '../../lib/bezier.js';
 import * as V from '../../lib/v.js';
 
-import { defineEmits, defineProps, onMounted, reactive, ref, watch, computed } from 'vue';
+import { onMounted, reactive, ref, watch, computed } from 'vue';
 
 const emit = defineEmits(['update:modelValue']);
 const props = defineProps({
