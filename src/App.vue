@@ -13,18 +13,20 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
 
     <div class="intro">
       <div class="intro-content">
-        <h1 class="font-light text-2xl leading-snug">
+        <h1 class="font-light text-2xl leading-[1.42] text-gray-500">
           <strong style="display: block;">
             Eli Crow is a
-            <span style="display: block; margin: 0.35ch 0">
+            <span class="block my-[0.7ch]">
               <span class="gooey-text"><span class="gooey-text-inner">designer and developer</span></span>
             </span>
           </strong>
           making software products for lasting benefit with
           <a href="https://sep.com" target="_blank" rel="noopener">sep.com</a>
         </h1>
-        <hr class="my-6 border-gray-200">
-        <p class="text-gray-300">This site is for interactive experiments and thoughts on design and development. I am happily employed.</p>
+
+        <hr class="my-8 border-t-2 border-gray-100">
+
+        <p class="text-gray-400 leading-relaxed">This site is for interactive experiments and thoughts on design and development. I am happily employed.</p>
       </div>
     </div>
 
@@ -33,26 +35,17 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
         <Crow class="flex-1" :scale="0.65" />
       </Card>
 
-      <!-- <LinkContainer tag="article" class="card is-link is-bones-live">
-        <img class="card-image-typography" src="/assets/typography.svg" />
-
-        <div class="card-padding">
-          <h2 class="card-title is-high-leading"><span contenteditable class="gooey-text is-subtle"><span class="gooey-text-inner">A call for a typographic box model that actually makes sense</span></span></h2>
-          <p><time>2021</time></p>
-        </div>
-        <a data-main-link href="#" class="card-corner-decoration is-page" aria-label="Read Article" @click.stop>
-          <Icon icon="chevronRight" />
-        </a>
-      </LinkContainer> -->
-
       <AlleyOoperCard />
 
-      <Card type="external" href="https://bones.live" class="p-8" tag="article">
-        <img class="h-32 mb-8 self-start" src="/assets/bones-live-dice.svg" />
-        <h2 class="text-xl font-light text-gray-900 mb-4">
-          Bones.live, a multiplayer dice box. Throw the bones. Embrace your destiny.
-        </h2>
-        <p><time>2021</time></p>
+      <Card type="external" href="https://bones.live" class="p-8 group" tag="article">
+        <div class="card-gradient-purple absolute inset-0 z-1 transition duration-[1s] transform scale-125 group-hover:scale-100"/>
+        <div class="relative z-10">
+          <img class="h-32 mb-8 self-start" src="/assets/bones-live-dice.svg" />
+          <h2 class="text-xl leading-snug font-light text-gray-900 mb-4">
+            Bones.live, a multiplayer dice box. Throw the bones. Embrace your destiny.
+          </h2>
+          <p><time>2021</time></p>
+        </div>
       </Card>
 
       <Card>
@@ -61,14 +54,14 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
           :images="[
             {
               key: 0, 
-              src: '/assets/dog-yikes.jpg', 
-              thumbnailSrc: '/assets/dog-yikes-thumb.jpg', 
+              src: '/assets/dog-yikes.webp', 
+              thumbnailSrc: '/assets/dog-yikes-thumb.webp', 
               alt: 'A satin blue dog, beset by bones. The word “Yikes!” explodes vibrantly in the foreground. He gives a sidelong stare, frightened, as if to say “That is not my problem.”'
             },
             {
               key: 1, 
-              src: '/assets/dog-boned.jpg', 
-              thumbnailSrc: '/assets/dog-boned-thumb.jpg', 
+              src: '/assets/dog-boned.webp', 
+              thumbnailSrc: '/assets/dog-boned-thumb.webp', 
               alt: 'A satin blue dog peers down at you, desperate. Two bones cross behind him like the Jolly Roger. The word “Boned!” floats before him. He leans back, resigned to his fate.' 
             },
           ]"
@@ -84,13 +77,13 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
       </Card>
 
       <Card class="p-8">
-        <p>Imagine this is one of the 30 blog posts I never finished.</p>
+        <p class="text-gray-400">Imagine this is one of the 30 blog posts I never finished.</p>
       </Card>
       <Card class="p-8">
-        <p>Pretend there is an impressive-looking chart here to show off my visualization skills.</p>
+        <p class="text-gray-400">Pretend there is an impressive-looking chart here to show off my visualization skills.</p>
       </Card>
       <Card class="p-8">
-        <p>This is where my resumé would go if I had one.</p>
+        <p class="text-gray-400">This is where my resumé would go if I had one.</p>
       </Card>
     </div>
   </div>
@@ -98,17 +91,16 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
 
 <style scoped>
 .site {
-  --site-padding-top: 52px;
+  --site-padding-top: 40px;
   --site-columns: repeat(auto-fit, minmax(300px, 1fr));
-  display: grid;
-  grid-template-columns: var(--site-columns);
   gap: 20px;
-  padding-top: var(--site-padding-top);
 }
-@media screen and (max-width: 700px) {
+@screen sm {
   .site {
-    --site-padding-top: 40px;
-    display: block;
+    --site-padding-top: 52px;
+    display: grid;
+    grid-template-columns: var(--site-columns);
+    padding-top: var(--site-padding-top);
   }
 }
 
@@ -120,10 +112,11 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
   position: sticky;
   top: var(--site-padding-top);
   transform: translateY(-0.5rem);
+  padding-bottom: var(--site-padding-top);
 }
-@media screen and (max-width: 700px) {
+@screen sm {
   .intro-content {
-    padding-bottom: var(--site-padding-top);
+    padding-bottom: 0;
   }
 }
 
@@ -133,35 +126,10 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
   grid-template-columns: var(--site-columns);
   gap: inherit;
 }
-@media screen and (max-width: 700px) {
-  .card-group {
-    padding-right: 0;
-  }
-}
 
-.space {
-  flex: 1 0 0;
-}
-
-/* inner added to cope with safari bug */
-.gooey-text {
-  filter: url(#filter-goo-blue);
-  margin: -0.5em calc(0.16em - 0.5em);
-  padding: 0.5em;
-  box-decoration-break: clone;
-}
-.gooey-text-inner {
-  @apply decoration-clone px-[0.16em] text-gray-50 bg-teal;
-}
-.gooey-text.is-subtle {
-  @apply -my-2 mx-[calc(-0.16em-0.5em)];
-  filter: url(#filter-goo-black);
-}
-.gooey-text.is-subtle .gooey-text-inner {
-  @apply bg-gray-50 text-gray-900;
-}
-.gooey-text-inner::selection {
-  @apply bg-yellow;
+.card-gradient-purple {
+  background-image: radial-gradient(32rem 32rem at 6rem 6rem, transparent 50%, theme('colors.purple.DEFAULT'));
+  transform-origin: 6rem 6rem;
 }
 
 .thumbnail:hover {

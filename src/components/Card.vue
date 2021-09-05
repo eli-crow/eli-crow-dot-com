@@ -48,7 +48,7 @@ function handleClick(e) {
 
         <div 
             v-if="props.type === 'interactive'" 
-            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default p-8 pointer-events-none">
+            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-screen p-8 pointer-events-none">
             <Icon icon="cursor" />
         </div>
         <a 
@@ -57,7 +57,7 @@ function handleClick(e) {
             ref="link"
             target="_blank"
             rel="noopener"
-            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default p-8"
+            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-screen p-8"
             aria-label="Visit Site"
             @click.stop>
             <Icon icon="externalLink" />
@@ -66,8 +66,12 @@ function handleClick(e) {
 </template>
 
 <style scoped>
-.card.is-link:hover {
-  box-shadow: inset 0 0 0 1px theme('colors.gray.200');
+.is-link {
+  cursor: default;
+}
+.is-link:hover {
+  box-shadow: 
+    inset 0 0 0px 2px theme('colors.gray.200');
 }
 @keyframes loading {
     from {

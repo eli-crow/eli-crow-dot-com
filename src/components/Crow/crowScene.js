@@ -1,12 +1,12 @@
 import * as PIXI from 'pixi.js'
 import gsap, {MotionPathPlugin, PixiPlugin} from 'gsap/all'
 
-import snakeTextureSrc from './assets/snake.png'
-import blobTextureSrc from './assets/blob.png'
-import dingTextureSrc from './assets/ding.png'
-import peepisTextureSrc from './assets/peepis.png'
-import stickTextureSrc from './assets/stick.png'
-import tildeTextureSrc from './assets/tilde.png'
+import snakeTextureSrc from './assets/snake.webp'
+import blobTextureSrc from './assets/blob.webp'
+import dingTextureSrc from './assets/ding.webp'
+import peepisTextureSrc from './assets/peepis.webp'
+import stickTextureSrc from './assets/stick.webp'
+import tildeTextureSrc from './assets/tilde.webp'
 
 import {angleDifference} from '../../lib/v.js'
 const lerp = (a, b, t) => a * (1 - t) + b * t;

@@ -1,10 +1,7 @@
-@import url("https://use.typekit.net/gwp5zpe.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@layer utilities {
 
-}
 html {
   @apply text-gray-500 h-full;
 }
@@ -18,9 +15,15 @@ html {
 }
 
 body {
-  @apply h-full flex flex-col leading-normal bg-gray-50;
+  @apply h-full flex flex-col leading-normal bg-gray-50 text-base;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+@screen sm {
+  body {
+    background-image: radial-gradient(220vw 110vh at 12rem 12rem, transparent 60%, theme('colors.teal.DEFAULT'));
+    background-attachment: fixed;
+  }
 }
 
 body>* {
