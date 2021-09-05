@@ -136,7 +136,7 @@ function handleKeyboard(e) {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--surface-1);
+  background-color: theme('colors.gray.100');
   /* backdrop-filter: blur(10px); */
   will-change: opacity;
 }
@@ -212,6 +212,7 @@ function handleKeyboard(e) {
 }
 .image {
   object-fit: contain;
+  width: 100%;
   height: 100%;
 }
 .pager {

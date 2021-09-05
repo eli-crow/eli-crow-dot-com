@@ -105,18 +105,22 @@ function handleThumbDown(ev) {
     ref="root">
     <svg
       v-if="state.mounted"
-      class="svg">
-      <path tab-index="0"
-        class="track"
+      class="overflow-visible w-full">
+      <path 
+        class="fill-none stroke-[6px] text-gray-400 stroke-current fill-[none]"
+        stroke-linecap="round"
+        vector-effect="non-scaling-stroke"
         :d="state.pathData"
         ref="trackRef" />
       <path
-        class="track-progress"
+        class="fill-none stroke-[6px] text-teal stroke-current fill-[none]"
+        stroke-linecap="round"
+        vector-effect="non-scaling-stroke"
         :d="state.pathData"
         stroke-dasharray="99999"
         :stroke-dashoffset="state.progressDashOffset" />
       <circle
-        class="thumb"
+        class="text-white fill-current stroke-[2px] stroke-current active:stroke-[hsla(209,73%,59%,1)]"
         :cx="state.thumbPosition[0]"
         :cy="state.thumbPosition[1]"
         :r="state.thumbRadius"
@@ -125,32 +129,3 @@ function handleThumbDown(ev) {
     </svg>
   </div>
 </template>
-
-<style scoped>
-.svg {
-  overflow: visible;
-  width: 100%;
-}
-.track {
-  fill: none;
-  stroke: white;
-  vector-effect: non-scaling-stroke;
-  stroke-width: 6px;
-  stroke-linecap: round;
-}
-.track-progress {
-  fill: none;
-  stroke: var(--blue);
-  vector-effect: non-scaling-stroke;
-  stroke-width: 6px;
-  stroke-linecap: round;
-}
-.thumb {
-  fill: white;
-  stroke-width: 2px;
-  vector-effect: non-scaling-stroke;
-}
-.thumb:active {
-  stroke: var(--blue);
-}
-</style>
