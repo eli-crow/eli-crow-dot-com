@@ -2,6 +2,7 @@ export const dot = (v0, v1) => v0[0] * v1[0] + v0[1] * v1[1];
 export const magnitude = (v) => Math.sqrt(squareLength(v));
 export const length = magnitude;
 export const angle = (v) => Math.atan2(v[1], v[0]);
+export const angleDifference = (a, b, _d = a - b) => _d + (_d > Math.PI ? -2 * Math.PI : _d < -Math.PI ? 2 * Math.PI : 0);
 export const toPolar = (v) => [angle(v), length(v)];
 export const fromPolar = (theta, r) => [Math.cos(theta) * r, Math.sin(theta) * r];
 export const squareLength = (v) => v[0] ** 2 + v[1] ** 2;

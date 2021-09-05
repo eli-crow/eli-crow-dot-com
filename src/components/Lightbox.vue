@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits, defineProps, computed, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { FocusTrap } from 'focus-trap-vue';
 
 const props = defineProps({
@@ -21,10 +21,6 @@ const emit = defineEmits([
 const focusRoot = ref();
 watch(focusRoot, newValue => {
   newValue?.focus();
-});
-const focusableElements = computed(() => {
-  return [...focusRoot.value.querySelectorAll('a, button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])')]
-    .filter(el => !el.hasAttribute('disabled'));
 });
 
 const selectedImageIndex = computed(() => props.selectedImageKey === null ? null : props.images.findIndex(i => i.key === props.selectedImageKey));
@@ -140,7 +136,7 @@ function handleKeyboard(e) {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--surface-1);
+  background-color: theme('colors.gray.100');
   /* backdrop-filter: blur(10px); */
   will-change: opacity;
 }
@@ -216,6 +212,7 @@ function handleKeyboard(e) {
 }
 .image {
   object-fit: contain;
+  width: 100%;
   height: 100%;
 }
 .pager {

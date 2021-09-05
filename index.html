@@ -2,12 +2,13 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eli Crow, Designer & Developer</title>
 
   <!-- Favicon / theme -->
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" href="/favicon/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
   <link rel="manifest" href="/favicon/site.webmanifest">
@@ -15,19 +16,23 @@
   <meta name="msapplication-TileColor" content="#00aba9">
   <meta name="theme-color" content="#ffffff">
 
-  <title>elicrow-com</title>
+  <!-- preload / prefetch -->
+  <link rel="preconnect" href="https://use.typekit.net">
+  <link rel="preload" href="/src/components/Crow/crowScene.js">
+
+  <!-- defer fonts -->
+  <link rel="preload" href="https://use.typekit.net/gwp5zpe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 </head>
 
 <body>
   <noscript>
-    <strong>We're sorry but elicrow-com doesn't work properly without JavaScript enabled. Please enable it to
-      continue.</strong>
+    <strong>Sorry, this site doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
   </noscript>
+
   <div id="app"></div>
   <div id="overlay"></div>
-  <!-- built files will be auto injected -->
+  <script type="module" src="/src/main.js"></script>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-91287800-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -36,7 +41,6 @@
 
     gtag('config', 'UA-91287800-1');
   </script>
-
 </body>
 
 </html>
