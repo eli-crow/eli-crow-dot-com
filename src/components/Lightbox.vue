@@ -220,7 +220,7 @@ function handleKeyboard(e) {
   align-items: center;
   justify-content: center;
   position: absolute;
-  z-index: 1;
+  z-index: 20;
   top: 0;
   height: 100%;
   appearance: none;
