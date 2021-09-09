@@ -29,7 +29,7 @@ function handleClick(e) {
 <template>
     <component
       :is="props.tag" 
-      class="card relative flex flex-col bg-gray-100 h-[520px] overflow-hidden group" 
+      class="relative flex flex-col bg-gray-100 h-[520px] overflow-hidden group rounded-sm" 
       :class="{
         'is-link': props.type === 'external'
       }"
@@ -71,7 +71,7 @@ function handleClick(e) {
 }
 .is-link:hover {
   box-shadow: 
-    inset 0 0 0px 2px theme('colors.gray.200');
+    inset 0 0 0px 1px theme('colors.gray.200');
 }
 @keyframes loading {
     from {
@@ -85,7 +85,7 @@ function handleClick(e) {
     position: absolute;
     inset: 0;
     background: rgba(255,255,255, 0.05);
-    animation: loading 1s ease infinite alternate both;
+    animation: loading 0.5s ease-out infinite alternate both;
     animation-delay: 600ms;
 }
 </style>

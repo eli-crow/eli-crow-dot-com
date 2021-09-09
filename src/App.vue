@@ -9,10 +9,10 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
 <template>
   <TheSVGFilters v-once />
 
-  <div class="site">
+  <div class="site py-12">
 
-    <div class="intro">
-      <div class="intro-content">
+    <div class="px-8 pb-12 sm:py-0">
+      <div class="sm:sticky sm:top-12">
         <h1 class="font-light text-2xl leading-[1.42] text-gray-500">
           <strong style="display: block;">
             Eli Crow is a
@@ -91,32 +91,13 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
 
 <style scoped>
 .site {
-  --site-padding-top: 40px;
   --site-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
 @screen sm {
   .site {
-    --site-padding-top: 52px;
     display: grid;
     grid-template-columns: var(--site-columns);
-    padding-top: var(--site-padding-top);
-  }
-}
-
-.intro {
-  padding-left: 32px;
-  padding-right: 32px;
-}
-.intro-content {
-  position: sticky;
-  top: var(--site-padding-top);
-  transform: translateY(-0.5rem);
-  padding-bottom: var(--site-padding-top);
-}
-@screen sm {
-  .intro-content {
-    padding-bottom: 0;
   }
 }
 
