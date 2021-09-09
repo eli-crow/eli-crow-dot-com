@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview",
+    "serve": "vite preview"
   },
   "dependencies": {
     "autoprefixer": "^10.3.4",
