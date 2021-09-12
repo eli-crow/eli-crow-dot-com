@@ -26,9 +26,11 @@ import TheThemeSettings from './components/TheThemeSettings.vue'
           <a href="https://sep.com" target="_blank" rel="noopener">sep.com</a>
         </h1>
 
-        <hr class="mt-5 mb-6 border-t-2 border-gray-200">
+        <hr class="mt-5 mb-6 border-t-2 border-gray-100">
 
-        <p class="text-gray-400 leading-relaxed mb-6">This site is for interactive experiments and thoughts on design and development. I am happily employed.</p>
+        <p class="text-gray-400 leading-relaxed mb-6">
+          This site is a playground for interactive experiments and thoughts on design and development. I am happily employed.
+        </p>
 
         <TheThemeSettings />
       </div>
@@ -43,7 +45,7 @@ import TheThemeSettings from './components/TheThemeSettings.vue'
 
       <Card type="external" href="https://bones.live" class="p-8 group" tag="article">
         <div class="relative z-10">
-          <Icon class="text-[8rem] w-auto mb-7 self-start text-purple dark:text-gray-900" icon="bonesDotLive"/>
+          <Icon class="text-[8rem] w-auto mb-10 self-start text-purple dark:text-gray-900" icon="bonesDotLive"/>
           <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">
             Bones.live, a multiplayer dice box. Throw the bones. Embrace your destiny.
           </h2>

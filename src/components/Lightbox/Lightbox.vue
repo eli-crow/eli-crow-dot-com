@@ -157,42 +157,21 @@ function handleKeyboard(e) {
 }
 .content {
   overscroll-behavior: contain;
-  max-width: 1000px;
+  width: 100%;
   height: 100%;
   pointer-events: all;
   min-height: 0;
   outline: none;
-}
-@media screen and (max-width: 700px) {
-  .content {
-    display: grid;
-    grid-template:
-      ". . . . ." 1.25rem
-      ". title . close ." 2rem
-      ". . . . ." 1.25rem
-      "image image image image image" 1fr
-      ". . . . ." 1.5rem
-      ". thumbnails thumbnails thumbnails ." 4rem
-      ". . . . ." 1.5rem
-      / 1.5rem 1fr 1rem auto 1.5rem;
-  }
-}
-@media not screen and (max-width: 700px) {
-  .content-container {
-    padding: 0 1.5rem;
-  }
-  .content {
-    display: grid;
-    grid-template:
-      ". . ." 1.25rem
-      "title . close" 2rem
-      ". . ." 1.25rem
-      "image image image" 1fr
-      ". . ." 1.5rem
-      "thumbnails thumbnails thumbnails" 4rem
-      ". . ." 1.5rem
-      / 1fr 1rem auto;
-  }
+  display: grid;
+  grid-template:
+    ". . . . ." 1.25rem
+    ". title . close ." 2rem
+    ". . . . ." 1.25rem
+    "image image image image image" 1fr
+    ". . . . ." 1.5rem
+    ". thumbnails thumbnails thumbnails ." 4rem
+    ". . . . ." 1.5rem
+    / 1.5rem 1fr 1rem auto 1.5rem;
 }
 .title {
   grid-area: title;
@@ -209,7 +188,6 @@ function handleKeyboard(e) {
 .image-container {
   position: relative;
   grid-area: image;
-  background-color: black;
   background-size: cover;
   min-height: 0;
 }
@@ -257,7 +235,7 @@ function handleKeyboard(e) {
   width: auto;
 }
 .thumbnail[data-selected="true"] {
-  outline: solid 3px white;
+  outline: solid 3px theme('colors.blue.DEFAULT');
 }
 .thumbnail:hover {
   filter: brightness(1.2);

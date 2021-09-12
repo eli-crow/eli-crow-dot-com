@@ -1,7 +1,8 @@
 <script setup>
 import { ref, watch } from "vue"
 
-const theme = ref(localStorage.theme ?? 'dark')
+const preferred = window?.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+const theme = ref(localStorage.theme ?? preferred ?? 'dark')
 
 watch(theme, setTheme)
 setTheme(theme.value)
@@ -25,7 +26,7 @@ function toggleTheme() {
 </script>
 
 <template>
-  <button @click="toggleTheme" class="flex items-center text-gray-400">
+  <button @click="toggleTheme" class="flex items-center text-gray-400 hover:text-gray-900">
       <Icon class="text-lg" v-if="theme === 'dark'" icon="sun" />
       <Icon class="text-lg" v-else icon="moon" />
       <span class="ml-2">Toggle theme</span>

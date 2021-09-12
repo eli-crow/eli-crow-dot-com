@@ -25,8 +25,8 @@ function open(key) {
         <div class="flex flex-col relative group mb-7">
             <img
                 class="
-                rounded shadow-lg relative z-10 transition duration-1000 transform origin-center
-                group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:rotate-[-3deg]"
+                rounded shadow-lg relative z-10 transition duration-1000 transform origin-bottom-left
+                group-hover:rotate-[-4deg]"
                 draggable="false"
                 :key="props.images[0].key"
                 :src="props.images[0].thumbnailSrc"
@@ -34,8 +34,8 @@ function open(key) {
             />
             <img
                 class="
-                  rounded absolute inset-0 transform origin-center opacity-10 transition duration-1000
-                  group-hover:translate-x-8 group-hover:-translate-y-6 group-hover:opacity-50 group-hover:rotate-[8deg]"
+                  rounded absolute inset-0 transform origin-bottom-left opacity-10 transition duration-1000
+                  group-hover:opacity-50 group-hover:rotate-[4deg]"
                 draggable="false"
                 :key="props.images[1].key"
                 :src="props.images[1].thumbnailSrc"
