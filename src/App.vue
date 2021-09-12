@@ -3,6 +3,7 @@ import Crow from './components/Crow/Crow.vue';
 import Card from './components/Card.vue';
 import LightboxPreview from "./components/LightboxPreview.vue";
 import AlleyOoperCard from './components/AlleyOoper/AlleyOoperCard.vue';
+import GLTFViewer from './components/GLTFViewer/GLTFViewer.vue';
 import TheSVGFilters from './components/TheSVGFilters.vue'
 </script>
 
@@ -49,31 +50,49 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
       </Card>
 
       <Card>
-        <LightboxPreview
-          title="Yikes Dog – Blender"
-          :images="[
-            {
-              key: 0, 
-              src: '/assets/dog-yikes.webp', 
-              thumbnailSrc: '/assets/dog-yikes-thumb.webp', 
-              alt: 'A satin blue dog, beset by bones. The word “Yikes!” explodes vibrantly in the foreground. He gives a sidelong stare, frightened, as if to say “That is not my problem.”'
-            },
-            {
-              key: 1, 
-              src: '/assets/dog-boned.webp', 
-              thumbnailSrc: '/assets/dog-boned-thumb.webp', 
-              alt: 'A satin blue dog peers down at you, desperate. Two bones cross behind him like the Jolly Roger. The word “Boned!” floats before him. He leans back, resigned to his fate.' 
-            },
-          ]"
-          v-slot="{images, open}">
-          <img
-            class="thumbnail"
-            v-for="image in images"
-            :key="image.key"
-            :src="image.thumbnailSrc"
-            :alt="image.alt"
-            @click="open(image.key)" />
-        </LightboxPreview>
+        <div class="p-8">
+          <LightboxPreview
+            title="Yikes Dog – Blender"
+            :images="[
+              {
+                key: 0, 
+                src: '/assets/dog-yikes.webp', 
+                thumbnailSrc: '/assets/dog-yikes-thumb.webp', 
+                alt: 'A satin blue dog, beset by bones. The word “Yikes!” explodes vibrantly in the foreground. He gives a sidelong stare, frightened, as if to say “That is not my problem.”'
+              },
+              {
+                key: 1, 
+                src: '/assets/dog-boned.webp', 
+                thumbnailSrc: '/assets/dog-boned-thumb.webp', 
+                alt: 'A satin blue dog peers down at you, desperate. Two bones cross behind him like the Jolly Roger. The word “Boned!” floats before him. He leans back, resigned to his fate.' 
+              },
+            ]"
+            v-slot="{images}">
+
+            <h2 class="text-xl leading-snug font-light text-gray-900 mb-1 mt-8">
+              Yikes Dog
+            </h2>
+            <p><time>2021, Blender</time></p>
+
+            <div class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-screen p-8 flex items">
+              <span class="mr-2 text-lg leading-none">{{images.length}}</span>
+              <Icon icon="image" />
+            </div>
+          </LightboxPreview>
+        </div>
+      </Card>
+
+      <Card>
+        <GLTFViewer class="h-64" gltf="/assets/ute.glb"/>
+        <div class="p-8 pt-0">
+          <h2 class="text-xl leading-snug font-light text-gray-900 mb-1">
+            Ute
+          </h2>
+          <p><time>2021, Blender</time></p>
+        </div>
+        <div class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-screen p-8 flex items">
+          <Icon icon="threeD" />
+        </div>
       </Card>
 
       <Card class="p-8">
@@ -111,9 +130,5 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
 .card-gradient-purple {
   background-image: radial-gradient(32rem 32rem at 6rem 6rem, transparent 50%, theme('colors.purple.DEFAULT'));
   transform-origin: 6rem 6rem;
-}
-
-.thumbnail:hover {
-  filter: brightness(1.2);
 }
 </style>
