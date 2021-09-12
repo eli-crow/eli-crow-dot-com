@@ -4,7 +4,7 @@ module.exports = {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}"
   ],
-  darkMode: false,
+  darkMode: 'class',
   theme: {
     fontFamily: {
       sans: ['"proxima-nova"', '"Open Sans"', '"Gill Sans MT"', '"Gill Sans"', 'Corbel', 'Helvetica', 'Arial', 'sans-serif']
@@ -19,37 +19,37 @@ module.exports = {
     },
     colors: {
       black: {
-        DEFAULT: 'rgba(0, 0, 0, 1)',
+        DEFAULT: 'var(--white)',
       },
       white: {
-        DEFAULT: 'rgba(255, 255, 255, 1)',
+        DEFAULT: 'var(--white)',
       },
       red: {
-        DEFAULT: 'rgba(245, 79, 68, 1)',
+        DEFAULT: 'var(--red)',
       },
       yellow: {
-        DEFAULT: 'rgba(248, 190, 42, 1)',
+        DEFAULT: 'var(--yellow)',
       },
       teal: {
-        DEFAULT: 'rgba(3, 208, 183, 1)',
+        DEFAULT: 'var(--teal)',
       },
       blue: {
-        DEFAULT: 'rgba(60, 153, 239, 1)',
+        DEFAULT: 'var(--blue)',
       },
       purple: {
-        DEFAULT: 'rgba(117, 56, 173, 1)',
+        DEFAULT: 'var(--purple)',
       },
       gray: {
-        '50': 'rgba(8, 9, 11, 1)',
-        '100': 'rgba(22, 24, 28, 1)',
-        '200': 'rgba(41, 47, 55, 1)',
-        '300': 'rgba(65, 72, 82, 1)',
-        '400': 'rgba(86, 94, 107, 1)',
-        '500': 'rgba(112, 122, 137, 1)',
-        '600': 'rgba(133, 145, 161, 1)',
-        '700': 'rgba(158, 170, 188, 1)',
-        '800': 'rgba(185, 196, 211, 1)',
-        '900': 'rgba(219, 227, 239, 1)',
+        '50': 'var(--gray-50)',
+        '100': 'var(--gray-100)',
+        '200': 'var(--gray-200)',
+        '300': 'var(--gray-300)',
+        '400': 'var(--gray-400)',
+        '500': 'var(--gray-500)',
+        '600': 'var(--gray-600)',
+        '700': 'var(--gray-700)',
+        '800': 'var(--gray-800)',
+        '900': 'var(--gray-900)',
       },
     },
   }

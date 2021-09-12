@@ -5,6 +5,7 @@ import LightboxCard from "./components/Lightbox/LightboxCard.vue";
 import AlleyOoperCard from './components/AlleyOoper/AlleyOoperCard.vue';
 import GLTFViewer from './components/GLTFViewer/GLTFViewer.vue';
 import TheSVGFilters from './components/TheSVGFilters.vue'
+import TheThemeSettings from './components/TheThemeSettings.vue'
 </script>
 
 <template>
@@ -27,7 +28,9 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
 
         <hr class="mt-5 mb-6 border-t-2 border-gray-200">
 
-        <p class="text-gray-400 leading-relaxed">This site is for interactive experiments and thoughts on design and development. I am happily employed.</p>
+        <p class="text-gray-400 leading-relaxed mb-6">This site is for interactive experiments and thoughts on design and development. I am happily employed.</p>
+
+        <TheThemeSettings />
       </div>
     </div>
 
@@ -40,7 +43,7 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
 
       <Card type="external" href="https://bones.live" class="p-8 group" tag="article">
         <div class="relative z-10">
-          <img class="h-36 mb-7 self-start" src="/assets/bones-live-dice.svg" />
+          <Icon class="text-[8rem] w-auto mb-7 self-start text-purple dark:text-gray-900" icon="bonesDotLive"/>
           <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">
             Bones.live, a multiplayer dice box. Throw the bones. Embrace your destiny.
           </h2>
@@ -103,7 +106,7 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
 }
 @screen sm {
   .site {
-    --site-columns: repeat(auto-fit, minmax(300px, 1fr));
+    --site-columns: repeat(auto-fit, minmax(280px, 1fr));
     display: grid;
     grid-template-columns: var(--site-columns);
   }
@@ -113,5 +116,4 @@ import TheSVGFilters from './components/TheSVGFilters.vue'
     grid-template-columns: var(--site-columns);
   }
 }
-
 </style>

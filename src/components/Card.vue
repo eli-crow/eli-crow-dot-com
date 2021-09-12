@@ -29,7 +29,7 @@ function handleClick(e) {
 <template>
     <component
       :is="props.tag" 
-      class="relative shadow-lg flex flex-col bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm" 
+      class="relative flex flex-col bg-white dark:bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm transition" 
       :class="{
         'is-link': props.type === 'external' || props.type === 'internal'
       }"
@@ -48,12 +48,12 @@ function handleClick(e) {
 
         <div 
             v-if="props.type === 'interactive'" 
-            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-screen p-8 pointer-events-none">
+            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-multiply dark:mix-blend-screen p-8 pointer-events-none">
             <Icon icon="cursor" />
         </div>
         <div 
             v-else-if="props.type === '3d'" 
-            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-screen p-8 flex items">
+            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-multiply dark:mix-blend-screen p-8 flex items">
             <Icon icon="threeD" />
         </div>
         <a 
@@ -62,7 +62,7 @@ function handleClick(e) {
             ref="link"
             target="_blank"
             rel="noopener"
-            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-screen p-8"
+            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-multiply dark:mix-blend-screen p-8"
             aria-label="Visit Site"
             @click.stop>
             <Icon icon="externalLink" />
@@ -73,10 +73,13 @@ function handleClick(e) {
 <style scoped>
 .is-link {
   cursor: default;
+  --shadow-color: var(--gray-100);
+}
+:deep(.dark) .is-link {
+  --shadow-color: var(--gray-200);
 }
 .is-link:hover {
-  box-shadow: 
-    inset 0 0 0px 1px theme('colors.gray.200');
+  box-shadow: inset 0 0 0px 1px var(--shadow-color);
 }
 @keyframes loading {
     from {

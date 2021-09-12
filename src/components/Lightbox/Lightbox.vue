@@ -75,7 +75,7 @@ function handleKeyboard(e) {
 </script>
 
 <template>
-  <slot :title="props.title" :images="props.images" :open="open"/>
+  <slot :title="props.title" :images="props.images" />
 
   <teleport to="#overlay">
     <transition name="fade">
@@ -139,7 +139,7 @@ function handleKeyboard(e) {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: theme('colors.gray.100');
+  background-color: theme('colors.gray.50');
   /* backdrop-filter: blur(10px); */
   will-change: opacity;
 }

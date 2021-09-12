@@ -18,6 +18,7 @@ const { w, h, d } = icons[props.icon]
 <style scoped>
 svg {
   height: 1em;
+  width: auto;
   overflow: visible;
 }
 </style>
