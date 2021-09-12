@@ -29,7 +29,7 @@ watchEffect(() => {
 <template>
   <Card type="interactive" class="p-8">
     <transition name="fade" mode="out-in">
-      <div v-if="state.status === 'normal'" class="alley-ooper-group">
+      <div v-if="state.status === 'normal'" class="alley-ooper-group pb-16">
         <label class="alley-ooper">
           <span class="alley-ooper-label">Slider</span>
           <span class="alley-ooper-value">{{ state.alleyOopers[0].toFixed(0) }}</span>
@@ -52,7 +52,7 @@ watchEffect(() => {
         </label>
       </div>
 
-      <div v-else>
+      <div v-else class=" pb-16">
         <label class="alley-ooper">
           <span class="alley-ooper-label">Alley-Ooper</span>
           <span class="alley-ooper-value">{{ state.wildAlleyOoper.toFixed(0) }}</span>

@@ -29,9 +29,9 @@ function handleClick(e) {
 <template>
     <component
       :is="props.tag" 
-      class="relative flex flex-col bg-gray-100 h-[520px] overflow-hidden group rounded-sm" 
+      class="relative shadow-lg flex flex-col bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm" 
       :class="{
-        'is-link': props.type === 'external'
+        'is-link': props.type === 'external' || props.type === 'internal'
       }"
       @click="handleClick"
     >
@@ -50,6 +50,11 @@ function handleClick(e) {
             v-if="props.type === 'interactive'" 
             class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-screen p-8 pointer-events-none">
             <Icon icon="cursor" />
+        </div>
+        <div 
+            v-else-if="props.type === '3d'" 
+            class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-screen p-8 flex items">
+            <Icon icon="threeD" />
         </div>
         <a 
             v-else-if="props.type === 'external'"

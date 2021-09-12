@@ -75,6 +75,8 @@ function handleKeyboard(e) {
 </script>
 
 <template>
+  <slot :title="props.title" :images="props.images" :open="open"/>
+
   <teleport to="#overlay">
     <transition name="fade">
       <div class="backdrop" v-if="props.selectedImageKey !== null" @scroll.stop.prevent.capture @click="close" />
@@ -85,18 +87,19 @@ function handleKeyboard(e) {
         <FocusTrap :active="props.selectedImageKey !== null" @deactivate="close">
           <div
             class="content"
-            @click.stop
             tabindex="-1"
             ref="focusRoot"
+            @click.stop
             @keydown="handleKeyboard">
 
             <h2 class="title">{{props.title}} {{selectedImageIndex + 1}}/{{props.images.length}}</h2>
             <button class="close icon-button" @click.prevent="close">
               <Icon icon="close" />
             </button>
+
             <div class="image-container">
               <img
-                class="image"
+                class="image rounded"
                 :src="selectedSrc"
                 :alt="selectedImage.alt" />
               <button class="previous pager" @click="previous">
@@ -106,21 +109,21 @@ function handleKeyboard(e) {
                 <Icon icon="chevronRight" />
               </button>
             </div>
+
             <div class="thumbnails">
               <img
                 v-for="image in images"
-                class="thumbnail"
+                class="thumbnail rounded-sm"
                 draggable="false"
+                tabindex="0"
                 :key="image.key"
                 :src="image.thumbnailSrc"
                 :alt="image.alt"
                 :data-selected="image.key === selectedImageKey"
-                tabindex="0"
                 @keydown.enter="changeImage(image.key)"
                 @keydown.space="changeImage(image.key)"
                 @click.prevent="changeImage(image.key)" />
             </div>
-
           </div>
         </FocusTrap>
       </div>

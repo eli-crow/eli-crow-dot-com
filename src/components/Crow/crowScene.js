@@ -62,14 +62,14 @@ function createScene() {
       shapes.scale = new PIXI.Point(scale, scale);
       shapes.sortableChildren = true;
       shapes.position.set(
-        canvas.clientWidth / 2 - 12,
-        canvas.clientHeight / 2 - 40
+        canvas.clientWidth / 2 + 10,
+        canvas.clientHeight / 2 - 30
       );
       app.stage.addChild(shapes);
       window.addEventListener("resize", () => {
         shapes.position.set(
-          canvas.clientWidth / 2 - 12,
-          canvas.clientHeight / 2 - 40
+          canvas.clientWidth / 2 + 10,
+          canvas.clientHeight / 2 - 30
         );
       });
   

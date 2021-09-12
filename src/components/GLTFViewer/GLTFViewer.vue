@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue"
+import { ref, onMounted, onBeforeUnmount } from "vue"
 import envTextureUrl from './pedestrian_overpass_1k.hdr'
 
 const container = ref()
@@ -10,17 +10,32 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    rotate: {
+        type: Boolean,
+        default: false,
+    },
 })
+
+const doesAnimate = props.rotate
 
 let THREE, OrbitControls
 let gltf, environmentTexture
-let camera, scene, renderer
+let camera, scene, renderer, controls
 
 await load()
 
 onMounted(() => {
     init()
     render()
+    if (doesAnimate) {
+        window.requestAnimationFrame(loop)
+    }
+})
+
+onBeforeUnmount(() => {
+    if (doesAnimate) {
+        window.cancelAnimationFrame(loop)
+    }
 })
 
 async function load() {
@@ -62,18 +77,25 @@ function init () {
     scene = new THREE.Scene()
     scene.add(gltf.scene)
 
-    camera = gltf.cameras[1]
+    // TODO: next time you add a model, figure out how you want to disambiguate cameras
+    camera = gltf.cameras[0]
     camera.position.copy(camera.parent.position)
     camera.quaternion.copy(camera.parent.quaternion)
     camera.scale.copy(camera.parent.scale)
     scene.add(camera)
 
-    const controls = new OrbitControls(camera, canvas.value);
+    controls = new OrbitControls(camera, canvas.value);
     controls.addEventListener('change', render)
-    controls.minDistance = 20
-    controls.maxDistance = 20
-    controls.target.set(-.8, 0.4, 0)
+    controls.enablePan = false
+    controls.enableZoom = false
+    controls.enableDamping = true
+    controls.minDistance = 25
+    controls.maxDistance = 25
+    controls.minPolarAngle = Math.PI * 0.25
+    controls.maxPolarAngle = Math.PI * 0.5
+    controls.target.set(0, 1.1, 0)
     controls.update()
+    controls.autoRotate = props.rotate
 
     const pmremGenerator = new THREE.PMREMGenerator(renderer)
     pmremGenerator.compileEquirectangularShader()
@@ -98,6 +120,14 @@ function handleResize() {
 
     renderer.setSize(w, h)
     
+    render()
+}
+
+function loop() {
+    window.requestAnimationFrame(loop)
+
+    controls.update()
+
     render()
 }
 </script>
