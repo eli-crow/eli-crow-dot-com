@@ -22,7 +22,6 @@ const state = reactive({
 });
 const trackSpline = ref();
 const root = ref();
-const trackRef = ref();
 
 onMounted(() => {
   state.mounted = true;
@@ -106,12 +105,15 @@ function handleThumbDown(ev) {
     <svg
       v-if="state.mounted"
       class="overflow-visible w-full">
+
+      <!-- track -->
       <path 
-        class="fill-none stroke-[6px] text-gray-400 stroke-current fill-[none]"
+        class="fill-none stroke-[6px] text-gray-100 dark:text-gray-400 stroke-current fill-[none]"
         stroke-linecap="round"
         vector-effect="non-scaling-stroke"
-        :d="state.pathData"
-        ref="trackRef" />
+        :d="state.pathData"/>
+
+      <!-- track progress -->
       <path
         class="fill-none stroke-[6px] text-teal stroke-current fill-[none]"
         stroke-linecap="round"
@@ -119,11 +121,14 @@ function handleThumbDown(ev) {
         :d="state.pathData"
         stroke-dasharray="99999"
         :stroke-dashoffset="state.progressDashOffset" />
+
+      <!-- thumb -->
       <circle
-        class="text-white fill-current stroke-[2px] stroke-current active:stroke-[hsla(209,73%,59%,1)]"
+        class="text-white fill-current dark:stroke-[2px] active:!stroke-[hsla(209,73%,59%,1)]"
         :cx="state.thumbPosition[0]"
         :cy="state.thumbPosition[1]"
         :r="state.thumbRadius"
+        :style="{stroke: 'var(--gray-200)'}"
         @pointerdown.stop.prevent="handleThumbDown"
         @touchstart.stop.prevent.capture />
     </svg>
