@@ -2,8 +2,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview",
-    "deploy": "git checkout develop; git pull; git merge origin deploy; git checkout deploy; git push;"
+    "serve": "vite preview"
   },
   "dependencies": {
     "autoprefixer": "^10.3.4",
