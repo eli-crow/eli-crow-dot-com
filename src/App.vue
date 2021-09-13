@@ -37,8 +37,8 @@ import TheThemeSettings from './components/TheThemeSettings.vue'
     </div>
 
     <div class="card-group">
-      <Card type="interactive" :style="{gridColumn: '1 / -2'}">
-        <Crow class="flex-1 min-h-[480px]" :scale="0.65" />
+      <Card type="interactive" :style="{gridColumn: '1 / -2'}" class="min-h-[480px]">
+        <Crow class="flex-1" :scale="0.65" />
       </Card>
 
       <AlleyOoperCard />
@@ -72,7 +72,7 @@ import TheThemeSettings from './components/TheThemeSettings.vue'
         ]"
       />
 
-      <Card type="3d">
+      <Card type="3d" class="min-h-[300px]">
         <GLTFViewer class="h-64" gltf="/assets/ute-uncompressed.glb" rotate/>
         <div class="p-8 pt-0">
           <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">
