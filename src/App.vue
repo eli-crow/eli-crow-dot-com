@@ -15,8 +15,8 @@ import TheThemeSettings from './components/TheThemeSettings.vue'
 
     <div class="px-8 pb-12 sm:py-0">
       <div class="sm:sticky sm:top-12">
-        <h1 class="font-light text-2xl leading-[1.42] text-gray-500">
-          <strong style="display: block;">
+        <h1 class="font-light text-2xl leading-[1.42] text-gray-900">
+          <strong class="block">
             Eli Crow is a
             <span class="block my-[0.7ch]">
               <span class="gooey-text"><span class="gooey-text-inner">designer and developer</span></span>
@@ -28,7 +28,7 @@ import TheThemeSettings from './components/TheThemeSettings.vue'
 
         <hr class="mt-5 mb-6 border-t-2 border-gray-100">
 
-        <p class="text-gray-400 leading-relaxed mb-6">
+        <p class="text-gray-500 leading-relaxed mb-6">
           This site is a playground for interactive experiments and thoughts on design and development. I am happily employed.
         </p>
 
