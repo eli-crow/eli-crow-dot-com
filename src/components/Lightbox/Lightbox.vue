@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { FocusTrap } from 'focus-trap-vue';
+import Modal from '../Modal.vue'
 
 const props = defineProps({
   title: {
@@ -17,11 +17,6 @@ const props = defineProps({
 const emit = defineEmits([
   'update:selected-image-key'
 ]);
-
-const focusRoot = ref();
-watch(focusRoot, newValue => {
-  newValue?.focus();
-});
 
 const selectedImageIndex = computed(() => props.selectedImageKey === null ? null : props.images.findIndex(i => i.key === props.selectedImageKey));
 const selectedImage = computed(() => props.selectedImageKey === null ? null : props.images[selectedImageIndex.value]);
@@ -77,167 +72,37 @@ function handleKeyboard(e) {
 <template>
   <slot :title="props.title" :images="props.images" />
 
-  <teleport to="#overlay">
-    <transition name="fade">
-      <div class="backdrop" v-if="props.selectedImageKey !== null" @scroll.stop.prevent.capture @click="close" />
-    </transition>
+  <Modal 
+    :is-open="selectedImage !== null" 
+    :title="`${props.title} ${selectedImageIndex + 1}/${props.images.length}`"
+    @key="handleKeyboard"
+    @close="close"
+  >
+    <div class="relative bg-cover flex-1 flex flex-col items-center min-h-0">
+      <img
+        class="object-contain h-full"
+        :src="selectedSrc"
+        :alt="selectedImage.alt" />
+      <button class="flex items-center justify-center text-gray-600 hover:text-gray-900 absolute z-20 top-0 h-full hover:bg-gray-100 mix-blend-multiply dark:mix-blend-screen bg-opacity-20 left-0 w-12" @click="previous">
+        <Icon icon="chevronLeft" class="text-xl filter drop-shadow-md" />
+      </button>
+      <button class="flex items-center justify-center text-gray-600 hover:text-gray-900 absolute z-20 top-0 h-full hover:bg-gray-100 mix-blend-multiply dark:mix-blend-screen bg-opacity-20 right-0 w-12" @click="next">
+        <Icon icon="chevronRight" class="text-xl filter drop-shadow-md" />
+      </button>
+    </div>
 
-    <transition name="lift">
-      <div class="content-container" v-if="props.selectedImageKey !== null">
-        <FocusTrap :active="props.selectedImageKey !== null" @deactivate="close">
-          <div
-            class="content"
-            tabindex="-1"
-            ref="focusRoot"
-            @click.stop
-            @keydown="handleKeyboard">
-
-            <h2 class="title">{{props.title}} {{selectedImageIndex + 1}}/{{props.images.length}}</h2>
-            <button class="close icon-button" @click.prevent="close">
-              <Icon icon="close" />
-            </button>
-
-            <div class="image-container">
-              <img
-                class="image rounded"
-                :src="selectedSrc"
-                :alt="selectedImage.alt" />
-              <button class="previous pager" @click="previous">
-                <Icon icon="chevronLeft" />
-              </button>
-              <button class="next pager" @click="next">
-                <Icon icon="chevronRight" />
-              </button>
-            </div>
-
-            <div class="thumbnails">
-              <img
-                v-for="image in images"
-                class="thumbnail rounded-sm"
-                draggable="false"
-                tabindex="0"
-                :key="image.key"
-                :src="image.thumbnailSrc"
-                :alt="image.alt"
-                :data-selected="image.key === selectedImageKey"
-                @keydown.enter="changeImage(image.key)"
-                @keydown.space="changeImage(image.key)"
-                @click.prevent="changeImage(image.key)" />
-            </div>
-          </div>
-        </FocusTrap>
-      </div>
-    </transition>
-  </teleport>
+    <div class="flex gap-3 px-4 py-6 justify-center">
+      <img
+        v-for="image in images"
+        :class="`rounded-sm h-16 w-auto hover:filter hover:brightness-125 ${image.key === selectedImageKey ? 'ring-[3px] ring-blue' : ''}`"
+        draggable="false"
+        tabindex="0"
+        :key="image.key"
+        :src="image.thumbnailSrc"
+        :alt="image.alt"
+        @keydown.enter="changeImage(image.key)"
+        @keydown.space="changeImage(image.key)"
+        @click.prevent="changeImage(image.key)" />
+    </div>
+  </Modal>
 </template>
-
-<style scoped>
-.backdrop {
-  overscroll-behavior: contain;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: theme('colors.gray.50');
-  /* backdrop-filter: blur(10px); */
-  will-change: opacity;
-}
-.content-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  will-change: opacity, transform;
-  pointer-events: none;
-}
-.content {
-  overscroll-behavior: contain;
-  width: 100%;
-  height: 100%;
-  pointer-events: all;
-  min-height: 0;
-  outline: none;
-  display: grid;
-  grid-template:
-    ". . . . ." 1.25rem
-    ". title . close ." 2rem
-    ". . . . ." 1.25rem
-    "image image image image image" 1fr
-    ". . . . ." 1.5rem
-    ". thumbnails thumbnails thumbnails ." 4rem
-    ". . . . ." 1.5rem
-    / 1.5rem 1fr 1rem auto 1.5rem;
-}
-.title {
-  grid-area: title;
-  align-self: center;
-  font-size: 1rem;
-  font-weight: 600;
-}
-.close {
-  grid-area: close;
-  align-self: center;
-  padding: 0.5rem;
-  margin: -0.5rem;
-}
-.image-container {
-  position: relative;
-  grid-area: image;
-  background-size: cover;
-  min-height: 0;
-}
-.image {
-  object-fit: contain;
-  width: 100%;
-  height: 100%;
-}
-.pager {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  z-index: 20;
-  top: 0;
-  height: 100%;
-  appearance: none;
-  border: 0;
-  background: transparent;
-  color: white;
-  font-size: 1.5rem;
-  width: 3rem;
-}
-.pager:hover {
-  background: rgba(255, 255, 255, 0.15);
-  /* backdrop-filter: blur(10px); */
-  color: white;
-}
-.pager > * {
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
-}
-.previous {
-  left: 0;
-}
-.next {
-  right: 0;
-}
-.thumbnails {
-  grid-area: thumbnails;
-  display: flex;
-  gap: 0.75rem;
-}
-.thumbnail {
-  height: 100%;
-  width: auto;
-}
-.thumbnail[data-selected="true"] {
-  outline: solid 3px theme('colors.blue.DEFAULT');
-}
-.thumbnail:hover {
-  filter: brightness(1.2);
-}
-</style>

@@ -24,15 +24,16 @@ function handleClick(e) {
     e.preventDefault()
   }
 }
+
+const linkClasses = props.type === 'external' || props.type === 'internal'
+  ? 'hover:ring-1 hover:ring-gray-100 dark:hover:ring-gray-200 ring-inset'
+  : ''
 </script>
 
 <template>
     <component
       :is="props.tag" 
-      class="relative flex flex-col bg-white dark:bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm transition" 
-      :class="{
-        'is-link': props.type === 'external' || props.type === 'internal'
-      }"
+      :class="`relative flex flex-col bg-white dark:bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm transition ${linkClasses}`" 
       @click="handleClick"
     >
         <transition name="fade">
@@ -71,16 +72,6 @@ function handleClick(e) {
 </template>
 
 <style scoped>
-.is-link {
-  cursor: default;
-  --shadow-color: var(--gray-100);
-}
-:deep(.dark) .is-link {
-  --shadow-color: var(--gray-200);
-}
-.is-link:hover {
-  box-shadow: inset 0 0 0px 1px var(--shadow-color);
-}
 @keyframes loading {
     from {
       background: theme('colors.gray.100');

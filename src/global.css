@@ -105,12 +105,13 @@ b, strong {
 }
 
 .fade-enter-active {
-  transition: 2.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 1.8s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
   overflow: visible;
 }
 
 .fade-leave-active {
+  position: relative;
   transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
   overflow: visible;

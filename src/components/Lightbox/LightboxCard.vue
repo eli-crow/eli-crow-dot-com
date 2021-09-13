@@ -18,6 +18,19 @@ const props = defineProps({
 function open(key) {
   selectedImageKey.value = key;
 }
+
+function handleKeyboard(e) {
+  switch (e.key) {
+    case 'ArrowLeft':
+      previous();
+      e.preventDefault();
+      break;
+    case 'ArrowRight':
+      next();
+      e.preventDefault();
+      break;
+  }
+}
 </script>
 
 <template>
