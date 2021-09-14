@@ -36,16 +36,14 @@ const linkClasses = props.type === 'external' || props.type === 'internal'
       :class="`relative flex flex-col bg-white dark:bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm transition ${linkClasses}`" 
       @click="handleClick"
     >
-        <transition name="fade">
-            <suspense>
-                <template #default>
-                    <slot/>
-                </template>
-                <template #fallback>
-                    <div class="loading"/>
-                </template>
-            </suspense>
-        </transition>
+        <suspense>
+            <template #default>
+                <slot/>
+            </template>
+            <template #fallback>
+                <div class="absolute inset-0 animate-pulse bg-gray-100"/>
+            </template>
+        </suspense>
 
         <div 
             v-if="props.type === 'interactive'" 
@@ -70,21 +68,3 @@ const linkClasses = props.type === 'external' || props.type === 'internal'
         </a>
     </component>
 </template>
-
-<style scoped>
-@keyframes loading {
-    from {
-      background: theme('colors.gray.100');
-    }
-    to {
-      background: theme('colors.gray.50');
-    }
-}
-.loading {
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255, 0.05);
-    animation: loading 0.5s ease-out infinite alternate both;
-    animation-delay: 600ms;
-}
-</style>

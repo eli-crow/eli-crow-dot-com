@@ -1,9 +1,9 @@
 <script setup>
-import Crow from './components/Crow/Crow.vue';
 import Card from './components/Card.vue';
+import CrowCard from './components/Crow/CrowCard.vue';
 import LightboxCard from "./components/Lightbox/LightboxCard.vue";
 import AlleyOoperCard from './components/AlleyOoper/AlleyOoperCard.vue';
-import GLTFViewer from './components/GLTFViewer/GLTFViewer.vue';
+import GLTFViewerCard from './components/GLTFViewer/GLTFViewerCard.vue';
 import TheSVGFilters from './components/TheSVGFilters.vue'
 import TheThemeSettings from './components/TheThemeSettings.vue'
 </script>
@@ -37,11 +37,9 @@ import TheThemeSettings from './components/TheThemeSettings.vue'
     </div>
 
     <div class="card-group">
-      <Card type="interactive" :style="{gridColumn: '1 / -2'}" class="min-h-[480px]">
-        <Crow class="flex-1" :scale="0.65" />
-      </Card>
+      <CrowCard :style="{gridColumn: '1 / -2'}"/>
 
-      <AlleyOoperCard />
+      <GLTFViewerCard type="3d" class="min-h-[300px]" gltf="/assets/ute-uncompressed.glb" title="Ute" byline="2021, Blender" rotate/>
 
       <Card type="external" href="https://bones.live" class="p-8 group" tag="article">
         <Icon class="text-[8rem] w-auto mb-10 self-start text-purple dark:text-gray-900" icon="bonesDotLive"/>
@@ -70,15 +68,7 @@ import TheThemeSettings from './components/TheThemeSettings.vue'
         ]"
       />
 
-      <Card type="3d" class="min-h-[300px]">
-        <GLTFViewer class="h-64" gltf="/assets/ute-uncompressed.glb" rotate/>
-        <div class="p-8 pt-0">
-          <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">
-            Ute
-          </h2>
-          <p><time>2021, Blender</time></p>
-        </div>
-      </Card>
+      <AlleyOoperCard />
 
       <Card class="p-8">
         <p class="text-gray-500">Imagine this is one of the 30 blog posts I never finished.</p>

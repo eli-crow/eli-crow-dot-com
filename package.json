@@ -5,6 +5,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.2.1",
     "autoprefixer": "^10.3.4",
     "focus-trap": "^6.6.1",
     "focus-trap-vue": "^3.2.1",

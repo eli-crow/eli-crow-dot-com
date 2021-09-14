@@ -89,8 +89,8 @@ function init () {
     controls.enablePan = false
     controls.enableZoom = false
     controls.enableDamping = true
-    controls.minDistance = 25
-    controls.maxDistance = 25
+    controls.minDistance = 32
+    controls.maxDistance = 32
     controls.minPolarAngle = Math.PI * 0.25
     controls.maxPolarAngle = Math.PI * 0.5
     controls.target.set(0, 1.1, 0)

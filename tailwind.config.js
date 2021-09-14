@@ -1,3 +1,4 @@
+
 module.exports = {
   mode: 'jit',
   purge: [
@@ -5,6 +6,9 @@ module.exports = {
     "./src/**/*.{vue,js,ts,jsx,tsx}"
   ],
   darkMode: 'class',
+  plugins: [
+    require('@tailwindcss/aspect-ratio')
+  ],
   theme: {
     fontFamily: {
       sans: ['"proxima-nova"', '"Open Sans"', '"Gill Sans MT"', '"Gill Sans"', 'Corbel', 'Helvetica', 'Arial', 'sans-serif']
