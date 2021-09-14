@@ -39,7 +39,7 @@ import TheThemeSettings from './components/TheThemeSettings.vue'
     <div class="card-group">
       <CrowCard :style="{gridColumn: '1 / -2'}"/>
 
-      <GLTFViewerCard type="3d" class="min-h-[300px]" gltf="/assets/ute-uncompressed.glb" title="Ute" byline="2021, Blender" rotate/>
+      <GLTFViewerCard class="min-h-[300px]" gltf="/assets/ute-uncompressed.glb" title="Ute" byline="2021, Blender" rotate/>
 
       <Card type="external" href="https://bones.live" class="p-8 group" tag="article">
         <Icon class="text-[8rem] w-auto mb-10 self-start text-purple dark:text-gray-900" icon="bonesDotLive"/>

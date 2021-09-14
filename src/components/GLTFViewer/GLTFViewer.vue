@@ -1,19 +1,15 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue"
+import { ref, onMounted, onBeforeUnmount, watchEffect } from "vue"
 import envTextureUrl from './pedestrian_overpass_1k.hdr'
 
 const container = ref()
 const canvas = ref()
 
 const props = defineProps({
-    gltf: {
-        type: String,
-        required: true,
-    },
-    rotate: {
-        type: Boolean,
-        default: false,
-    },
+    gltf: { type: String, required: true },
+    rotate: { type: Boolean, default: false },
+    zoomable: { type: Boolean, default: false },
+    pannable: { type: Boolean, default: false },
 })
 
 const doesAnimate = props.rotate
@@ -35,6 +31,13 @@ onMounted(() => {
 onBeforeUnmount(() => {
     if (doesAnimate) {
         window.cancelAnimationFrame(loop)
+    }
+})
+
+watchEffect(() => {
+    if (controls) {
+        controls.enableZoom = props.zoomable
+        controls.enablePan = props.pannable
     }
 })
 
@@ -86,8 +89,8 @@ function init () {
 
     controls = new OrbitControls(camera, canvas.value);
     controls.addEventListener('change', render)
-    controls.enablePan = false
-    controls.enableZoom = false
+    controls.enablePan = props.pannable
+    controls.enableZoom = props.zoomable
     controls.enableDamping = true
     controls.minDistance = 32
     controls.maxDistance = 32

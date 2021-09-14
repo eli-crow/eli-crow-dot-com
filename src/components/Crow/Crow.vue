@@ -19,7 +19,6 @@ const root = ref()
 await scene.load()
 
 async function init(root, canvas) {
-  console.log(root, canvas)
   await scene.init(root, canvas, props.scale, true)
   state.isLoaded = true
 }
