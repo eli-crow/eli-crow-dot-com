@@ -1,6 +1,5 @@
 <script setup>
-import { watch, ref, reactive } from "vue";
-import Modal from '../Modal.vue'
+import { watch, ref, reactive, onMounted } from "vue";
 const {default: scene} = await import('./crowScene.js')
 
 const props = defineProps({
@@ -19,12 +18,15 @@ const root = ref()
 
 await scene.load()
 
+async function init(root, canvas) {
+  console.log(root, canvas)
+  await scene.init(root, canvas, props.scale, true)
+  state.isLoaded = true
+}
+
 watch(() => props.scale, scene.setScale)
-watch(canvas, async (nv, ov) => {
-  if (nv && !ov) {
-    await scene.init(root.value, canvas.value, props.scale, true)
-    state.isLoaded = true
-  }
+onMounted(() => {
+  init(root.value, canvas.value)
 })
 </script>
 
