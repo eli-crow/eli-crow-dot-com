@@ -15,7 +15,7 @@ import TheThemeSettings from './components/TheThemeSettings.vue'
 
     <div class="px-8 pb-12 sm:py-0">
       <div class="sm:sticky sm:top-12">
-        <h1 class="font-light text-2xl leading-[1.42] text-gray-900">
+        <h1 class="font-light text-2xl leading-[1.42] text-gray-800">
           <strong class="block">
             Eli Crow is a
             <span class="block my-[0.7ch]">
