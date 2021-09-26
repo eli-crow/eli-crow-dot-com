@@ -2,6 +2,7 @@
 import { reactive, watchEffect } from "vue";
 import AlleyOoper from "./AlleyOoper.vue";
 import Card from "../Card.vue";
+import Transition from "../Transition.vue";
 
 const state = reactive({
   status: 'normal',
@@ -28,7 +29,7 @@ watchEffect(() => {
 
 <template>
   <Card type="interactive" class="p-8">
-    <transition name="fade" mode="out-in">
+    <Transition name="fade" mode="out-in">
       <div v-if="state.status === 'normal'" class="alley-ooper-group pb-16">
         <label class="alley-ooper">
           <span class="alley-ooper-label">Slider</span>
@@ -81,7 +82,11 @@ watchEffect(() => {
             style="height: 24rem;" />
         </label>
       </div>
-    </transition>
+    </Transition>
+
+    <div class="card-icon">
+      <Icon icon="cursor">Interactive</Icon>
+    </div>
   </Card>
 </template>
 
