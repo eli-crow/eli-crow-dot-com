@@ -19,12 +19,12 @@
 }
 
 .fade-leave-active {
-  position: absolute;
   transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
-  overflow: visible;
   pointer-events: none;
 }
+
+
 
 .lift-enter-from {
   transform: translateY(10%);
