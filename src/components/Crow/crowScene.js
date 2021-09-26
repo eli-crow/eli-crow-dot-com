@@ -9,7 +9,6 @@ import stickTextureSrc from './assets/stick.webp'
 import tildeTextureSrc from './assets/tilde.webp'
 
 import {angleDifference} from '../../lib/v.js'
-const lerp = (a, b, t) => a * (1 - t) + b * t;
 
 PixiPlugin.registerPIXI(PIXI);
 gsap.registerPlugin(MotionPathPlugin, PixiPlugin);
@@ -20,10 +19,17 @@ const JOINT_MAX_ANGLE_MAGNITUDE = Math.PI * 0.065;
 const JOINT_LERP_FACTOR = 0.4;
 const JOINT_ANGLE_LERP_FACTOR = 0.75;
 
-function createScene() {
+function lerp (a, b, t) { 
+  return  a * (1 - t) + b * t;
+}
+
+async function createScene() {
   let resources
   let app, shapes
+  let timeline
   let scale = 1
+
+  await load()
 
   async function load() {
     resources = await new Promise(resolve => {
@@ -43,6 +49,11 @@ function createScene() {
         resolve(resources)
       })
     })
+  }
+
+  function destroy() {
+    timeline.kill()
+    app.destroy(false, true)
   }
 
   function init(root, canvas, initialScale) {
@@ -73,7 +84,7 @@ function createScene() {
         );
       });
   
-      const timeline = gsap.timeline();
+      timeline = gsap.timeline();
       // timeline.timeScale(10)
       // gsap.to(timeline, { timeScale: 0.2, duration: 8 });
   
@@ -343,8 +354,9 @@ function createScene() {
   return {
     load,
     init,
+    destroy,
     setScale
   }
 }
   
-export default createScene()
+export { createScene }
