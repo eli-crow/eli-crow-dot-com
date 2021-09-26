@@ -1,6 +1,6 @@
 <script setup>
-import { watch, ref, reactive, onMounted } from "vue";
-const {default: scene} = await import('./crowScene.js')
+import { watch, ref, reactive, onMounted, onBeforeUnmount, onUnmounted } from "vue";
+const {createScene} = await import('./crowScene.js')
 
 const props = defineProps({
   scale: {
@@ -16,7 +16,7 @@ const state = reactive({
 const canvas = ref()
 const root = ref()
 
-await scene.load()
+const scene = await createScene()
 
 async function init(root, canvas) {
   await scene.init(root, canvas, props.scale, true)
@@ -26,6 +26,9 @@ async function init(root, canvas) {
 watch(() => props.scale, scene.setScale)
 onMounted(() => {
   init(root.value, canvas.value)
+})
+onUnmounted(() => {
+  scene.destroy()
 })
 </script>
 

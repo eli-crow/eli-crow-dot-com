@@ -1,37 +1,43 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watchEffect } from "vue"
-import envTextureUrl from './pedestrian_overpass_1k.hdr'
+import { ref, onMounted, watchEffect, onUnmounted } from "vue"
 
 const container = ref()
 const canvas = ref()
 
 const props = defineProps({
     gltf: { type: String, required: true },
+    environment: { type: String, default: '/assets/pedestrian-overpass.hdr' },
     rotate: { type: Boolean, default: false },
     zoomable: { type: Boolean, default: false },
     pannable: { type: Boolean, default: false },
 })
 
+const emit = defineEmits(['interacted'])
+
 const doesAnimate = props.rotate
 
 let THREE, OrbitControls
 let gltf, environmentTexture
-let camera, scene, renderer, controls
+let camera, scene, renderer, controls, mixer
+let lastTime
 
 await load()
 
 onMounted(() => {
     init()
     render()
+
     if (doesAnimate) {
         window.requestAnimationFrame(loop)
     }
 })
 
-onBeforeUnmount(() => {
+onUnmounted(() => {
     if (doesAnimate) {
         window.cancelAnimationFrame(loop)
     }
+    renderer.dispose()
+    environmentTexture?.dispose()
 })
 
 watchEffect(() => {
@@ -41,28 +47,37 @@ watchEffect(() => {
     }
 })
 
+function convertBlenderLightUnitsToThreeUnits(units) {
+    return units / 300
+}
+
 async function load() {
     const pTHREE = import('three/build/three.module');
     const pGLTFLoader = import('three/examples/jsm/loaders/GLTFLoader')
-    const pRGBELoader = import( 'three/examples/jsm/loaders/RGBELoader')
     const pDRACOLoader = import( 'three/examples/jsm/loaders/DRACOLoader')
     const pOrbitControls = import( 'three/examples/jsm/controls/OrbitControls.js')
 
     THREE = await pTHREE
     const { GLTFLoader } = await pGLTFLoader
     const { DRACOLoader } = await pDRACOLoader
-    const { RGBELoader } = await pRGBELoader
     const o = await pOrbitControls
     OrbitControls = o.OrbitControls
 
     const gltfLoader = new GLTFLoader()
     const dracoLoader = new DRACOLoader()
-    const rgbeLoader = new RGBELoader()
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
     gltfLoader.setDRACOLoader(dracoLoader)
-
-    const pEnvirontmentTexture = rgbeLoader.loadAsync(envTextureUrl)
     const pGLTF = gltfLoader.loadAsync(props.gltf)
+
+    let pEnvirontmentTexture
+    if (props.environment.endsWith('.exr')) {
+        const { EXRLoader } = await import( 'three/examples/jsm/loaders/EXRLoader')
+        pEnvirontmentTexture = new EXRLoader().loadAsync(props.environment)
+    } 
+    else if (props.environment.endsWith('.hdr')) {
+        const { RGBELoader } = await import( 'three/examples/jsm/loaders/RGBELoader')
+        pEnvirontmentTexture = new RGBELoader().loadAsync(props.environment)
+    }
     
     environmentTexture = await pEnvirontmentTexture
     gltf = await pGLTF
@@ -74,29 +89,50 @@ function init () {
         canvas: canvas.value,
         alpha: true,
     })
+    renderer.physicallyCorrectLights = true;
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.outputEncoding = THREE.sRGBEncoding
 
     scene = new THREE.Scene()
     scene.add(gltf.scene)
 
-    // TODO: next time you add a model, figure out how you want to disambiguate cameras
+    scene.traverse(o => {
+        //objects otherwise disappear at certain angles
+        o.frustumCulled = false
+        
+        //fix lights by adjusting blender's units
+        if (o.type === 'PointLight') {
+            o.intensity = convertBlenderLightUnitsToThreeUnits(o.intensity)
+        }
+
+        if (o.material?.envMapIntensity) {
+            o.material.toneMapped = false
+            o.material.envMapIntensity *= 1
+        }
+    })
+
     camera = gltf.cameras[0]
-    camera.position.copy(camera.parent.position)
-    camera.quaternion.copy(camera.parent.quaternion)
-    camera.scale.copy(camera.parent.scale)
+    if (camera.parent) {
+        camera.position.copy(camera.parent.position)
+        camera.quaternion.copy(camera.parent.quaternion)
+        camera.scale.copy(camera.parent.scale)
+    }
+    const cameraTarget = gltf.scene.children.find(o => o.userData.name === 'CameraTarget')
     scene.add(camera)
 
     controls = new OrbitControls(camera, canvas.value);
-    controls.addEventListener('change', render)
+    if (cameraTarget) {
+        controls.target.copy(cameraTarget.position)
+    }
+    controls.addEventListener('start', () => {emit('interacted')})
     controls.enablePan = props.pannable
     controls.enableZoom = props.zoomable
     controls.enableDamping = true
-    controls.minDistance = 32
-    controls.maxDistance = 32
+    const distance = cameraTarget?.position.distanceTo(camera.position) ?? 10
+    controls.minDistance = distance
+    controls.maxDistance = distance
     controls.minPolarAngle = Math.PI * 0.25
     controls.maxPolarAngle = Math.PI * 0.5
-    controls.target.set(0, 1.1, 0)
     controls.update()
     controls.autoRotate = props.rotate
 
@@ -105,8 +141,14 @@ function init () {
     const cubeRenderTarget = pmremGenerator.fromEquirectangular(environmentTexture)
     const envMap = cubeRenderTarget.texture ?? null
     scene.environment = envMap
-    
     environmentTexture.dispose()
+
+    if (gltf.animations.length) {
+        mixer = new THREE.AnimationMixer(scene)
+        gltf.animations.forEach(clip => {
+            mixer.clipAction(clip).play();
+        })
+    } 
 
     window.addEventListener('resize', handleResize)
     handleResize()
@@ -126,18 +168,25 @@ function handleResize() {
     render()
 }
 
-function loop() {
-    window.requestAnimationFrame(loop)
+function loop(time) {
+    if (lastTime === undefined)
+        lastTime = time
+    const deltaTime = (time - lastTime) / 1_000
 
-    controls.update()
+    mixer?.update(deltaTime)
+    controls?.update()
 
     render()
+
+    lastTime = time
+
+    window.requestAnimationFrame(loop)
 }
 </script>
 
 
 <template>
-    <div ref="container">
+    <div ref="container" class="min-w-0 min-h-0">
         <canvas ref="canvas"/>
     </div>
 </template>

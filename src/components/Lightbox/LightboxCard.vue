@@ -34,11 +34,11 @@ function handleKeyboard(e) {
 </script>
 
 <template>
-    <Card class="p-8" type="internal" @click="open(props.images[0].key)">
+    <Card class="p-8" pressable @click="open(props.images[0].key)">
         <div class="flex flex-col relative group mb-7">
             <img
                 class="
-                rounded shadow-lg relative z-10 transition duration-1000 transform origin-bottom-left
+                rounded shadow-lg relative z-10 transition duration-500 transform origin-bottom-left
                 group-hover:rotate-[-4deg]"
                 draggable="false"
                 :key="props.images[0].key"
@@ -47,7 +47,7 @@ function handleKeyboard(e) {
             />
             <img
                 class="
-                  rounded absolute inset-0 transform origin-bottom-left opacity-10 transition duration-1000
+                  rounded absolute inset-0 transform origin-bottom-left opacity-10 transition duration-500
                   group-hover:opacity-50 group-hover:rotate-[4deg]"
                 draggable="false"
                 :key="props.images[1].key"
@@ -61,7 +61,7 @@ function handleKeyboard(e) {
         </h2>
         <p><time>2021, Blender</time></p>
 
-        <div class="absolute bottom-0 right-0 text-lg text-gray-300 group-hover:text-gray-900 cursor-default mix-blend-multiply dark:mix-blend-screen p-8 flex items">
+        <div class="card-icon flex">
             <span class="mr-2 text-lg leading-none">{{images.length}}</span>
             <Icon icon="image" />
         </div>

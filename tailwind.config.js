@@ -10,6 +10,12 @@ module.exports = {
     require('@tailwindcss/aspect-ratio')
   ],
   theme: {
+    extend: {
+      screens: {
+        'fine': {'raw': '(pointer: fine)'},
+        'coarse': {'raw': '(pointer: coarse)'},
+      }  
+    },
     fontFamily: {
       sans: ['"proxima-nova"', '"Open Sans"', '"Gill Sans MT"', '"Gill Sans"', 'Corbel', 'Helvetica', 'Arial', 'sans-serif']
     },        
@@ -22,6 +28,9 @@ module.exports = {
       '4xl': '3.5rem',
     },
     colors: {
+      transparent: {
+        DEFAULT: 'transparent'
+      },
       black: {
         DEFAULT: 'var(--white)',
       },

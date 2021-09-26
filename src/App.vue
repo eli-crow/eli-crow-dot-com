@@ -1,109 +1,14 @@
 <script setup>
-import Card from './components/Card.vue';
-import CrowCard from './components/Crow/CrowCard.vue';
-import LightboxCard from "./components/Lightbox/LightboxCard.vue";
-import AlleyOoperCard from './components/AlleyOoper/AlleyOoperCard.vue';
-import GLTFViewerCard from './components/GLTFViewer/GLTFViewerCard.vue';
-import TheSVGFilters from './components/TheSVGFilters.vue'
-import TheThemeSettings from './components/TheThemeSettings.vue'
+import TheSVGFilters from './components/TheSVGFilters.vue';
+import Transition from './components/Transition.vue';
 </script>
 
 <template>
-  <TheSVGFilters v-once />
+  <TheSVGFilters />
 
-  <div class="site w-full max-w-[1440px]">
-
-    <div class="px-8 pb-12 sm:py-0">
-      <div class="sm:sticky sm:top-12">
-        <h1 class="font-light text-2xl leading-[1.42] text-gray-800">
-          <strong class="block">
-            Eli Crow is a
-            <span class="block my-[0.7ch]">
-              <span class="gooey-text"><span class="gooey-text-inner">designer and developer</span></span>
-            </span>
-          </strong>
-          making software products for lasting benefit with
-          <a href="https://sep.com" target="_blank" rel="noopener">sep.com</a>
-        </h1>
-
-        <hr class="mt-5 mb-6 border-t-2 border-gray-100">
-
-        <p class="text-gray-500 leading-relaxed mb-6">
-          This site is a playground for interactive experiments and thoughts on design and development. I am happily employed.
-        </p>
-
-        <TheThemeSettings />
-      </div>
-    </div>
-
-    <div class="card-group">
-      <CrowCard :style="{gridColumn: '1 / -2'}"/>
-
-      <GLTFViewerCard class="min-h-[300px]" gltf="/assets/ute-uncompressed.glb" title="Ute" byline="2021, Blender" rotate/>
-
-      <Card type="external" href="https://bones.live" class="p-8 group" tag="article">
-        <Icon class="text-[8rem] w-auto mb-10 self-start text-purple dark:text-gray-900" icon="bonesDotLive"/>
-        <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">
-          Bones.live, a multiplayer dice box. Throw the bones. Embrace your destiny.
-        </h2>
-        <p><time>2021</time></p>
-      </Card>
-
-
-      <LightboxCard
-        title="Yikes Dog – Blender"
-        :images="[
-          {
-            key: 0, 
-            src: '/assets/dog-yikes.webp', 
-            thumbnailSrc: '/assets/dog-yikes-thumb.webp', 
-            alt: 'A satin blue dog, beset by bones. The word “Yikes!” explodes vibrantly in the foreground. He gives a sidelong stare, frightened, as if to say “That is not my problem.”'
-          },
-          {
-            key: 1, 
-            src: '/assets/dog-boned.webp', 
-            thumbnailSrc: '/assets/dog-boned-thumb.webp', 
-            alt: 'A satin blue dog peers down at you, desperate. Two bones cross behind him like the Jolly Roger. The word “Boned!” floats before him. He leans back, resigned to his fate.' 
-          },
-        ]"
-      />
-
-      <AlleyOoperCard />
-
-      <Card class="p-8">
-        <p class="text-gray-500">Imagine this is one of the 30 blog posts I never finished.</p>
-      </Card>
-
-      <Card class="p-8">
-        <p class="text-gray-500">Pretend there is an impressive-looking chart here to show off my visualization skills.</p>
-      </Card>
-
-      <Card class="p-8">
-        <p class="text-gray-500">This is where my resumé would go if I had one.</p>
-      </Card>
-    </div>
-  </div>
+  <router-view v-slot="{ Component }">
+    <Transition name="fade" mode="out-in">
+      <component :is="Component" />
+    </Transition>
+  </router-view>
 </template>
-
-<style scoped>
-.site {
-  gap: 20px;
-}
-.card-group {
-  display: flex;
-  flex-direction: column;
-  gap: inherit;
-}
-@screen sm {
-  .site {
-    --site-columns: repeat(auto-fit, minmax(280px, 1fr));
-    display: grid;
-    grid-template-columns: var(--site-columns);
-  }
-  .card-group {
-    grid-column: 2 / -1;
-    display: grid;
-    grid-template-columns: var(--site-columns);
-  }
-}
-</style>
