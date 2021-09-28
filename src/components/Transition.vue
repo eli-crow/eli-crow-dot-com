@@ -14,12 +14,12 @@
 }
 
 .fade-enter-active {
-  transition: 1.8s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
 }
 
 .fade-leave-active {
-  transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
   transition-property: opacity;
   pointer-events: none;
 }
