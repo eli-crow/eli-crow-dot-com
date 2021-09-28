@@ -23,7 +23,7 @@ const state = reactive({
         <a class="gooey-text-inner" href="https://www.youtube.com/watch?v=9i2eZaJsC7g" target="_blank">Chuck 'er in the ute, eh?</a>
       </p>
       
-      <p class="mb-6">This cute little ute was the first 3D project I felt proud of. Modeling hard surfaces is more technical than I expected. I was suprised to learn how much goes into making surfaces look natural. Thanks go out to the generous Blender community for many YouTube tutorials.</p> 
+      <p class="mb-6">This cute little ute was the first 3D project I thought was worth sharing. Modeling hard surfaces is more technical than I expected. I was suprised to learn how much goes into making surfaces look natural. Thanks go out to the generous Blender community for many YouTube tutorials.</p> 
 
       <p class="mb-2"><Icon icon="clock">Created:</Icon> <time>2021</time></p>
       <p><Icon icon="wrench">Tools used:</Icon> Blender, THREE.js</p>
