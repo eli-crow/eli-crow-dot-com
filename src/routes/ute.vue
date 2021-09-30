@@ -3,10 +3,53 @@ import { reactive } from "vue"
 import GLTFViewer from '../components/GLTFViewer/GLTFViewer.vue'
 import TheShowoffPage from '../components/TheShowoffPage.vue'
 import InteractionHint from '../components/InteractionHint.vue'
+import { Vector2 } from "three/build/three.module"
 
 const state = reactive({
   showHint: true
 })
+
+let road
+
+function afterInit(THREE, scene, gltf) {
+  const roadTexture = THREE.ImageUtils.loadTexture("/assets/road.webp")
+  roadTexture.wrapS = THREE.RepeatWrapping
+  roadTexture.wrapT = THREE.RepeatWrapping
+  const roadGeometery = new THREE.PlaneGeometry(4, 16)
+  const roadMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      offset: {value: 0},
+      tex: { type: "t", value: roadTexture}
+    },
+    vertexShader: `
+      uniform float offset;
+      varying vec2 vUv;
+      varying vec3 vPos;
+			void main() {
+				vUv = (uv + vec2(0.0, offset)) * vec2(1.0, 2.0);
+        vPos = position;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+			}`,
+    fragmentShader: `
+      varying vec2 vUv;
+      varying vec3 vPos;
+			uniform sampler2D tex;
+
+			void main() {
+        gl_FragColor = texture2D( tex, vUv );
+				gl_FragColor.a *= 1.0 - clamp(length(vPos.xy) / 5.0, 0.0, 1.0);
+			}
+    `,
+  })
+  roadMaterial.transparent = true
+  road = new THREE.Mesh(roadGeometery, roadMaterial)
+  road.rotation.x = Math.PI * -0.5
+  scene.add(road)
+}
+
+function beforeRender(THREE, scene) {
+  road.material.uniforms.offset.value -= 0.005
+}
 </script>
 
 <template>
@@ -35,6 +78,8 @@ const state = reactive({
         environment="/assets/pedestrian-overpass.hdr" 
         rotate
         class="w-full h-full md:max-w-[40rem] md:max-h-[40rem] min-w-0 min-h-0"
+        @after-init="afterInit"
+        @before-render="beforeRender"
         @interacted="state.showHint = false"/>
       
       <InteractionHint :visible="state.showHint" icon="threeD" class="absolute bottom-0">
