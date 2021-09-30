@@ -9,10 +9,10 @@ const props = defineProps({
     environment: { type: String, default: '/assets/pedestrian-overpass.hdr' },
     rotate: { type: Boolean, default: false },
     zoomable: { type: Boolean, default: false },
-    pannable: { type: Boolean, default: false },
+    pannable: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['interacted'])
+const emit = defineEmits(['interacted', 'before-render', 'after-init'])
 
 const doesAnimate = props.rotate
 
@@ -150,6 +150,8 @@ function init () {
         })
     } 
 
+    emit('after-init', THREE, scene, gltf)
+
     window.addEventListener('resize', handleResize)
     handleResize()
 }
@@ -175,6 +177,7 @@ function loop(time) {
 
     mixer?.update(deltaTime)
     controls?.update()
+    emit('before-render', THREE, scene)
 
     render()
 
