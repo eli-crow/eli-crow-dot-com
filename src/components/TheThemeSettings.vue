@@ -27,8 +27,8 @@ function toggleTheme() {
 
 <template>
   <button @click="toggleTheme" class="flex items-center hover:text-gray-900">
-      <Icon class="text-lg" v-if="theme === 'dark'" icon="sun" />
-      <Icon class="text-lg" v-else icon="moon" />
+      <Icon class="text-lg" v-if="theme === 'dark'" icon="sun">Light Theme</Icon> 
+      <Icon class="text-lg" v-else icon="moon">Dark Theme</Icon>
       <span class="ml-2">Toggle theme</span>
   </button>
 </template>

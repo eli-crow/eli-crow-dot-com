@@ -32,7 +32,7 @@ function handleClick(event) {
 <template>
     <component
       :is="props.tag" 
-      :class="`relative flex flex-col bg-white dark:bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm transition cursor-default ${props.pressable ? 'hover:ring-1 hover:ring-gray-100 dark:hover:ring-gray-200 ring-inset' : ''}`" 
+      :class="`Card relative flex flex-col bg-white dark:bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm transition cursor-default ${props.pressable ? 'hover:ring-1 hover:ring-gray-100 dark:hover:ring-gray-200 ring-inset' : ''}`" 
       @click="handleClick"
     >
         <suspense>

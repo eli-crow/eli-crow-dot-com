@@ -26,7 +26,7 @@ import PlayOverlay from '../components/PlayOverlay.vue'
           <a href="https://sep.com" target="_blank" rel="noopener">sep.com</a>
         </h1>
 
-        <hr class="mt-5 mb-6 border-t-2 border-gray-100">
+        <div class="mt-5 mb-6 border-t-2 border-gray-100" />
 
         <p class="text-gray-500 leading-relaxed mb-6">
           This site is a playground for interactive experiments and thoughts on design and development. I am happily employed.
