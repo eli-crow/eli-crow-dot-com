@@ -62,7 +62,7 @@ import PlayOverlay from '../components/PlayOverlay.vue'
           <img class="object-contain w-full h-full" src="/assets/losing-sleep-thumb.webp" draggable="false"/>
           <PlayOverlay icon="threeD" />
         </div>
-        <h2 class="text-xl leading-snug font-light text-gray-900 mb-2" id="heading-losing-sleep">
+        <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">
           Losing Sleep
         </h2>
         <p><time>2021, Blender</time></p>
