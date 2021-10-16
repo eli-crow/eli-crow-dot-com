@@ -37,6 +37,7 @@ import PlayOverlay from '../components/PlayOverlay.vue'
     </header>
 
     <main class="card-group">
+
       <CrowCard :style="{gridColumn: '1 / -2'}"/>
         
       <Card pressable link tag="article">
@@ -61,7 +62,7 @@ import PlayOverlay from '../components/PlayOverlay.vue'
           <img class="object-contain w-full h-full" src="/assets/losing-sleep-thumb.webp" draggable="false"/>
           <PlayOverlay icon="threeD" />
         </div>
-        <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">
+        <h2 class="text-xl leading-snug font-light text-gray-900 mb-2" id="heading-losing-sleep">
           Losing Sleep
         </h2>
         <p><time>2021, Blender</time></p>
@@ -77,12 +78,12 @@ import PlayOverlay from '../components/PlayOverlay.vue'
           Bones.live, a multiplayer dice box. Throw the bones. Embrace your destiny.
         </h2>
         <p><time>2021</time></p>
-        <div class="card-icon">
-          <Icon icon="externalLink"/>
-        </div>
+        <a class="card-icon" href="https://bones.live" target="_blank">
+          <Icon icon="externalLink">Visit Site</Icon>
+        </a>
       </Card>
 
-      <LightboxCard
+    <LightboxCard
         title="Yikes Dog – Blender"
         :images="[
           {

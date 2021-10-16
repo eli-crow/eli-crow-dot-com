@@ -58,7 +58,7 @@ function handleKeyboard(e) {
                         <header class="flex gap-3 items-center p-4">
                             <h2 class="title flex-1">{{props.title}}</h2>
                             <button class="close icon-button p-4 -m-4" @click.prevent="close">
-                                <Icon icon="close" />
+                                <Icon icon="close">Close</Icon>
                             </button>
                         </header>
 
