@@ -23,7 +23,7 @@ const props = defineProps({
 function handleClick(event) {
     if (props.link) {
         const card = event.currentTarget
-        const firstLink = card.querySelector('a')
+        const firstLink = card.querySelector('a, button')
         firstLink?.click()
     }
 }
@@ -32,7 +32,7 @@ function handleClick(event) {
 <template>
     <component
       :is="props.tag" 
-      :class="`relative flex flex-col bg-white dark:bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm transition ${props.pressable ? 'hover:ring-1 hover:ring-gray-100 dark:hover:ring-gray-200 ring-inset' : ''}`" 
+      :class="`relative flex flex-col bg-white dark:bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm transition cursor-default ${props.pressable ? 'hover:ring-1 hover:ring-gray-100 dark:hover:ring-gray-200 ring-inset' : ''}`" 
       @click="handleClick"
     >
         <suspense>

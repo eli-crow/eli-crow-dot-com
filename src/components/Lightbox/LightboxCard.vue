@@ -34,7 +34,7 @@ function handleKeyboard(e) {
 </script>
 
 <template>
-    <Card class="p-8" pressable @click="open(props.images[0].key)">
+    <Card class="p-8" link>
         <div class="flex flex-col relative group mb-7">
             <img
                 class="
@@ -61,10 +61,10 @@ function handleKeyboard(e) {
         </h2>
         <p><time>2021, Blender</time></p>
 
-        <div class="card-icon flex">
+        <button class="card-icon flex" @click="open(props.images[0].key)">
             <span class="mr-2 text-lg leading-none">{{images.length}}</span>
-            <Icon icon="image" />
-        </div>
+            <Icon icon="image">{{images.length === 1 ? 'Image' : 'Images'}}</Icon>
+        </button>
     </Card>
 
     <Lightbox v-model:selected-image-key="selectedImageKey" :images="props.images" :title="props.title" />

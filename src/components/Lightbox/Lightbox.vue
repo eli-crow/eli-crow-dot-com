@@ -81,13 +81,18 @@ function handleKeyboard(e) {
     <div class="relative bg-cover flex-1 flex flex-col items-center min-h-0">
       <img
         class="object-contain h-full"
+        aria-live="assertive"
         :src="selectedSrc"
         :alt="selectedImage.alt" />
-      <button class="flex items-center justify-center text-gray-600 hover:text-gray-900 absolute z-20 top-0 h-full hover:bg-gray-100 mix-blend-multiply dark:mix-blend-screen bg-opacity-20 left-0 w-12" @click="previous">
-        <Icon icon="chevronLeft" class="text-xl filter drop-shadow-md" />
+      <button 
+        class="flex items-center justify-center text-gray-600 hover:text-gray-900 absolute z-20 top-0 h-full hover:bg-gray-100 mix-blend-multiply dark:mix-blend-screen bg-opacity-20 left-0 w-12" 
+        @click="previous">
+        <Icon icon="chevronLeft" class="text-xl filter drop-shadow-md">Previous Image</Icon>
       </button>
-      <button class="flex items-center justify-center text-gray-600 hover:text-gray-900 absolute z-20 top-0 h-full hover:bg-gray-100 mix-blend-multiply dark:mix-blend-screen bg-opacity-20 right-0 w-12" @click="next">
-        <Icon icon="chevronRight" class="text-xl filter drop-shadow-md" />
+      <button 
+        class="flex items-center justify-center text-gray-600 hover:text-gray-900 absolute z-20 top-0 h-full hover:bg-gray-100 mix-blend-multiply dark:mix-blend-screen bg-opacity-20 right-0 w-12" 
+        @click="next">
+        <Icon icon="chevronRight" class="text-xl filter drop-shadow-md">Next Image</Icon>
       </button>
     </div>
 
