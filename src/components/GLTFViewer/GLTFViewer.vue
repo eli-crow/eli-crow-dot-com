@@ -19,7 +19,7 @@ const props = defineProps({
     pannable: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['interacted', 'before-render', 'after-init'])
+const emit = defineEmits(['interacted', 'interacted-end', 'before-render', 'after-init'])
 
 let THREE, OrbitControls
 let gltf, environmentTexture
@@ -161,6 +161,7 @@ function init() {
         controls.target.copy(cameraTarget.position)
     }
     controls.addEventListener('start', () => { emit('interacted') })
+    controls.addEventListener('end', () => { emit('interacted-end') })
     controls.enablePan = props.pannable
     controls.enableZoom = props.zoomable
     controls.enableRotate = props.rotatable
