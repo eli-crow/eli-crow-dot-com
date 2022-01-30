@@ -56,7 +56,7 @@ class Rail {
     this.spline3d = new BezierSpline3D(splineDescription)
     this.spline2d = null
     this.bead = bead
-    this.t = 1
+    this.t = Math.random()
     this.minT = minT
     this.maxT = maxT
 
@@ -108,17 +108,17 @@ function initScene(_THREE, scene, gltf, _renderer, _render) {
       obj.geometry.rotateY(Math.PI / 2)
 
       if (obj.name.includes("Blue")) {
-        const rail = new Rail(RAIL_RED, obj, camera, renderer, 0.017, 0.98)
+        const rail = new Rail(RAIL_RED, obj, camera, renderer, 0.028, 0.97)
         state.rails.push(rail)
       }
 
       else if (obj.name.includes("Red")) {
-        const rail = new Rail(RAIL_YELLOW, obj, camera, renderer, 0.03, 0.97)
+        const rail = new Rail(RAIL_YELLOW, obj, camera, renderer, 0.05, 0.942)
         state.rails.push(rail)
       }
 
       else if (obj.name.includes("Yellow")) {
-        const rail = new Rail(RAIL_BLUE, obj, camera, renderer, 0.02, 0.985)
+        const rail = new Rail(RAIL_BLUE, obj, camera, renderer, 0.027, 0.963)
         state.rails.push(rail)
       }
     }
