@@ -76,7 +76,8 @@ function beforeRender(THREE, scene) {
       <GLTFViewer 
         gltf="/assets/ute.glb" 
         environment="/assets/pedestrian-overpass.hdr" 
-        rotate
+        auto-rotate
+        rotatable
         class="w-full h-full md:max-w-[40rem] md:max-h-[40rem] min-w-0 min-h-0"
         @after-init="afterInit"
         @before-render="beforeRender"

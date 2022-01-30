@@ -33,7 +33,8 @@ const state = reactive({
       <GLTFViewer 
         gltf="/assets/losing-sleep.glb" 
         environment="/assets/studio.exr" 
-        rotate
+        auto-rotate
+        rotatable
         class="w-full h-full md:max-w-[40rem] md:max-h-[40rem] min-w-0 min-h-0"
         @interacted="state.showHint = false"/>
       

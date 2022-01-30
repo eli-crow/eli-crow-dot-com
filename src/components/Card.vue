@@ -50,6 +50,6 @@ function handleClick(event) {
 
 <style>
 .card-icon {
-    @apply absolute bottom-0 right-0 text-lg text-gray-300 transition group-hover:text-gray-900 cursor-default mix-blend-multiply dark:mix-blend-screen p-8;
+    @apply absolute bottom-0 right-0 text-lg text-gray-300 transition group-hover:text-gray-900 cursor-default mix-blend-multiply dark:mix-blend-screen p-8 pointer-events-none;
 }
 </style>
