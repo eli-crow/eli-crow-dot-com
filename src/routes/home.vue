@@ -4,7 +4,6 @@ import Icon from '../components/Icon/Icon.vue'
 import CrowCard from '../components/Crow/CrowCard.vue'
 import LightboxCard from "../components/Lightbox/LightboxCard.vue"
 import AlleyOoperCard from '../components/AlleyOoper/AlleyOoperCard.vue'
-import GLTFViewerCard from '../components/GLTFViewer/GLTFViewerCard.vue'
 import TheThemeSettings from '../components/TheThemeSettings.vue'
 import PlayOverlay from '../components/PlayOverlay.vue'
 </script>

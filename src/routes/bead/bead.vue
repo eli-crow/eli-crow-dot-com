@@ -122,6 +122,24 @@ function initScene(_THREE, scene, gltf, _renderer, _render) {
 
   const raycaster = new THREE.Raycaster()
   const raycasterPointer = new THREE.Vector2()
+  function handlePointerLeave() {
+    _renderer.domElement.style.cursor = ""
+  }
+  function handlePointerMove(e) {
+    const { clientWidth, clientHeight } = _renderer.domElement
+    const { offsetX, offsetY } = e
+    raycasterPointer.x = (offsetX / clientWidth) * 2 - 1
+    raycasterPointer.y = - (offsetY / clientHeight) * 2 + 1
+    raycaster.setFromCamera(raycasterPointer, camera)
+    const beads = state.rails.map(r => r.bead)
+    const intersects = raycaster.intersectObjects(beads)
+
+    if (intersects.length) {
+      _renderer.domElement.style.cursor = "grab"
+    } else {
+      _renderer.domElement.style.cursor = ""
+    }
+  }
   function handlePointerDown(e) {
     const { clientWidth, clientHeight } = _renderer.domElement
     const { offsetX, offsetY } = e
@@ -132,25 +150,30 @@ function initScene(_THREE, scene, gltf, _renderer, _render) {
     const intersects = raycaster.intersectObjects(beads)
 
     if (intersects.length) {
+      _renderer.domElement.style.cursor = "grabbing"
       const bead = intersects[0].object
       const index = beads.indexOf(bead)
       const rail = state.rails[index]
 
-      const move = e => {
+      const drag = e => {
+        _renderer.domElement.style.cursor = "grabbing"
         state.showHint = false
         rail.updateFromEvent(e)
         renderFunc()
       }
-      const up = () => {
-        window.removeEventListener('pointermove', move)
-        window.removeEventListener('pointerup', up)
+      const release = () => {
+        _renderer.domElement.style.cursor = ""
+        window.removeEventListener('pointermove', drag)
+        window.removeEventListener('pointerup', release)
       }
-      window.addEventListener('pointermove', move)
-      window.addEventListener('pointerup', up)
+      window.addEventListener('pointermove', drag)
+      window.addEventListener('pointerup', release)
     }
   }
 
   _renderer.domElement.addEventListener('pointerdown', handlePointerDown)
+  _renderer.domElement.addEventListener('pointermove', handlePointerMove)
+  _renderer.domElement.addEventListener('pointerleave', handlePointerLeave)
 
   window.addEventListener('resize', update2d)
   window.requestAnimationFrame(update2d)
