@@ -31,6 +31,12 @@ jobs:
           publish_branch: master
           publish_dir: ./dist
           
+      - name: Location
+        run: echo $PWD
+          
+      - name: Copy index to 404
+        run: cp ./index.html ./404.html
+          
       - name: Merge Deploy into Develop
         uses: devmasx/merge-branch@v1.3.1
         with:
