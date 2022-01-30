@@ -1,7 +1,6 @@
 
 module.exports = {
-  mode: 'jit',
-  purge: [
+  content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}"
   ],
@@ -12,13 +11,13 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        'fine': {'raw': '(pointer: fine)'},
-        'coarse': {'raw': '(pointer: coarse)'},
-      }  
+        'fine': { 'raw': '(pointer: fine)' },
+        'coarse': { 'raw': '(pointer: coarse)' },
+      }
     },
     fontFamily: {
       sans: ['"proxima-nova"', '"Open Sans"', '"Gill Sans MT"', '"Gill Sans"', 'Corbel', 'Helvetica', 'Arial', 'sans-serif']
-    },        
+    },
     fontSize: {
       base: '1.0625rem',
       lg: '1.3125rem',

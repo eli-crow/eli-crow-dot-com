@@ -55,7 +55,7 @@ import PlayOverlay from '../components/PlayOverlay.vue'
         <div class="p-8 pt-0">
           <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">Bead Maze</h2>
           <p>
-            <time>2021</time>
+            <time>2022</time>
           </p>
         </div>
         <router-link to="/bead" class="card-icon flex items-center" title="View 3d Model">

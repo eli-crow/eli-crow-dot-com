@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, render } from "vue"
+import { reactive } from "vue"
 import GLTFViewer from '../../components/GLTFViewer/GLTFViewer.vue'
 import TheShowoffPage from '../../components/TheShowoffPage.vue'
 import InteractionHint from '../../components/InteractionHint.vue'
@@ -181,8 +181,13 @@ function initScene(_THREE, scene, gltf, _renderer, _render) {
         class="mb-6"
       >Many of my interactive experiments involve a bead and a track. I solved this squiggly puzzle by projecting a 3D bezier spline onto 2D and constraining the beads using projection and binary search</p>
 
-      <p class="mb-2"><Icon icon="clock">Created:</Icon> <time>2021</time></p>
-      <p><Icon icon="wrench">Tools used:</Icon> Blender, THREE.js</p>
+      <p class="mb-2">
+        <Icon icon="clock">Created:</Icon>
+        <time>2022</time>
+      </p>
+      <p>
+        <Icon icon="wrench">Tools used:</Icon>Blender, THREE.js
+      </p>
     </template>
 
     <template #content>

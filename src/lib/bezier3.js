@@ -1,7 +1,5 @@
 import * as V3 from './v3.js'
 
-const CURVETIME_EPSILON = 1e-4 // close enough for pixel-precision
-
 const lerp = (start, end, t) => start + (end - start) * t
 
 // class for getting info about the bezier curve

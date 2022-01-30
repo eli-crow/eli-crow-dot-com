@@ -28,7 +28,6 @@ function lerp(a, b, t) {
 
 async function load() {
   resourcesPromise ??= new Promise(resolve => {
-    console.log('recreated')
     const loader = new PIXI.Loader()
     loader.use((r, next) => {
       r.texture?.baseTexture.setResolution(2)

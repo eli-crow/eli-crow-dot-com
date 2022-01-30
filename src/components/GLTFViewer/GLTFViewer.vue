@@ -96,7 +96,7 @@ async function updateEnvironmentMapFromSrc(src) {
 }
 
 async function load() {
-    const pTHREE = import('three/build/three.module')
+    const pTHREE = import('three')
     const pGLTFLoader = import('three/examples/jsm/loaders/GLTFLoader')
     const pDRACOLoader = import('three/examples/jsm/loaders/DRACOLoader')
     const pOrbitControls = import('three/examples/jsm/controls/OrbitControls.js')
