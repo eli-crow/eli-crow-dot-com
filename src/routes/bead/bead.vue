@@ -181,13 +181,8 @@ function initScene(_THREE, scene, gltf, _renderer, _render) {
         class="mb-6"
       >Many of my interactive experiments involve a bead and a track. I solved this squiggly puzzle by projecting a 3D bezier spline onto 2D and constraining the beads using projection and binary search</p>
 
-      <p class="mb-2">
-        <Icon icon="clock">Created:</Icon>
-        <time>2022</time>
-      </p>
-      <p>
-        <Icon icon="wrench">Tools used:</Icon>Blender, THREE.js
-      </p>
+      <p class="mb-2"><Icon icon="clock">Created:</Icon> <time>2021</time></p>
+      <p><Icon icon="wrench">Tools used:</Icon> Blender, THREE.js</p>
     </template>
 
     <template #content>
@@ -197,7 +192,7 @@ function initScene(_THREE, scene, gltf, _renderer, _render) {
           environment="/assets/studio.exr"
           @interacted="state.showHint = false"
           @after-init="initScene"
-          class="flex-1 md:h-[calc(60vw-12rem)]"
+          class="flex-1 md:h-[calc(70vw-14rem)]"
         />
         <InteractionHint
           :visible="state.showHint"

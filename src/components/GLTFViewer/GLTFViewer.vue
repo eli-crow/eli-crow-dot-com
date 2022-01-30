@@ -201,6 +201,8 @@ function render() {
 }
 
 function handleResize() {
+    if (!container.value) return
+
     const { clientWidth: w, clientHeight: h } = container.value
 
     renderer.setSize(w, h)
