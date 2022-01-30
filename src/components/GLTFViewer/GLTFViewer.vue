@@ -41,7 +41,9 @@ onMounted(() => {
 
 onUnmounted(() => {
     window.cancelAnimationFrame(loop)
+    renderer.forceContextLoss();
     renderer.dispose()
+    renderer = null;
     environmentTexture?.dispose()
 })
 
@@ -198,7 +200,7 @@ function init() {
 }
 
 function render() {
-    renderer.render(scene, camera)
+    renderer?.render(scene, camera)
 }
 
 function handleResize() {
