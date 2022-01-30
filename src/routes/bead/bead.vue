@@ -207,7 +207,7 @@ function initScene(_THREE, scene, gltf, _renderer, _render) {
       <p class="mb-5 gooey-text text-lg">
         <span
           class="gooey-text-inner"
-        >You are seven. Goku flexes silently on an old CRT. It kept you busy in the waiting room.</span>
+        >You are seven years old. Goku flexes silently on an old CRT. You slide the beads along the rail while you wait for your appointment.</span>
       </p>
 
       <p
