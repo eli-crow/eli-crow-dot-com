@@ -137,7 +137,7 @@ export class GLTFViewerScene {
         this.handleResize()
 
         if (this.doesAnimate) {
-            this.raf = window.requestAnimationFrame(() => this.animate())
+            this.raf = window.requestAnimationFrame(t => this.animate(t))
         }
     }
 
@@ -193,7 +193,7 @@ export class GLTFViewerScene {
         if (!this.doesAnimate) this.render()
     }
 
-    private animate(time: number = 0) {
+    private animate(time: number) {
         this.mixer?.update((time - this.lastTime) / 1_000)
         this.controls?.update()
         this.options.onUpdate?.()
@@ -202,6 +202,6 @@ export class GLTFViewerScene {
 
         this.lastTime = time
 
-        this.raf = window.requestAnimationFrame(() => this.animate())
+        this.raf = window.requestAnimationFrame(t => this.animate(t))
     }
 }
