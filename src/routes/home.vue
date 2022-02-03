@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Card from '../components/Card.vue'
 import Icon from '../components/Icon/Icon.vue'
 import CrowCard from '../components/Crow/CrowCard.vue'
@@ -45,7 +45,7 @@ import PlayOverlay from '../components/PlayOverlay.vue'
       <Card pressable link tag="article">
         <div class="relative p-8 pb-0 pr-0 cursor-default">
           <img
-            class="object-contain object-right-top h-72"
+            class="object-contain object-right h-72 ml-[-2rem] max-w-none w-[calc(100%+2rem)]"
             src="/assets/bead-maze-thumb.webp"
             draggable="false"
           />
