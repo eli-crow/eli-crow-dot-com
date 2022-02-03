@@ -1,2 +1,2 @@
-import GLTFViewer from './GLTFViewer.vue'
-export default GLTFViewer
+export default './GLTFViewer.vue'
+export { GLTFViewerScene } from './GLTFViewerScene'

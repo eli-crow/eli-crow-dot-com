@@ -1,17 +1,18 @@
-<script setup>
+<script setup lang="ts">
+import * as THREE from 'three'
 import { reactive } from "vue"
 import GLTFViewer from '../components/GLTFViewer/GLTFViewer.vue'
 import TheShowoffPage from '../components/TheShowoffPage.vue'
 import InteractionHint from '../components/InteractionHint.vue'
-import { Vector2 } from "three"
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
 
 const state = reactive({
   showHint: true
 })
 
-let road
+let road: THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>
 
-function afterInit(THREE, scene, gltf) {
+function afterInit(scene: THREE.Scene, gltf: GLTF) {
   const roadTexture = THREE.ImageUtils.loadTexture("/assets/road.webp")
   roadTexture.wrapS = THREE.RepeatWrapping
   roadTexture.wrapT = THREE.RepeatWrapping
@@ -19,7 +20,7 @@ function afterInit(THREE, scene, gltf) {
   const roadMaterial = new THREE.ShaderMaterial({
     uniforms: {
       offset: { value: 0 },
-      tex: { type: "t", value: roadTexture }
+      tex: { value: roadTexture }
     },
     vertexShader: `
       uniform float offset;
@@ -47,7 +48,7 @@ function afterInit(THREE, scene, gltf) {
   scene.add(road)
 }
 
-function beforeRender(THREE, scene) {
+function beforeRender() {
   road.material.uniforms.offset.value -= 0.005
 }
 </script>

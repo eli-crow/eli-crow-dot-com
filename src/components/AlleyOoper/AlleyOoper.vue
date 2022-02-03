@@ -1,6 +1,6 @@
 <script setup>
-import { BezierSpline } from '../../lib/bezier.js'
-import * as V from '../../lib/v.js'
+import { BezierSpline } from '../../lib/bezier'
+import * as V from '../../lib/v'
 
 import { onMounted, reactive, ref, watch, computed } from 'vue'
 

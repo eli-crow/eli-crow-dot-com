@@ -8,7 +8,7 @@ import peepisTextureSrc from './assets/peepis.webp'
 import stickTextureSrc from './assets/stick.webp'
 import tildeTextureSrc from './assets/tilde.webp'
 
-import { angleDifference } from '../../lib/v.js'
+import { angleDifference } from '../../lib/v'
 
 PixiPlugin.registerPIXI(PIXI)
 gsap.registerPlugin(MotionPathPlugin, PixiPlugin)
