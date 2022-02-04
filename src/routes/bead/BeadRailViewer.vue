@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { onMounted, onBeforeUnmount } from 'vue';
 
 const emit = defineEmits<{ (e: 'interacted'): void }>()
 
 const { BeadScene } = await import('./BeadScene')
 const scene = new BeadScene({ onInteractionStart() { emit('interacted') } })
 await scene.load()
-const container = ref<HTMLElement>()
-onMounted(() => scene.init(container.value))
-onUnmounted(() => scene.dispose())
+const container = $ref<HTMLElement>()
+onMounted(() => scene.init(container))
+onBeforeUnmount(() => window.setTimeout(scene.dispose, 1000))
 </script>
 
 <template>
