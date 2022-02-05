@@ -10,22 +10,23 @@ const RAIL_RED: SplineDescription3D = [[-4.3924, -0.0067, -2.5489, -4.3924, 1.73
 const RAIL_YELLOW: SplineDescription3D = [[-4.3924, -0.0067, 0.0434, -4.3924, 0.4865, 0.0434, -4.0733, 1.1946, 0.0723, -3.1529, 1.1946, 0.0428], [-2.5161, 1.1946, 0.0225, -2.0242, 1.1946, 0.3274, -2.0313, 1.1946, 0.9645], [-2.0429, 1.1946, 2.0006, -1.6889, 1.1815, 2.177, -1.086, 1.1946, 2.177], [-0.3926, 1.2095, 2.177, -0.1111, 1.5817, 2.177, -0.1579, 2.5023, 2.177], [-0.2035, 3.4012, 2.177, 0.762, 3.3777, 2.1212, 1.2631, 3.3886, 2.1212], [1.8333, 3.4011, 2.1212, 2.5346, 3.3898, 2.1212, 2.6044, 2.6455, 2.1212], [2.6893, 1.7404, 2.1212, 1.804, 1.4651, 1.4701, 1.8301, 1.4651, 0.6167], [1.8531, 1.4651, -0.1322, 2.4781, 1.4651, -0.0746, 3.1709, 1.4651, -0.0593], [3.9896, 1.4651, -0.0413, 4.369, 0.7296, 0.0273, 4.369, 0.0235, 0.0434]]
 
 interface BeadSceneOptions {
-    onInteractionStart(): void
+    environment?: string,
+    onInteractionEnd?: () => void
 }
 
 export class BeadScene extends GLTFViewerScene {
-    private rails: Rail[] = []
+    public rails: Rail[] = []
     private static raycaster = new THREE.Raycaster()
 
-    constructor({ onInteractionStart }: BeadSceneOptions) {
+    constructor({ onInteractionEnd, environment = "/assets/studio.exr" }: BeadSceneOptions) {
         super({
-            gltfSrc,
-            onInteractionStart,
+            gltf: gltfSrc,
             onInteractionEnd: () => {
                 this.rails.forEach(r => r.calculate2d())
+                onInteractionEnd?.()
             },
             rotatable: true,
-            environment: '/assets/studio.exr',
+            environment: environment,
             defaultZoom: 0.85,
         })
     }
@@ -38,13 +39,13 @@ export class BeadScene extends GLTFViewerScene {
                 obj.geometry.rotateY(Math.PI / 2)
 
                 if (obj.name.includes("Blue")) {
-                    const rail = new Rail(RAIL_RED, obj, this.camera, this.renderer, 0.028, 0.97)
+                    const rail = new Rail(RAIL_RED, obj, this.camera!, this.renderer, 0.028, 0.97)
                     this.rails.push(rail)
                 } else if (obj.name.includes("Red")) {
-                    const rail = new Rail(RAIL_YELLOW, obj, this.camera, this.renderer, 0.05, 0.942)
+                    const rail = new Rail(RAIL_YELLOW, obj, this.camera!, this.renderer, 0.05, 0.942)
                     this.rails.push(rail)
                 } else if (obj.name.includes("Yellow")) {
-                    const rail = new Rail(RAIL_BLUE, obj, this.camera, this.renderer, 0.027, 0.963)
+                    const rail = new Rail(RAIL_BLUE, obj, this.camera!, this.renderer, 0.027, 0.963)
                     this.rails.push(rail)
                 }
             }
@@ -54,7 +55,7 @@ export class BeadScene extends GLTFViewerScene {
 
         this.renderer.domElement.addEventListener('pointerdown', e => this.handlePointerDown(e), true)
         this.renderer.domElement.addEventListener('pointermove', e => this.handlePointerMove(e))
-        this.renderer.domElement.addEventListener('pointerleave', e => this.handlePointerLeave(e))
+        this.renderer.domElement.addEventListener('pointerleave', () => this.handlePointerLeave())
     }
 
     private getScreenPoint(e: PointerEvent) {
@@ -67,12 +68,12 @@ export class BeadScene extends GLTFViewerScene {
         )
     }
 
-    private handlePointerLeave(e: PointerEvent) {
+    private handlePointerLeave() {
         this.renderer.domElement.style.cursor = ""
     }
 
     private handlePointerMove(e: PointerEvent) {
-        BeadScene.raycaster.setFromCamera(this.getScreenPoint(e), this.camera)
+        BeadScene.raycaster.setFromCamera(this.getScreenPoint(e), this.camera!)
         const beads = this.rails.map(r => r.bead)
         const intersects = BeadScene.raycaster.intersectObjects(beads)
 
@@ -80,7 +81,7 @@ export class BeadScene extends GLTFViewerScene {
     }
 
     private handlePointerDown(e: PointerEvent) {
-        BeadScene.raycaster.setFromCamera(this.getScreenPoint(e), this.camera)
+        BeadScene.raycaster.setFromCamera(this.getScreenPoint(e), this.camera!)
         const beads = this.rails.map(r => r.bead)
         const intersects = BeadScene.raycaster.intersectObjects(beads)
 

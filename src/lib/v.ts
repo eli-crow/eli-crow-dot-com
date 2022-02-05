@@ -13,7 +13,7 @@ export const fromPolar = (theta: number, r: number): Vec => [Math.cos(theta) * r
 export const squareLength = (v: Vec): number => v[0] ** 2 + v[1] ** 2
 export const distance = (v0: Vec, v1: Vec): number => Math.sqrt(squareDistance(v0, v1))
 export const squareDistance = (v0: Vec, v1: Vec): number => squareLength(subtract(v1, v0))
-export const scale = (v: Vec, s): Vec => [v[0] * s, v[1] * s]
+export const scale = (v: Vec, s: number): Vec => [v[0] * s, v[1] * s]
 export const add = (v0: Vec, v1: Vec): Vec => [v0[0] + v1[0], v0[1] + v1[1]]
 export const subtract = (v0: Vec, v1: Vec): Vec => [v0[0] - v1[0], v0[1] - v1[1]]
 export const sub = subtract

@@ -32,7 +32,7 @@
   <div id="overlay" class="pointer-events-none"></div>
 
   <script>
-    // set the dark theme based on localstorage before loading the app
+    // set the dark theme based on localstorage before loading the app to avoid a flash of white when a user prefers a dark theme
     const stored = localStorage.theme
     const preferred = window?.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
     const otherwise = 'dark'
@@ -45,18 +45,16 @@
       document.documentElement.classList.remove('dark')
     }
   </script>
-  <script type="module" src="/src/main.js"></script>
-
+  <script type="module" src="/src/main.ts"></script>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-91287800-1"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+    window.dataLayer = window.dataLayer || []
+    function gtag() { dataLayer.push(arguments) }
+    gtag('js', new Date())
 
     gtag('config', 'UA-91287800-1');
   </script>
-
 </body>
 
 </html>

@@ -1,5 +1,7 @@
 import * as PIXI from 'pixi.js'
-import gsap, { MotionPathPlugin, PixiPlugin } from 'gsap/all'
+import gsap from 'gsap'
+import MotionPathPlugin from 'gsap/MotionPathPlugin'
+import PixiPlugin from 'gsap/PixiPlugin'
 
 import snakeTextureSrc from './assets/snake.webp'
 import blobTextureSrc from './assets/blob.webp'
@@ -19,10 +21,10 @@ const JOINT_MAX_ANGLE_MAGNITUDE = Math.PI * 0.065
 const JOINT_LERP_FACTOR = 0.4
 const JOINT_ANGLE_LERP_FACTOR = 0.75
 
-let resourcesPromise
-let resources
+let resourcesPromise: Promise<typeof resources>
+let resources: PIXI.utils.Dict<PIXI.LoaderResource>
 
-function lerp(a, b, t) {
+function lerp(a: number, b: number, t: number) {
   return a * (1 - t) + b * t
 }
 
@@ -40,7 +42,7 @@ async function load() {
       .add('peepis', peepisTextureSrc)
       .add('stick', stickTextureSrc)
       .add('tilde', tildeTextureSrc)
-    loader.load((loader, resources) => {
+    loader.load((_loader, resources) => {
       resolve(resources)
     })
   })
@@ -49,8 +51,9 @@ async function load() {
 }
 
 async function createScene() {
-  let app, shapes
-  let timeline
+  let app: PIXI.Application
+  let shapes: PIXI.Container
+  let timeline: GSAPTimeline
   let scale = 1
 
   await load()
@@ -60,8 +63,8 @@ async function createScene() {
     app.destroy(false)
   }
 
-  function init(root, canvas, initialScale) {
-    return new Promise((resolve, reject) => {
+  function init(root: HTMLElement, canvas: HTMLCanvasElement, initialScale: number) {
+    return new Promise((resolve, _reject) => {
       scale = initialScale
       app = new PIXI.Application({
         view: canvas,
@@ -69,12 +72,11 @@ async function createScene() {
         backgroundAlpha: 0,
         autoDensity: true,
         resolution: window.devicePixelRatio,
-        autoResize: true,
         resizeTo: root,
       })
 
       shapes = new PIXI.Container()
-      shapes.scale = new PIXI.Point(scale, scale)
+      shapes.scale.set(scale, scale)
       shapes.sortableChildren = true
       shapes.position.set(
         canvas.clientWidth / 2 + 10,
@@ -256,7 +258,7 @@ async function createScene() {
       const snakeHead = new PIXI.Point(0, 0)
       const snakePointsIncludingHead = [...snakePoints, snakeHead]
       const snake = new PIXI.SimpleRope(
-        resources.snake.texture,
+        resources.snake.texture!,
         snakePointsIncludingHead
       )
       shapes.addChild(snake)
@@ -349,10 +351,10 @@ async function createScene() {
     })
   }
 
-  function setScale(s) {
+  function setScale(s: number) {
     scale = s
     if (!shapes) return
-    shapes.scale = new PIXI.Point(s, s)
+    shapes.scale.set(s, s)
   }
 
   return {

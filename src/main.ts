@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 
 import App from './App.vue'
 import Icon from './components/Icon/Icon.vue';
-import router from './router.js'
+import router from './router'
 
 import "./global.css";
 

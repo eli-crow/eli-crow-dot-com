@@ -67,14 +67,18 @@ onMounted(() => {
         >
             <suspense>
                 <template #default>
-                    <div class="flex-1 min-h-0 min-w-0 relative flex flex-col items-center justify-center md:h-full">
+                    <div
+                        class="flex-1 min-h-0 min-w-0 relative flex flex-col items-center justify-center md:h-full"
+                    >
                         <slot />
                     </div>
                 </template>
 
                 <template #fallback>
                     <div class="flex-1 flex items-center justify-center">
-                        <Icon icon="loading" class="text-xl animate-spin text-gray-300" />
+                        <div class="animate-spin line-height-none">
+                            <Icon icon="loading" class="text-xl text-gray-300" />
+                        </div>
                     </div>
                 </template>
             </suspense>

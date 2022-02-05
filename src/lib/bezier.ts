@@ -38,8 +38,9 @@ export class BezierCurve {
         return [x, y]
     }
 
-    getPointAtLength(len: number): Vec {
+    getPointAtLength(len: number) {
         const t = this.getTAtLength(len)
+        if (t === null) return null
         return this.getPointAt(t)
     }
 
@@ -98,6 +99,8 @@ export class BezierCurve {
             lastTLength = tLength
             lastAccumulatedLength = accumulatedLength
         }
+
+        return null
     }
 
     // Look for two cached T-lengths, one on either side of `t`. Lerp between them. tLengths are assumed to be sorted in ascending T order
@@ -122,10 +125,14 @@ export class BezierCurve {
             lastTLength = tLength
             lastAccumulatedLength = accumulatedLength
         }
+
+        return null
     }
 
     getNormalizedLengthAt(t: number) {
-        return this.getLengthAt(t) / this.getLength()
+        const length = this.getLengthAt(t)
+        if (length === null) return null
+        return length / this.getLength()
     }
 
     getNearestTInWindingOrder(currentT: number, target: Vec): number {
@@ -194,9 +201,7 @@ export class BezierCurve {
 
     // Cache a number of roughly equidistant lengths
     private _initLengths() {
-        const tLengths: Vec[] = [
-            [0, 0]
-        ]
+        const tLengths: [t: number, length: number][] = [[0, 0]]
 
         const minLength = 0.05
         // TODO: not quite sure why the loop is happening exactly 1000 times here,
@@ -258,6 +263,9 @@ export class BezierSpline {
         const lengthAtT = length * t
 
         const curveIndex = this.getCurveIndexAtLength(lengthAtT)
+
+        if (curveIndex === null) return null
+
         const curveStartsAtLength = this._curveStartLengths[curveIndex]
         const curve = this.curves[curveIndex]
 
@@ -265,19 +273,23 @@ export class BezierSpline {
         return curve.getPointAtLength(lengthAlongCurve)
     }
 
-    getCurveLocation(t: number): CurveLocation {
+    getCurveLocation(t: number) {
         const length = this.getLength()
         const lengthAtT = length * t
 
-        const curveIndex = this.getCurveIndexAtLength(lengthAtT)
-        const curveStartsAtLength = this._curveStartLengths[curveIndex]
-        const curve = this.curves[curveIndex]
+        const index = this.getCurveIndexAtLength(lengthAtT)
 
+        if (index === null) return null
+
+        const curveStartsAtLength = this._curveStartLengths[index]
+        const curve = this.curves[index]
         const lengthAlongCurve = lengthAtT - curveStartsAtLength
-        return {
-            index: curveIndex,
-            t: curve.getTAtLength(lengthAlongCurve),
-        }
+        const tAtlength = curve.getTAtLength(lengthAlongCurve)
+
+        if (tAtlength === null) return null
+
+        const location: CurveLocation = { index, t: tAtlength }
+        return location
     }
 
     getTAtLength(len: number) {
@@ -318,7 +330,7 @@ export class BezierSpline {
         const lenAtSplineCurrentT = this.getLengthAt(splineCurrentT)
 
         let curveIndex = this.getCurveIndexAt(splineCurrentT) ?? 0
-        let lastCurveIndex: number
+        let lastCurveIndex: number | undefined
         let curveNearestT: number
         let curveLengthBefore: number
         let curve: BezierCurve
@@ -327,44 +339,46 @@ export class BezierSpline {
             curve = this.curves[curveIndex]
             curveLengthBefore = this._curveStartLengths[curveIndex]
             const curveNLen = lenAtSplineCurrentT - curveLengthBefore
-            const curveCurrentT = curve.getTAtLength(curveNLen)
+            const curveCurrentT = curve.getTAtLength(curveNLen)!
             curveNearestT = curve.getNearestTInWindingOrder(curveCurrentT, pt)
 
-            if (curveNearestT <= 0) {
+            if (curveNearestT <= CURVETIME_EPSILON) {
                 if (curveIndex === 0 || lastCurveIndex === curveIndex - 1) break
                 lastCurveIndex = curveIndex
                 curveIndex--
             }
 
-            else if (curveNearestT >= 1) {
+            else if (curveNearestT >= 1 - CURVETIME_EPSILON) {
                 if (curveIndex === this.curves.length - 1 || lastCurveIndex === curveIndex + 1) break
                 lastCurveIndex = curveIndex
                 curveIndex++
             }
 
-            else {
-                break
-            }
+            else break
         }
 
-        return (curveLengthBefore + curve.getLengthAt(curveNearestT)) / this._length
+        const lengthNearestT = curve.getLengthAt(curveNearestT)
+        if (lengthNearestT === null) return null
+
+        return (curveLengthBefore + lengthNearestT) / this._length
     }
 
     _initCurves(curveDescription: SplineDescription) {
         this.curves = curveDescription.map((c, i, a) => {
             if (i === 0) {
+                c = c as SplineDescription[0]
                 return new BezierCurve(c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7])
             }
 
             else if (i === 1) {
-                const previous = a[i - 1]
+                const previous = a[i - 1] as SplineDescription[0]
                 const p0x = previous[6]
                 const p0y = previous[7]
                 return new BezierCurve(p0x, p0y, c[0], c[1], c[2], c[3], c[4], c[5])
             }
 
             else {
-                const previous = a[i - 1]
+                const previous = a[i - 1] as SplineDescription[1]
                 const p0x = previous[4]
                 const p0y = previous[5]
                 return new BezierCurve(p0x, p0y, c[0], c[1], c[2], c[3], c[4], c[5])
