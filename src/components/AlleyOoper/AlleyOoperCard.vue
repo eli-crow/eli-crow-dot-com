@@ -1,28 +1,27 @@
 <script setup lang="ts">
-import { reactive, watchEffect } from "vue";
-import AlleyOoper from "./AlleyOoper.vue";
-import Card from "../Card.vue";
-import Transition from "../Transition.vue";
+import { watchEffect } from "vue"
+import AlleyOoper from "./AlleyOoper.vue"
+import Card from "../Card.vue"
+import Transition from "../Transition.vue"
 
-const state = reactive({
-  status: 'normal',
-  alleyOopers: [25, 50, 75, 95],
-  wildAlleyOoper: 0
-});
+let status = $ref<'normal' | 'wild'>('normal')
+let values = $ref([25, 50, 75, 95])
+let wildValue = $ref(0)
 
 watchEffect(() => {
-  if (state.alleyOopers.every(a => a === 100)) {
-    state.status = 'wild';
-    state.alleyOopers[0] = 25;
-    state.alleyOopers[1] = 50;
-    state.alleyOopers[2] = 75;
-    state.alleyOopers[3] = 95;
+  if (values.every(a => a === 100)) {
+    status = 'wild'
+    values[0] = 25
+    values[1] = 50
+    values[2] = 75
+    values[3] = 95
   }
-});
+})
+
 watchEffect(() => {
-  if (state.wildAlleyOoper === 100) {
-    state.status = 'normal';
-    state.wildAlleyOoper = 0;
+  if (wildValue === 100) {
+    status = 'normal'
+    wildValue = 0
   }
 })
 </script>
@@ -30,53 +29,53 @@ watchEffect(() => {
 <template>
   <Card type="interactive" class="p-8">
     <Transition name="fade" mode="out-in">
-      <div v-if="state.status === 'normal'" class="alley-ooper-group pb-16">
+      <div v-if="status === 'normal'" class="alley-ooper-group pb-16">
         <label class="alley-ooper">
           <span class="alley-ooper-label">Slider</span>
-          <span class="alley-ooper-value">{{ state.alleyOopers[0].toFixed(0) }}</span>
+          <span class="alley-ooper-value">{{ values[0].toFixed(0) }}</span>
           <AlleyOoper
             class="alley-ooper-input"
-            v-model="state.alleyOopers[0]"
-            min="0"
-            max="100"
+            v-model="values[0]"
+            :min="0"
+            :max="100"
             :spline="[[0, 0, .33, 0, .66, 0, 1, 0]]"
-            style="height: 1rem;"
+            style="height: 1rem"
           />
         </label>
         <label class="alley-ooper">
           <span class="alley-ooper-label">Swooper</span>
-          <span class="alley-ooper-value">{{ state.alleyOopers[1].toFixed(0) }}</span>
+          <span class="alley-ooper-value">{{ values[1].toFixed(0) }}</span>
           <AlleyOoper
             class="alley-ooper-input"
-            v-model="state.alleyOopers[1]"
-            min="0"
-            max="100"
+            v-model="values[1]"
+            :min="0"
+            :max="100"
             :spline="[[0, 0, .33, 1, .66, 1, 1, 0]]"
-            style="height: 1.5rem;"
+            style="height: 1.5rem"
           />
         </label>
         <label class="alley-ooper">
           <span class="alley-ooper-label">Swisher</span>
-          <span class="alley-ooper-value">{{ state.alleyOopers[2].toFixed(0) }}</span>
+          <span class="alley-ooper-value">{{ values[2].toFixed(0) }}</span>
           <AlleyOoper
             class="alley-ooper-input"
-            v-model="state.alleyOopers[2]"
-            min="0"
-            max="100"
+            v-model="values[2]"
+            :min="0"
+            :max="100"
             :spline="[[0, 1, 1.75, 1.5, -0.2, -0.15, 1, 0]]"
-            style="height: 3rem;"
+            style="height: 3rem"
           />
         </label>
         <label class="alley-ooper">
           <span class="alley-ooper-label">Looper</span>
-          <span class="alley-ooper-value">{{ state.alleyOopers[3].toFixed(0) }}</span>
+          <span class="alley-ooper-value">{{ values[3].toFixed(0) }}</span>
           <AlleyOoper
             class="alley-ooper-input"
-            v-model="state.alleyOopers[3]"
-            min="0"
-            max="100"
+            v-model="values[3]"
+            :min="0"
+            :max="100"
             :spline="[[0, 1, 2, -0.85, -0.5, -1.33, 1, 1]]"
-            style="height: 3rem;"
+            style="height: 3rem"
           />
         </label>
       </div>
@@ -84,12 +83,12 @@ watchEffect(() => {
       <div v-else class="pb-16">
         <label class="alley-ooper">
           <span class="alley-ooper-label">Alley-Ooper</span>
-          <span class="alley-ooper-value">{{ state.wildAlleyOoper.toFixed(0) }}</span>
+          <span class="alley-ooper-value">{{ wildValue.toFixed(0) }}</span>
           <AlleyOoper
             class="alley-ooper-input"
-            v-model="state.wildAlleyOoper"
-            min="0"
-            max="100"
+            v-model="wildValue"
+            :min="0"
+            :max="100"
             :spline="[
               [0.04, 0.03, 0.151922, 0.121118, 0.580877, 0.288622, 0.737267, 0.207631],
               [0.833169, 0.157965, 0.777481, 0, 0.540662, 0],
@@ -107,7 +106,7 @@ watchEffect(() => {
               [0.402145, 0.801692, 0.697052, 0.997788, 0.889188, 0.971834],
               [1.01534, 0.954793, 1.03664, 0.842059, 0.938339, 0.787273],
             ]"
-            style="height: 24rem;"
+            style="height: 24rem"
           />
         </label>
       </div>

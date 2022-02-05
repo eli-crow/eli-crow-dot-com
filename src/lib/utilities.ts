@@ -24,3 +24,20 @@ export function bezierCurveTo2D(curve: BezierCurve3D, threeCamera: THREE.Camera)
 
     return new BezierCurve(p0.x, p0.y, c0.x, c0.y, c1.x, c1.y, p1.x, p1.y)
 }
+
+export function clamp(n: number, min: number = 0, max: number = 1) {
+    return Math.min(Math.max(n, min), max)
+}
+
+export function lerp(from: number, to: number, t: number) {
+    return from + (to - from) * t
+}
+
+export function unlerp(n: number, from: number, to: number) {
+    if (Math.abs(to - from) < Number.EPSILON) return 0
+    return (n - from) / (to - from)
+}
+
+export function remap(n: number, from0: number, from1: number, to0: number, to1: number) {
+    return lerp(to0, to1, unlerp(n, from0, from1))
+}
