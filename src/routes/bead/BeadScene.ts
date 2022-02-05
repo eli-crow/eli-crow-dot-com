@@ -10,22 +10,23 @@ const RAIL_RED: SplineDescription3D = [[-4.3924, -0.0067, -2.5489, -4.3924, 1.73
 const RAIL_YELLOW: SplineDescription3D = [[-4.3924, -0.0067, 0.0434, -4.3924, 0.4865, 0.0434, -4.0733, 1.1946, 0.0723, -3.1529, 1.1946, 0.0428], [-2.5161, 1.1946, 0.0225, -2.0242, 1.1946, 0.3274, -2.0313, 1.1946, 0.9645], [-2.0429, 1.1946, 2.0006, -1.6889, 1.1815, 2.177, -1.086, 1.1946, 2.177], [-0.3926, 1.2095, 2.177, -0.1111, 1.5817, 2.177, -0.1579, 2.5023, 2.177], [-0.2035, 3.4012, 2.177, 0.762, 3.3777, 2.1212, 1.2631, 3.3886, 2.1212], [1.8333, 3.4011, 2.1212, 2.5346, 3.3898, 2.1212, 2.6044, 2.6455, 2.1212], [2.6893, 1.7404, 2.1212, 1.804, 1.4651, 1.4701, 1.8301, 1.4651, 0.6167], [1.8531, 1.4651, -0.1322, 2.4781, 1.4651, -0.0746, 3.1709, 1.4651, -0.0593], [3.9896, 1.4651, -0.0413, 4.369, 0.7296, 0.0273, 4.369, 0.0235, 0.0434]]
 
 interface BeadSceneOptions {
-    onInteractionEnd(): void
+    environment?: string,
+    onInteractionEnd?: () => void
 }
 
 export class BeadScene extends GLTFViewerScene {
     public rails: Rail[] = []
     private static raycaster = new THREE.Raycaster()
 
-    constructor({ onInteractionEnd }: BeadSceneOptions) {
+    constructor({ onInteractionEnd, environment = "/assets/studio.exr" }: BeadSceneOptions) {
         super({
-            gltfSrc,
+            gltf: gltfSrc,
             onInteractionEnd: () => {
                 this.rails.forEach(r => r.calculate2d())
-                onInteractionEnd()
+                onInteractionEnd?.()
             },
             rotatable: true,
-            environment: '/assets/studio.exr',
+            environment: environment,
             defaultZoom: 0.85,
         })
     }

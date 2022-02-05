@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { effect, onMounted, ref } from "vue"
 
 const props = defineProps({
     pressable: {
@@ -15,15 +14,15 @@ const props = defineProps({
         default: null
     },
     tag: {
-      type: String,
-      default: 'div'
+        type: String,
+        default: 'div'
     }
 })
 
-function handleClick(event) {
+function handleClick(event: MouseEvent) {
     if (props.link) {
-        const card = event.currentTarget
-        const firstLink = card.querySelector('a, button')
+        const card = event.currentTarget as HTMLElement
+        const firstLink = card.querySelector?.('a, button') as HTMLElement
         firstLink?.click()
     }
 }
@@ -31,13 +30,13 @@ function handleClick(event) {
 
 <template>
     <component
-      :is="props.tag" 
-      :class="`Card relative flex flex-col bg-white dark:bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm transition cursor-default ${props.pressable ? 'hover:ring-1 hover:ring-gray-100 dark:hover:ring-gray-200 ring-inset' : ''}`" 
-      @click="handleClick"
+        :is="props.tag"
+        :class="`Card relative flex flex-col bg-white dark:bg-gray-100 sm:h-[520px] overflow-hidden group sm:rounded-sm transition cursor-default ${props.pressable ? 'hover:ring-1 hover:ring-gray-100 dark:hover:ring-gray-200 ring-inset' : ''}`"
+        @click="handleClick"
     >
         <suspense>
             <template #default>
-                <slot/>
+                <slot />
             </template>
             <template #fallback>
                 <div class="absolute inset-0 animate-pulse bg-gray-100 flex items-center justify-center">

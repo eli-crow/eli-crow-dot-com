@@ -9,7 +9,7 @@ import { convertBlenderLightUnitsToThreeUnits } from '../../lib/utilities'
 const DRACO_URL = 'https://www.gstatic.com/draco/v1/decoders/'
 
 interface GLTFViewerSceneOptions {
-    gltfSrc: string
+    gltf: string
     environment?: THREE.DataTexture | string
     environmentIsBackground?: boolean
     clearColor?: string
@@ -64,7 +64,7 @@ export class GLTFViewerScene {
         const dracoLoader = new DRACOLoader()
         dracoLoader.setDecoderPath(DRACO_URL)
         gltfLoader.setDRACOLoader(dracoLoader)
-        this.gltf = await gltfLoader.loadAsync(this.options.gltfSrc)
+        this.gltf = await gltfLoader.loadAsync(this.options.gltf)
 
         if (this.options.environment) {
             await this.setEnvironment(this.options.environment)
@@ -144,8 +144,8 @@ export class GLTFViewerScene {
 
     dispose() {
         window.cancelAnimationFrame(this.raf)
-        this.renderer.forceContextLoss()
-        this.renderer.dispose()
+        this.renderer?.forceContextLoss()
+        this.renderer?.dispose()
         this.environmentTexture?.dispose()
     }
 

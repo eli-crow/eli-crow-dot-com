@@ -63,6 +63,7 @@ function beforeRender() {
     <GLTFViewer
       gltf="/assets/ute.glb"
       environment="/assets/pedestrian-overpass.hdr"
+      :light-environment="null"
       auto-rotate
       rotatable
       class="w-full h-full md:max-w-[40rem] md:max-h-[40rem] min-w-0 min-h-0"

@@ -2,23 +2,29 @@
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 import { onMounted, watchEffect, watch, onUnmounted } from "vue"
 
-const props = withDefaults(defineProps<{
+import theme from '../../store/theme'
+
+const {
+    gltf,
+    clearColor,
+    environment = "/assets/studio.exr",
+    lightEnvironment = "/assets/studio-light.exr",
+    environmentIsBackground = false,
+    autoRotate = false,
+    rotatable = false,
+    zoomable = false,
+    pannable = false,
+} = defineProps<{
     gltf: string,
-    environment: string,
-    environmentBackground?: boolean,
+    environment?: string,
+    lightEnvironment?: string | null,
+    environmentIsBackground?: boolean,
     clearColor?: string,
     autoRotate?: boolean,
     rotatable?: boolean,
     zoomable?: boolean,
     pannable?: boolean,
-}>(), {
-    environment: "/pedestrian-overpass.hdr",
-    environmentBackground: false,
-    autoRotate: false,
-    rotatable: false,
-    zoomable: false,
-    pannable: false,
-})
+}>()
 
 const emit = defineEmits<{
     (event: 'interaction-end'): void,
@@ -29,14 +35,8 @@ const emit = defineEmits<{
 
 const { GLTFViewerScene } = await import("./GLTFViewerScene")
 const scene = new GLTFViewerScene({
-    gltfSrc: props.gltf,
-    pannable: props.pannable,
-    rotatable: props.rotatable,
-    zoomable: props.zoomable,
-    autoRotate: props.autoRotate,
-    clearColor: props.clearColor,
-    environment: props.environment,
-    environmentIsBackground: props.environmentBackground,
+    gltf, pannable, rotatable, zoomable, autoRotate, clearColor, environmentIsBackground,
+    environment: lightEnvironment && theme.theme === 'light' ? lightEnvironment : environment,
     onInteractionStart() { emit('interaction-end') },
     onInteractionEnd() { emit('interacted-end') },
     onAfterInit(scene, gltf) { emit('after-init', scene, gltf) },
@@ -50,18 +50,25 @@ onMounted(() => {
 })
 onUnmounted(() => {
     // wait for any transitions to complete
-    window.setTimeout(scene.dispose, 1000)
+    window.setTimeout(scene.dispose, 500)
 })
 watchEffect(() => {
     if (!scene?.controls) return
-    scene.controls.enableZoom = props.zoomable
-    scene.controls.enablePan = props.pannable
-    scene.controls.enableRotate = props.rotatable
-    scene.controls.autoRotate = props.autoRotate
+    scene.controls.enableZoom = zoomable
+    scene.controls.enablePan = pannable
+    scene.controls.enableRotate = rotatable
+    scene.controls.autoRotate = autoRotate
 })
-watch(() => props.environment, src => {
+watch(() => environment, src => {
     if (!scene) return
     scene.setEnvironment(src)
+})
+watch(() => [theme.theme, lightEnvironment, environment], () => {
+    if (lightEnvironment && theme.theme === 'light') {
+        scene.setEnvironment(lightEnvironment)
+    } else {
+        scene.setEnvironment(environment)
+    }
 })
 </script>
 
