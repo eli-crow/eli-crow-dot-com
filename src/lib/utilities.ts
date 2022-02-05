@@ -4,13 +4,13 @@ import { Vector3 } from 'three'
 import { BezierCurve } from './bezier'
 import { BezierCurve3D } from './bezier3'
 
-export function convertBlenderLightUnitsToThreeUnits(watts) {
+export function convertBlenderLightUnitsToThreeUnits(watts: number) {
     return (683 * watts) / (4 * Math.PI)
 }
 
 export function bezierCurveTo2D(curve: BezierCurve3D, threeCamera: THREE.Camera) {
     threeCamera.getWorldPosition(new Vector3())
-    function project(x, y, z) {
+    function project(x: number, y: number, z: number) {
         const vec = new Vector3(x, y, z)
         vec.project(threeCamera)
         vec.y *= -1

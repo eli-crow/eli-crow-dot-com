@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Transition from './Transition.vue'
 
 const props = defineProps({

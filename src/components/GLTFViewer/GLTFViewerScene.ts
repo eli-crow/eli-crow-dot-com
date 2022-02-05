@@ -5,7 +5,6 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { convertBlenderLightUnitsToThreeUnits } from '../../lib/utilities'
-import { Vector3 } from 'three'
 
 const DRACO_URL = 'https://www.gstatic.com/draco/v1/decoders/'
 
@@ -26,16 +25,16 @@ interface GLTFViewerSceneOptions {
 }
 
 export class GLTFViewerScene {
-    public controls: OrbitControls
-    protected camera: THREE.Camera
+    public controls: OrbitControls | undefined
+    protected camera: THREE.Camera | undefined
     protected scene: THREE.Scene
-    protected environmentTexture: THREE.DataTexture
-    protected mixer: THREE.AnimationMixer
+    protected environmentTexture: THREE.DataTexture | undefined
+    protected mixer: THREE.AnimationMixer | undefined
     protected lastTime: number = 0
     protected renderer: THREE.WebGLRenderer
     private options: GLTFViewerSceneOptions
-    private raf: number
-    private gltf: GLTF
+    private raf: number = -1
+    private gltf: GLTF | undefined
     private isLoaded: boolean = false
 
     get doesAnimate() { return this.options.autoRotate ?? false }
@@ -75,6 +74,8 @@ export class GLTFViewerScene {
     }
 
     init(container: HTMLElement) {
+        if (!this.gltf) throw new Error("Call and await load() before init")
+
         this.scene.add(this.gltf.scene)
         this.scene.traverse(o => {
             //objects otherwise disappear at certain angles
@@ -104,9 +105,9 @@ export class GLTFViewerScene {
         }
         if (this.options.onInteractionStart) this.controls.addEventListener('start', this.options.onInteractionStart)
         if (this.options.onInteractionEnd) this.controls.addEventListener('end', this.options.onInteractionEnd)
-        this.controls.enablePan = this.options.pannable
-        this.controls.enableZoom = this.options.zoomable
-        this.controls.enableRotate = this.options.rotatable
+        this.controls.enablePan = this.options.pannable ?? false
+        this.controls.enableZoom = this.options.zoomable ?? false
+        this.controls.enableRotate = this.options.rotatable ?? false
         if (this.doesAnimate) this.controls.enableDamping = true
         const distance = cameraTarget?.position.distanceTo(this.camera.position) ?? 10
         if (this.options.zoomable) {
@@ -119,14 +120,14 @@ export class GLTFViewerScene {
         this.controls.minPolarAngle = Math.PI * 0.25
         this.controls.maxPolarAngle = Math.PI * 0.75
         this.controls.update()
-        this.controls.autoRotate = this.options.autoRotate
+        if (this.options.autoRotate) this.controls.autoRotate = true
         if (!this.doesAnimate) {
             this.controls.addEventListener('change', () => this.render())
         }
 
         if (this.gltf.animations.length) {
             this.mixer = new THREE.AnimationMixer(this.scene)
-            this.gltf.animations.forEach(clip => this.mixer.clipAction(clip).play())
+            this.gltf.animations.forEach(clip => this.mixer!.clipAction(clip).play())
         }
 
         this.options.onAfterInit?.(this.scene, this.gltf)
@@ -145,7 +146,6 @@ export class GLTFViewerScene {
         window.cancelAnimationFrame(this.raf)
         this.renderer.forceContextLoss()
         this.renderer.dispose()
-        this.renderer = null
         this.environmentTexture?.dispose()
     }
 
@@ -167,7 +167,7 @@ export class GLTFViewerScene {
     }
 
     protected render() {
-        this.renderer.render(this.scene, this.camera)
+        this.renderer.render(this.scene, this.camera!)
     }
 
     private async loadEnvironmentTexture(src: string) {
@@ -177,16 +177,17 @@ export class GLTFViewerScene {
     }
 
     private handleResize() {
-        const { clientWidth: w, clientHeight: h } = this.renderer.domElement.parentElement
+        const { clientWidth: w, clientHeight: h } = this.renderer.domElement.parentElement!
 
         this.renderer.setSize(w, h)
 
         if (this.camera instanceof THREE.PerspectiveCamera) {
+            const { defaultZoom = 1 } = this.options
             const aspect = w / h
             this.camera.aspect = aspect
             this.camera.zoom = h > w
-                ? aspect * this.options.defaultZoom
-                : this.options.defaultZoom
+                ? aspect * defaultZoom
+                : defaultZoom
             this.camera.updateProjectionMatrix()
         }
 

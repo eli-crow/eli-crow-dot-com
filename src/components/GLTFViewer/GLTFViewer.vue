@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
-import { ref, onMounted, watchEffect, watch, onUnmounted, onBeforeUnmount } from "vue"
+import { onMounted, watchEffect, watch, onUnmounted } from "vue"
 
 const props = withDefaults(defineProps<{
     gltf: string,
@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-    (event: 'interacted'): void,
+    (event: 'interaction-end'): void,
     (event: 'interacted-end'): void,
     (event: 'before-render'): void,
     (event: 'after-init', scene: THREE.Scene, gltf: GLTF): void,
@@ -37,7 +37,7 @@ const scene = new GLTFViewerScene({
     clearColor: props.clearColor,
     environment: props.environment,
     environmentIsBackground: props.environmentBackground,
-    onInteractionStart() { emit('interacted') },
+    onInteractionStart() { emit('interaction-end') },
     onInteractionEnd() { emit('interacted-end') },
     onAfterInit(scene, gltf) { emit('after-init', scene, gltf) },
     onUpdate() { emit('before-render') },
@@ -64,7 +64,6 @@ watch(() => props.environment, src => {
     scene.setEnvironment(src)
 })
 </script>
-
 
 <template>
     <div ref="container" class="min-w-0 min-h-0"></div>

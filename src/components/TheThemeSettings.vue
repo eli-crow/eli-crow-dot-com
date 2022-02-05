@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue"
 
 const preferred = window?.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
@@ -26,9 +26,9 @@ function toggleTheme() {
 </script>
 
 <template>
-  <button @click="toggleTheme" class="flex items-center hover:text-gray-900">
-      <Icon class="text-lg" v-if="theme === 'dark'" icon="sun">Light Theme</Icon> 
-      <Icon class="text-lg" v-else icon="moon">Dark Theme</Icon>
-      <span class="ml-2">Toggle theme</span>
-  </button>
+    <button @click="toggleTheme" class="flex items-center hover:text-gray-900">
+        <Icon class="text-lg" v-if="theme === 'dark'" icon="sun">Light Theme</Icon>
+        <Icon class="text-lg" v-else icon="moon">Dark Theme</Icon>
+        <span class="ml-2">Toggle theme</span>
+    </button>
 </template>

@@ -18,7 +18,7 @@ export class Rail {
     public maxT = 1
   ) {
     this.spline3d = new BezierSpline3D(splineDescription)
-    this.spline2d = null
+    this.spline2d = BezierSpline.fromCurves(this.spline3d.curves.map(c => bezierCurveTo2D(c, this.camera)))
 
     this.calculate2d()
     this.update(this.t)
@@ -28,10 +28,16 @@ export class Rail {
     this.spline2d = BezierSpline.fromCurves(this.spline3d.curves.map(c => bezierCurveTo2D(c, this.camera)))
   }
 
+  getSVGPath() {
+    return this.spline2d.getSvgPathData()
+  }
+
   update(t: number) {
     this.t = clamp(t, this.minT, this.maxT)
 
     const location2d = this.spline2d.getCurveLocation(this.t)
+
+    if (!location2d) return
 
     const pos = this.spline3d.getPointAtCurveLocation(location2d)
     const tan = this.spline3d.getTangentAtCurveLocation(location2d)
@@ -40,13 +46,14 @@ export class Rail {
     this.bead.lookAt(...V3.add(pos, tan))
   }
 
-  updateFromEvent(e) {
+  updateFromEvent(e: PointerEvent) {
     const { clientWidth, clientHeight } = this.renderer.domElement
 
     const x = (e.offsetX / clientWidth) * 2 - 1
     const y = (e.offsetY / clientHeight) * 2 - 1
 
     const t = this.spline2d.getNearestTInWindingOrder(this.t, [x, y])
-    this.update(t)
+
+    if (t) this.update(t)
   }
 }

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { BezierSpline } from '../../lib/bezier'
 import * as V from '../../lib/v'
 

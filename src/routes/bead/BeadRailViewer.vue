@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount } from 'vue';
 
-const emit = defineEmits<{ (e: 'interacted'): void }>()
+const emit = defineEmits<{ (e: 'interaction-end'): void }>()
 
 const { BeadScene } = await import('./BeadScene')
-const scene = new BeadScene({ onInteractionStart() { emit('interacted') } })
+const scene = new BeadScene({ onInteractionEnd() { emit('interaction-end') } })
 await scene.load()
 const container = $ref<HTMLElement>()
 onMounted(() => scene.init(container))

@@ -3,7 +3,7 @@ import TheShowoffPage from '../../components/TheShowoffPage.vue'
 import InteractionHint from '../../components/InteractionHint.vue'
 import BeadRailViewer from "./BeadRailViewer.vue";
 
-const showHint = $ref(true)
+let showHint = $ref(true)
 </script>
 
 <template>
@@ -14,7 +14,11 @@ const showHint = $ref(true)
     tools="Blender, THREE.js"
     time="2022"
   >
-    <BeadRailViewer @interacted="showHint = false" class="flex-1 self-stretch" ref="container" />
+    <BeadRailViewer
+      @interaction-end="showHint = false"
+      class="flex-1 self-stretch"
+      ref="container"
+    />
     <InteractionHint
       :visible="showHint"
       icon="threeD"

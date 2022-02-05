@@ -1,3 +1,4 @@
+import { clamp } from 'three/src/math/MathUtils'
 import * as V3 from './v3'
 import { Vec3 } from './v3'
 
@@ -30,7 +31,7 @@ export class BezierCurve3D {
     }
 
     getPointAt(t: number): Vec3 {
-        t = Math.min(Math.max(t, 0), 1)
+        t = clamp(t, 0, 1)
         const { p0x, p0y, p0z, c0x, c0y, c0z, c1x, c1y, c1z, p1x, p1y, p1z } = this
         const omt = 1 - t
         const x = (omt ** 3 * p0x) + (3 * omt ** 2 * t * c0x) + (3 * omt * t ** 2 * c1x) + (t ** 3 * p1x)
@@ -39,19 +40,20 @@ export class BezierCurve3D {
         return [x, y, z]
     }
 
-    getPointAtLength(len: number): Vec3 {
+    getPointAtLength(len: number) {
         const t = this.getTAtLength(len)
+        if (t === null) return null
         return this.getPointAt(t)
     }
 
-    getPointAtNormalizedLength(nLen: number): Vec3 {
+    getPointAtNormalizedLength(nLen: number) {
         return this.getPointAtLength(this._length * nLen)
     }
 
     getVelocityAt(t: number): Vec3 {
         const { p0x, p0y, p0z, c0x, c0y, c0z, c1x, c1y, c1z, p1x, p1y, p1z } = this
 
-        if (t < Number.EPSILON) return [
+        if (t <= 0) return [
             3 * (c0x - p0x),
             3 * (c0y - p0y),
             3 * (c0z - p0z),
@@ -63,7 +65,7 @@ export class BezierCurve3D {
             3 * (p1z - c1z),
         ]
 
-        const component = (p0, c0, c1, p1) =>
+        const component = (p0: number, c0: number, c1: number, p1: number) =>
             3 * (c0 - p0) +
             2 * t * (3 * p0 - 6 * c0 + 3 * c1) +
             3 * (t ** 2) * (-p0 + 3 * c0 - 3 * c1 + p1)
@@ -79,20 +81,21 @@ export class BezierCurve3D {
         return V3.normalize(this.getVelocityAt(t))
     }
 
-    getTangentAtLength(len: any): Vec3 {
-        const t = this.getTAtLength(len)
+    getTangentAtLength(length: any) {
+        const t = this.getTAtLength(length)
+        if (t === null) return null
         return this.getTangentAt(t)
     }
 
-    getTAtNormalizedLength(nLength: number) {
-        if (nLength <= 0) return 0
-        if (nLength >= 1) return 1
-        return this.getTAtLength(nLength * this.getLength())
+    getTAtNormalizedLength(normalizedLength: number) {
+        if (normalizedLength <= 0) return 0
+        if (normalizedLength >= 1) return 1
+        return this.getTAtLength(normalizedLength * this.getLength())
     }
 
-    getTAtLength(len: number) {
-        if (len <= 0) return 0
-        if (len >= this.getLength()) return 1
+    getTAtLength(length: number) {
+        if (length <= 0) return 0
+        if (length >= this.getLength()) return 1
 
         let lastTLength = this._tLengths[0]
         let accumulatedLength = lastTLength[1]
@@ -102,8 +105,8 @@ export class BezierCurve3D {
 
             accumulatedLength += tLength[1]
 
-            if (accumulatedLength > len) {
-                const prog = (len - lastAccumulatedLength) / (accumulatedLength - lastAccumulatedLength)
+            if (accumulatedLength > length) {
+                const prog = (length - lastAccumulatedLength) / (accumulatedLength - lastAccumulatedLength)
                 const t = lerp(lastTLength[0], tLength[0], prog)
                 return t
             }
@@ -111,6 +114,8 @@ export class BezierCurve3D {
             lastTLength = tLength
             lastAccumulatedLength = accumulatedLength
         }
+
+        return null
     }
 
     // Look for two cached T-lengths, one on either side of `t`. Lerp between them. tLengths are assumed to be sorted in ascending T order
@@ -135,16 +140,16 @@ export class BezierCurve3D {
             lastTLength = tLength
             lastAccumulatedLength = accumulatedLength
         }
+
+        return null
     }
 
     getNormalizedLengthAt(t: number) {
-        return this.getLengthAt(t) / this.getLength()
+        return this.getLengthAt(t)
     }
 
     _initLengths() {
-        const tLengths: [t: number, length: number][] = [
-            [0, 0]
-        ]
+        const tLengths: [t: number, length: number][] = [[0, 0]]
 
         const minLength = 0.05
         // TODO: not quite sure why the loop is happening exactly 1000 times here,
@@ -198,6 +203,8 @@ export class BezierSpline3D {
         const lengthAtT = length * t
 
         const curveIndex = this.getCurveIndexAtLength(lengthAtT)
+        if (curveIndex === null) return null
+
         const curveStartsAtLength = this._curveStartLengths[curveIndex]
         const curve = this.curves[curveIndex]
 
@@ -214,6 +221,8 @@ export class BezierSpline3D {
         const lengthAtT = length * t
 
         const curveIndex = this.getCurveIndexAtLength(lengthAtT)
+        if (curveIndex === null) return null
+
         const curveStartsAtLength = this._curveStartLengths[curveIndex]
         const curve = this.curves[curveIndex]
 
@@ -251,6 +260,7 @@ export class BezierSpline3D {
         for (let i = this._curveStartLengths.length - 1; i >= 0; i--) {
             if (this._curveStartLengths[i] < l) return i
         }
+        return null
     }
 
     _initCurves(splineDescription: SplineDescription3D) {
@@ -259,19 +269,14 @@ export class BezierSpline3D {
         splineDescription.forEach((c, i, a) => {
             let curve: BezierCurve3D
             if (i === 0) {
+                c = c as SplineDescription3D[0]
                 curve = new BezierCurve3D(c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11])
             } else if (i === 1) {
-                const previous = a[i - 1]
-                const p0x = previous[9]
-                const p0y = previous[10]
-                const p0z = previous[11]
-                curve = new BezierCurve3D(p0x, p0y, p0z, c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8])
+                const prev = a[i - 1] as SplineDescription3D[0]
+                curve = new BezierCurve3D(prev[9], prev[10], prev[11], c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8])
             } else {
-                const previous = a[i - 1]
-                const p0x = previous[6]
-                const p0y = previous[7]
-                const p0z = previous[8]
-                curve = new BezierCurve3D(p0x, p0y, p0z, c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8])
+                const prev = a[i - 1] as SplineDescription3D[1]
+                curve = new BezierCurve3D(prev[6], prev[7], prev[8], c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8])
             }
 
             this.curves.push(curve)
