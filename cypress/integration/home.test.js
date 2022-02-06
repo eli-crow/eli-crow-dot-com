@@ -1,9 +1,9 @@
-describe('Homepage', () => {
+describe('home', () => {
     beforeEach(() => {
         cy.visit('/')
     })
-    
-    it('Visits various links', () => {
+
+    it('navigates to various pages', () => {
         cy.get('a').contains('sep.com').then(link => {
             cy.request(link.prop('href')).its('status').should('eq', 200)
         })
@@ -23,5 +23,13 @@ describe('Homepage', () => {
         cy.visit('/')
         cy.contains('Yikes Dog').closest('.Card').click()
         cy.get('header').should('contain', 'Yikes Dog')
+
+        cy.visit('/')
+        cy.contains('Ouija').closest('.Card').click()
+        cy.get('h1').should('contain', 'Ouija')
+
+        cy.visit('/')
+        cy.contains('Bead Maze').closest('.Card').click()
+        cy.get('h1').should('contain', 'Bead Maze')
     })
 })

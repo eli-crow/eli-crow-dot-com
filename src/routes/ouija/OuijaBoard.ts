@@ -14,106 +14,106 @@ type OuijaEventArgs<E extends OuijaEvent> = OuijaEventPayloads[E] extends undefi
 
 
 export class OuijaBoard {
-    #canvas: HTMLCanvasElement | null = null
-    #context: CanvasRenderingContext2D | null = null
-    #brushImage: HTMLImageElement
-    #brushDownListener: ((e: PointerEvent) => void) | null = null
-    #listeners: { [E in keyof OuijaEventPayloads]: Set<(...args: OuijaEventArgs<E>) => void> } = {
+    private canvas: HTMLCanvasElement | null = null
+    private context: CanvasRenderingContext2D | null = null
+    private brushImage: HTMLImageElement
+    private brushDownListener: ((e: PointerEvent) => void) | null = null
+    private listeners: { [E in keyof OuijaEventPayloads]: Set<(...args: OuijaEventArgs<E>) => void> } = {
         "brush-end": new Set()
     }
-    #smoothingCurve: BezierCurve = new BezierCurve(0, 0, 0, 0, 0, 0, 0, 0)
-    #smoothingFactor = 0.5
-    #smoothingSteps = 12
-    #minSquaredSpeed = 10 ** 2
-    #brushScaleMin = 0.2
-    #brushScaleSpeedFactor = 0.01
+    private smoothingCurve: BezierCurve = new BezierCurve(0, 0, 0, 0, 0, 0, 0, 0)
+    private smoothingFactor = 0.5
+    private smoothingSteps = 12
+    private minSquaredSpeed = 10 ** 2
+    private brushScaleMin = 0.2
+    private brushScaleSpeedFactor = 0.01
 
     readonly loaded: Promise<void>
     constructor() {
-        this.#brushImage = new Image();
-        this.#brushImage.src = BRUSH_IMAGE_SRC
+        this.brushImage = new Image();
+        this.brushImage.src = BRUSH_IMAGE_SRC
         this.loaded = new Promise(resolve => {
-            this.#brushImage.onload = () => resolve()
+            this.brushImage.onload = () => resolve()
         })
     }
 
     setCanvas(canvas: HTMLCanvasElement | undefined | null) {
         if (canvas) {
-            this.#canvas = canvas
-            this.#context = this.#canvas.getContext("2d")
+            this.canvas = canvas
+            this.context = this.canvas.getContext("2d")
             this.resizeToClientSize()
             this.setupListeners()
         } else {
-            this.#canvas = null
-            this.#context = null
+            this.canvas = null
+            this.context = null
         }
     }
 
     setSize(width: number, height: number) {
-        if (!this.#context || !this.#canvas) throw new Error("Need to call setCanvas first")
-        const pixels = this.#context.getImageData(0, 0, this.#canvas.width, this.#canvas.height)
-        this.#canvas.width = width
-        this.#canvas.height = height
-        this.#context.putImageData(pixels, 0, 0)
+        if (!this.context || !this.canvas) throw new Error("Need to call setCanvas first")
+        const pixels = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height)
+        this.canvas.width = width
+        this.canvas.height = height
+        this.context.putImageData(pixels, 0, 0)
     }
 
     resizeToClientSize() {
-        if (!this.#context || !this.#canvas) throw new Error("Need to call setCanvas first")
-        const { clientWidth, clientHeight } = this.#canvas
+        if (!this.context || !this.canvas) throw new Error("Need to call setCanvas first")
+        const { clientWidth, clientHeight } = this.canvas
         const { devicePixelRatio } = window
         this.setSize(clientWidth * devicePixelRatio, clientHeight * devicePixelRatio)
-        this.#context.scale(devicePixelRatio, devicePixelRatio)
+        this.context.scale(devicePixelRatio, devicePixelRatio)
     }
 
     on<E extends OuijaEvent>(event: E, callback: (...args: OuijaEventArgs<E>) => void) {
-        this.#listeners[event].add(callback)
+        this.listeners[event].add(callback)
     }
 
     off<E extends OuijaEvent>(event: E, callback: (...args: OuijaEventArgs<E>) => void) {
-        this.#listeners[event].delete(callback)
+        this.listeners[event].delete(callback)
     }
 
     clear() {
-        if (!this.#context || !this.#canvas) throw new Error("Need to call setCanvas first")
-        this.#context.clearRect(0, 0, this.#canvas.width, this.#canvas.height)
+        if (!this.context || !this.canvas) throw new Error("Need to call setCanvas first")
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     }
 
     private emit<E extends OuijaEvent>(event: E, ...args: OuijaEventArgs<E>) {
-        for (let callback of this.#listeners[event]) {
+        for (let callback of this.listeners[event]) {
             callback(...args as [])
         }
     }
 
     private brush(x: number, y: number, size = 1) {
-        if (!this.#brushImage.complete) throw new Error("Await TrustCanvas#loaded before drawing")
-        const c = this.#context!
+        if (!this.brushImage.complete) throw new Error("Await TrustCanvas#loaded before drawing")
+        const c = this.context!
         const angle = 2 * Math.PI * Math.random()
         c.translate(x, y)
         c.rotate(angle)
         c.scale(size, size)
-        c.drawImage(this.#brushImage, -this.#brushImage.width / 2, -this.#brushImage.width / 2)
+        c.drawImage(this.brushImage, -this.brushImage.width / 2, -this.brushImage.width / 2)
         c.scale(1 / size, 1 / size)
         c.rotate(-angle)
         c.translate(-x, -y)
     }
 
     private pointFromEvent(e: PointerEvent): Vec {
-        const { left, top } = this.#canvas!.getBoundingClientRect()
+        const { left, top } = this.canvas!.getBoundingClientRect()
         const { clientX, clientY } = e
         return [clientX - left, clientY - top]
     }
 
     private setupListeners() {
-        if (!this.#context || !this.#canvas) throw new Error("Need to call setCanvas first")
+        if (!this.context || !this.canvas) throw new Error("Need to call setCanvas first")
 
-        if (this.#brushDownListener) {
-            this.#canvas?.removeEventListener('pointerdown', this.#brushDownListener)
+        if (this.brushDownListener) {
+            this.canvas?.removeEventListener('pointerdown', this.brushDownListener)
         }
 
-        this.#brushDownListener = (e: PointerEvent) => {
-            const c = this.#smoothingCurve
+        this.brushDownListener = (e: PointerEvent) => {
+            const c = this.smoothingCurve
             const [x, y] = this.pointFromEvent(e)
-            this.brush(x, y, this.#brushScaleMin)
+            this.brush(x, y, this.brushScaleMin)
             c.p0x = c.c0x = c.c1x = c.p1x = x;
             c.p0y = c.c0y = c.c1y = c.p1y = y;
             window.addEventListener('pointermove', move)
@@ -121,12 +121,12 @@ export class OuijaBoard {
         }
 
         const move = (e: PointerEvent) => {
-            const c = this.#smoothingCurve
-            const t = this.#smoothingFactor
+            const c = this.smoothingCurve
+            const t = this.smoothingFactor
             const [x, y] = this.pointFromEvent(e)
 
             const squaredSpeed = (x - c.p0x) ** 2 + (y - c.p0y) ** 2
-            if (squaredSpeed > this.#minSquaredSpeed) {
+            if (squaredSpeed > this.minSquaredSpeed) {
                 c.p1x = c.c1x
                 c.c1x = c.c0x
                 c.c0x = c.p0x
@@ -137,10 +137,10 @@ export class OuijaBoard {
                 c.c0y = c.p0y
                 c.p0y = lerp(c.c0y, y, t)
 
-                const points = c.getPoints(this.#smoothingSteps)
+                const points = c.getPoints(this.smoothingSteps)
                 points.forEach(point => {
                     const [x, y] = point!
-                    this.brush(x, y, this.#brushScaleMin + (squaredSpeed ** 0.5) * this.#brushScaleSpeedFactor)
+                    this.brush(x, y, this.brushScaleMin + (squaredSpeed ** 0.5) * this.brushScaleSpeedFactor)
                 })
             }
         }
@@ -151,6 +151,6 @@ export class OuijaBoard {
             window.removeEventListener('pointerup', up)
         }
 
-        this.#canvas?.addEventListener('pointerdown', this.#brushDownListener)
+        this.canvas?.addEventListener('pointerdown', this.brushDownListener)
     }
 }
