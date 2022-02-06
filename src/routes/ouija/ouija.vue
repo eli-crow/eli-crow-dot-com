@@ -23,15 +23,21 @@ const ouija = useOuijaBoard({
         tools="HTML Canvas, WebSockets?"
         time="2022"
     >
-        <OuijaSVG class="max-w-3xl" />
-        <canvas
-            ref="canvas"
-            class="block absolute -top-8 -left-8 !w-[calc(100%+4rem)] !h-[calc(100%+4rem)] cursor-crosshair select-none"
-        />
+        <div class="-m-8 self-stretch flex justify-center">
+            <div class="max-w-3xl w-full aspect-w-1 aspect-h-1 relative">
+                <OuijaSVG class="p-8" />
+                <canvas
+                    ref="canvas"
+                    class="block absolute top-0 left-0 w-full h-full cursor-crosshair select-none"
+                />
+            </div>
+        </div>
+
         <button
             class="button absolute top-0 right-0 cursor-default hover:text-white select-none"
             @click="ouija.clear"
         >Clear</button>
+
         <InteractionHint
             :visible="showHint"
             icon="threeD"
