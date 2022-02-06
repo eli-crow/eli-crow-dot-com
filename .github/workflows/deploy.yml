@@ -20,6 +20,8 @@ jobs:
   
       - name: Build
         run: npm run build
+        env:
+          VITE_SERVER_URL: https://eli-crow-dot-com.herokuapp.com
       
       - name: Add Required Files
         run: echo "elicrow.com" > ./dist/CNAME && touch .nojekyll
