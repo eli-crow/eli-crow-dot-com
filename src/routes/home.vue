@@ -6,6 +6,7 @@ import LightboxCard from "../components/Lightbox/LightboxCard.vue"
 import AlleyOoperCard from '../components/AlleyOoper/AlleyOoperCard.vue'
 import TheThemeSettings from '../components/TheThemeSettings.vue'
 import PlayOverlay from '../components/PlayOverlay.vue'
+import OuijaSVG from './ouija/OuijaSVG.vue'
 </script>
 
 <template>
@@ -60,6 +61,22 @@ import PlayOverlay from '../components/PlayOverlay.vue'
         <router-link to="/bead" class="card-icon flex items-center" title="View 3d Model">
           <span class="mr-3 sm:hidden">Interact</span>
           <Icon icon="threeD" />
+        </router-link>
+      </Card>
+
+      <Card pressable link tag="article">
+        <div class="relative p-8 pb-0 cursor-default flex items-center">
+          <OuijaSVG class="h-72 w-auto" />
+        </div>
+        <div class="p-8 pt-0">
+          <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">Ouija</h2>
+          <p>
+            <time>2022</time>
+          </p>
+        </div>
+        <router-link to="/ouija" class="card-icon flex items-center" title="Call for contact">
+          <span class="mr-3 sm:hidden">Interact</span>
+          <Icon icon="cursor" />
         </router-link>
       </Card>
 
