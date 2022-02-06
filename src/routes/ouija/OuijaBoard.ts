@@ -8,10 +8,12 @@ const BRUSH_IMAGE_SRC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUC
 // copied from server repo
 interface ClientToServerEvents {
     stroke: (stroke: Stroke) => void
+    clear: () => void
 }
 
 interface ServerToClientEvents {
     stroked: (stroke: Stroke) => void
+    cleared: () => void
 }
 
 interface Stroke {
@@ -45,6 +47,10 @@ export class OuijaBoard {
     private brushScaleAngleFactor = 0.4
     private downAngle = .6 * Math.PI
     private socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(import.meta.env.VITE_SERVER_URL!)
+    private lastScale = 0
+    private recordedStroke: Stroke = {
+        points: []
+    }
 
     constructor() {
         this.brushImage = new Image();
@@ -52,11 +58,9 @@ export class OuijaBoard {
         this.loaded = new Promise(resolve => {
             this.brushImage.onload = () => resolve()
         })
-        this.socket.on('stroked', stroke => {
-            this.playStroke(stroke)
-        })
+        this.socket.on('stroked', stroke => this.playStroke(stroke))
+        this.socket.on('cleared', () => this.clearInternal())
     }
-
     setCanvas(canvas: HTMLCanvasElement | undefined | null) {
         if (canvas) {
             this.canvas = canvas
@@ -99,16 +103,24 @@ export class OuijaBoard {
         this.listeners[event].delete(callback)
     }
 
-    clear() {
+    private clearInternal() {
         if (!this.context || !this.canvas) throw new Error("Need to call setCanvas first")
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     }
 
+    clear() {
+        this.socket.emit("clear")
+        this.clearInternal()
+    }
+
     private playStroke(stroke: Stroke) {
         // TODO: x and y need to be normalized positions
-        // TODO: need to replay events as if they occurreed via pointermove
-        stroke.points.forEach(({ position, time }) => {
-            setTimeout(() => this.brush(...position), time)
+        stroke.points.forEach(({ position, time }, i) => {
+            if (i === 0) {
+                this.strokeDown(...position)
+            } else {
+                setTimeout(() => this.strokeMove(...position), time)
+            }
         })
     }
 
@@ -122,7 +134,7 @@ export class OuijaBoard {
         this.socket.emit("stroke", stroke)
     }
 
-    private brush(x: number, y: number, size = 1) {
+    private drawBrush(x: number, y: number, size = 1) {
         if (!this.brushImage.complete) throw new Error("Await TrustCanvas#loaded before drawing")
         const c = this.context!
         const angle = 2 * Math.PI * Math.random()
@@ -135,12 +147,54 @@ export class OuijaBoard {
         c.translate(-x, -y)
     }
 
+    private strokeDown(x: number, y: number) {
+        const c = this.smoothingCurve
+        this.lastScale = this.brushScaleMin
+        this.drawBrush(x, y, this.brushScaleMin)
+        c.p0x = c.c0x = c.c1x = c.p1x = x;
+        c.p0y = c.c0y = c.c1y = c.p1y = y;
+    }
+
+    private strokeMove(x: number, y: number) {
+        const c = this.smoothingCurve
+        const t = this.smoothingFactor
+        const speed = ((x - c.p0x) ** 2 + (y - c.p0y) ** 2) ** 0.5
+        const strokeAngle = Math.atan2(y - c.p0y, x - c.p0x)
+        const angleMatch = (1 - Math.abs(angleDifference(strokeAngle, this.downAngle) / Math.PI)) ** 2
+        const scale =
+            this.brushScaleMin +
+            speed * this.brushScaleSpeedFactor +
+            angleMatch * this.brushScaleAngleFactor
+
+        // TODO: something isn't right here. Curve is wonky
+
+        c.p1x = c.c1x
+        c.c1x = c.c0x
+        c.c0x = c.p0x
+        c.p0x = lerp(c.p0x, x, t)
+
+        c.p1y = c.c1y
+        c.c1y = c.c0y
+        c.c0y = c.p0y
+        c.p0y = lerp(c.p0y, y, t)
+
+        const points = c.getPoints(this.smoothingSteps)
+        points.forEach((point, i, a) => {
+            const [x, y] = point!
+            const interpolatedScale = lerp(this.lastScale, scale, i / (a.length - 1))
+            this.drawBrush(x, y, interpolatedScale)
+        })
+
+        this.lastScale = scale
+    }
+
     private pointFromEvent(e: PointerEvent): Vec {
         const { left, top } = this.canvas!.getBoundingClientRect()
         const { clientX, clientY } = e
         return [clientX - left, clientY - top]
     }
 
+    /** Set up listeners, record stroke events, send to socket */
     private setupListeners() {
         if (!this.context || !this.canvas) throw new Error("Need to call setCanvas first")
 
@@ -148,23 +202,15 @@ export class OuijaBoard {
             this.canvas?.removeEventListener('pointerdown', this.brushDownListener)
         }
 
-        const stroke: Stroke = {
-            points: []
-        }
-        let downTime = 0
-        let lastScale = this.brushScaleMin
+        let strokeDownTime = 0
 
         this.brushDownListener = (e: PointerEvent) => {
             e.preventDefault()
             e.stopPropagation()
-            downTime = Date.now()
-            const c = this.smoothingCurve
             const [x, y] = this.pointFromEvent(e)
-            stroke.points = [{ position: [x, y], time: downTime }]
-            lastScale = this.brushScaleMin
-            this.brush(x, y, this.brushScaleMin)
-            c.p0x = c.c0x = c.c1x = c.p1x = x;
-            c.p0y = c.c0y = c.c1y = c.p1y = y;
+            strokeDownTime = Date.now()
+            this.recordedStroke.points = [{ position: [x, y], time: strokeDownTime }]
+            this.strokeDown(x, y)
             window.addEventListener('pointermove', move)
             window.addEventListener('pointerup', up)
         }
@@ -173,50 +219,19 @@ export class OuijaBoard {
             e.preventDefault()
             e.stopPropagation()
 
-            const c = this.smoothingCurve
-            const t = this.smoothingFactor
-
             const [x, y] = this.pointFromEvent(e)
-
+            const c = this.smoothingCurve
             const squaredSpeed = (x - c.p0x) ** 2 + (y - c.p0y) ** 2
 
             if (squaredSpeed > this.minSquaredSpeed) {
-                stroke.points.push({ position: [x, y], time: Date.now() - downTime })
-
-                const speed = squaredSpeed ** 0.5
-                const strokeAngle = Math.atan2(y - c.p0y, x - c.p0x)
-                const angleMatch = (1 - Math.abs(angleDifference(strokeAngle, this.downAngle) / Math.PI)) ** 2
-                const scale =
-                    this.brushScaleMin +
-                    speed * this.brushScaleSpeedFactor +
-                    angleMatch * this.brushScaleAngleFactor
-
-                // TODO: something isn't right here.
-
-                c.p1x = c.c1x
-                c.c1x = c.c0x
-                c.c0x = c.p0x
-                c.p0x = lerp(c.p0x, x, t)
-
-                c.p1y = c.c1y
-                c.c1y = c.c0y
-                c.c0y = c.p0y
-                c.p0y = lerp(c.p0y, y, t)
-
-                const points = c.getPoints(this.smoothingSteps)
-                points.forEach((point, i, a) => {
-                    const [x, y] = point!
-                    const interpolatedScale = lerp(lastScale, scale, i / (a.length - 1))
-                    this.brush(x, y, interpolatedScale)
-                })
-
-                lastScale = scale
+                this.recordedStroke.points.push({ position: [x, y], time: Date.now() - strokeDownTime })
+                this.strokeMove(x, y)
             }
         }
 
         const up = () => {
             this.emit("brush-end")
-            this.sendStroke(stroke)
+            this.sendStroke(this.recordedStroke)
             window.removeEventListener('pointermove', move)
             window.removeEventListener('pointerup', up)
         }
