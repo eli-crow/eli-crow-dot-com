@@ -44,8 +44,20 @@ export class BezierCurve {
         return this.getPointAtLength(this._length * nLen)
     }
 
-    getPoints(n: number) {
-        return Array.from({ length: n }, (_v, i) => this.getPointAt(i / (n - 1)))
+    * getPoints(n: number) {
+        for (let i = 0; i < n; i++) {
+            yield this.getPointAt(i / (n - 1))
+        }
+    }
+
+    /** only works if curve has been measured */
+    * getPointsSpaced(space: number) {
+        let length = 0
+        while (length < this._length) {
+            yield this.getPointAtLength(length)
+            length += space
+        }
+        yield this.getPointAt(1)
     }
 
     getVelocityAt(t: number): V.Vec {

@@ -10,7 +10,7 @@ interface UseTrustCanvasOptions {
 export function useOuijaBoard({ canvas, onInteractionEnd }: UseTrustCanvasOptions) {
     const trust = new OuijaBoard()
 
-    const handleResize = debounce(() => trust.resizeToClientSize(), 300)
+    const handleResize = debounce(() => trust.resizeToClientWidth(), 300)
 
     onMounted(() => {
         trust.setCanvas(canvas.value)
