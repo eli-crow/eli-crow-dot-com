@@ -12,9 +12,9 @@ type OuijaEvent = keyof OuijaEventPayloads
 
 type OuijaEventArgs<E extends OuijaEvent> = OuijaEventPayloads[E] extends undefined ? [] : [payload: OuijaEventPayloads[E]]
 
-
 export class OuijaBoard {
     private canvas: HTMLCanvasElement | null = null
+    private buffer: HTMLCanvasElement = document.createElement('canvas')
     private context: CanvasRenderingContext2D | null = null
     private brushImage: HTMLImageElement
     private brushDownListener: ((e: PointerEvent) => void) | null = null
@@ -51,10 +51,16 @@ export class OuijaBoard {
 
     setSize(width: number, height: number) {
         if (!this.context || !this.canvas) throw new Error("Need to call setCanvas first")
-        const pixels = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height)
+
+        this.buffer.width = this.canvas.width
+        this.buffer.height = this.canvas.height
+        this.buffer.getContext("2d")!.drawImage(this.canvas, 0, 0)
+
+        const ratio = width / this.canvas.width
+
         this.canvas.width = width
         this.canvas.height = height
-        this.context.putImageData(pixels, 0, 0)
+        this.context.drawImage(this.buffer, 0, 0, width, this.buffer.height * ratio)
     }
 
     resizeToClientSize() {
@@ -110,6 +116,7 @@ export class OuijaBoard {
             this.canvas?.removeEventListener('pointerdown', this.brushDownListener)
         }
 
+        let lastSquaredSpeed = 0
         this.brushDownListener = (e: PointerEvent) => {
             const c = this.smoothingCurve
             const [x, y] = this.pointFromEvent(e)
@@ -138,11 +145,13 @@ export class OuijaBoard {
                 c.p0y = lerp(c.c0y, y, t)
 
                 const points = c.getPoints(this.smoothingSteps)
-                points.forEach(point => {
+                points.forEach((point, i, a) => {
                     const [x, y] = point!
-                    this.brush(x, y, this.brushScaleMin + (squaredSpeed ** 0.5) * this.brushScaleSpeedFactor)
+                    const speed = lerp(lastSquaredSpeed, squaredSpeed, i / (a.length - 1)) ** 0.5
+                    this.brush(x, y, this.brushScaleMin + speed * this.brushScaleSpeedFactor)
                 })
             }
+            lastSquaredSpeed = squaredSpeed
         }
 
         const up = () => {

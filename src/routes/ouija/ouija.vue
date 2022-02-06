@@ -19,7 +19,7 @@ const ouija = useOuijaBoard({
     <TheShowoffPage
         title="Ouija"
         subtitle="Is anybody listening?"
-        description="Does this page actually connect with other visitors to this site? Perhaps. Reach out and call for contact. Maybe someone will respond. Maybe I'm lying to you."
+        description="Does this page actually connect with other visitors to this site? Call out. Maybe someone will respond. Maybe I'm lying to you. Is there really any way to know?"
         tools="HTML Canvas, WebSockets?"
         time="2022"
     >
@@ -34,7 +34,7 @@ const ouija = useOuijaBoard({
         </div>
 
         <button
-            class="button absolute top-0 right-0 cursor-default hover:text-white select-none"
+            class="button absolute top-0 right-0 cursor-default hover:text-gray-900 select-none"
             @click="ouija.clear"
         >Clear</button>
 
@@ -43,8 +43,8 @@ const ouija = useOuijaBoard({
             icon="threeD"
             class="absolute bottom-0 left-1/2 -translate-x-1/2"
         >
-            <span class="coarse:hidden">Draw with your mouse</span>
-            <span class="fine:hidden">Draw with your finger</span>
+            <span class="coarse:hidden">Commune using your mouse</span>
+            <span class="fine:hidden">Commune using your finger</span>
         </InteractionHint>
     </TheShowoffPage>
 </template>
