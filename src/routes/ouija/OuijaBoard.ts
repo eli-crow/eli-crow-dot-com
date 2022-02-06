@@ -117,19 +117,27 @@ export class OuijaBoard {
         }
 
         let lastSquaredSpeed = 0
+
         this.brushDownListener = (e: PointerEvent) => {
+            e.preventDefault()
+            e.stopPropagation()
             const c = this.smoothingCurve
             const [x, y] = this.pointFromEvent(e)
             this.brush(x, y, this.brushScaleMin)
             c.p0x = c.c0x = c.c1x = c.p1x = x;
             c.p0y = c.c0y = c.c1y = c.p1y = y;
+            lastSquaredSpeed = 0
             window.addEventListener('pointermove', move)
             window.addEventListener('pointerup', up)
         }
 
         const move = (e: PointerEvent) => {
+            e.preventDefault()
+            e.stopPropagation()
+
             const c = this.smoothingCurve
             const t = this.smoothingFactor
+
             const [x, y] = this.pointFromEvent(e)
 
             const squaredSpeed = (x - c.p0x) ** 2 + (y - c.p0y) ** 2
@@ -160,6 +168,10 @@ export class OuijaBoard {
             window.removeEventListener('pointerup', up)
         }
 
-        this.canvas?.addEventListener('pointerdown', this.brushDownListener)
+        this.canvas.addEventListener('pointerdown', this.brushDownListener)
+        this.canvas.addEventListener("touchstart", e => e.preventDefault(), { passive: false })
+        this.canvas.addEventListener("touchmove", e => e.preventDefault(), { passive: false })
+        this.canvas.addEventListener("touchend", e => e.preventDefault(), { passive: false })
+        this.canvas.addEventListener("touchcancel", e => e.preventDefault(), { passive: false })
     }
 }
