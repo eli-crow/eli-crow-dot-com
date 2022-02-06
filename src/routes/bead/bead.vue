@@ -9,7 +9,7 @@ let showHint = $ref(true)
 <template>
   <TheShowoffPage
     title="Bead Maze"
-    subtitle="You are seven years old. Goku flexes silently on an old CRT. You slide the beads along the rail while you wait for your appointment."
+    subtitle="You are seven years old. Goku flexes silently on an old CRT. You fiddle idly in the sterile waiting room."
     description="Many of my interactive experiments involve a bead and a track. I solved this squiggly puzzle by projecting a 3D bezier spline onto 2D and constraining the beads using projection and binary search"
     tools="Blender, THREE.js"
     time="2022"

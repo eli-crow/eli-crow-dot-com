@@ -1,12 +1,8 @@
-import { clamp } from "three/src/math/MathUtils"
 import * as V from './v'
-import type { Vec } from './v'
+import { lerp, clamp } from "./utilities"
 
 const CURVETIME_EPSILON = 1e-6 // close enough for pixel-precision
 
-const lerp = (start: number, end: number, t: number) => start + (end - start) * t
-
-// class for getting info about the bezier curve
 export class BezierCurve {
     private _length = 0
     private _tLengths: [t: number, length: number][] = []
@@ -29,7 +25,7 @@ export class BezierCurve {
         return this._length
     }
 
-    getPointAt(t: number): Vec {
+    getPointAt(t: number): V.Vec {
         t = Math.min(Math.max(t, 0), 1)
         const { p0x, p0y, c0x, c0y, c1x, c1y, p1x, p1y } = this
         const omt = 1 - t
@@ -48,7 +44,11 @@ export class BezierCurve {
         return this.getPointAtLength(this._length * nLen)
     }
 
-    getVelocityAt(t: number): Vec {
+    getPoints(n: number) {
+        return Array.from({ length: n }, (_v, i) => this.getPointAt(i / (n - 1)))
+    }
+
+    getVelocityAt(t: number): V.Vec {
         t = Math.min(Math.max(t, 0), 1)
         const { p0x, p0y, c0x, c0y, c1x, c1y, p1x, p1y } = this
         const omt = 1 - t
@@ -58,17 +58,17 @@ export class BezierCurve {
         return [x, y]
     }
 
-    getWeightedNormalAt(t: number): Vec {
+    getWeightedNormalAt(t: number): V.Vec {
         t = Math.min(Math.max(t, 0), 1)
         const tangent = this.getVelocityAt(t)
         return [-tangent[1], tangent[0]]
     }
 
-    getTangentAt(t: number): Vec {
+    getTangentAt(t: number): V.Vec {
         return V.normalize(this.getVelocityAt(t))
     }
 
-    getNormalAt(t: number): Vec {
+    getNormalAt(t: number): V.Vec {
         return V.normalize(this.getWeightedNormalAt(t))
     }
 
@@ -135,7 +135,7 @@ export class BezierCurve {
         return length / this.getLength()
     }
 
-    getNearestTInWindingOrder(currentT: number, target: Vec): number {
+    getNearestTInWindingOrder(currentT: number, target: V.Vec): number {
         const currentPoint = this.getPointAt(currentT)
         const currentTangent = this.getTangentAt(currentT)
         const currentTargetVector = V.subtract(target, currentPoint)
@@ -326,7 +326,7 @@ export class BezierSpline {
             .join('')
     }
 
-    getNearestTInWindingOrder(splineCurrentT: number, pt: Vec) {
+    getNearestTInWindingOrder(splineCurrentT: number, pt: V.Vec) {
         const lenAtSplineCurrentT = this.getLengthAt(splineCurrentT)
 
         let curveIndex = this.getCurveIndexAt(splineCurrentT) ?? 0

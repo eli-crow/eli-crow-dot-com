@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import Transition from './Transition.vue'
+import type * as icons from './Icon/icons'
 
-const props = defineProps({
-    visible: { type: Boolean, default: true },
-    icon: { type: String, default: 'cursor' },
-})
+const {
+    visible = true,
+    icon = 'threeD',
+} = defineProps<{
+    visible?: boolean,
+    icon?: keyof typeof icons
+}>()
 </script>
 
 <template>
     <div class="pointer-events-none">
-        <Transition >
-            <p 
-                v-if="props.visible"
-                class="
-                    origin-center px-4 py-2 rounded-full whitespace-nowrap
-                    bg-gray-100 dark:bg-gray-100 
-                    md:dark:bg-gray-200">
-            <Icon :icon="props.icon" class="mr-2">3D Model</Icon>
-            <span><slot/></span>
-        </p>
+        <Transition>
+            <p v-if="visible" class="origin-center px-4 py-2 rounded-full whitespace-nowrap bg-gray-100 dark:bg-gray-100 md:dark:bg-gray-200" >
+                <Icon :icon="icon" class="mr-3 -mt-[0.3em]">3D Model</Icon>
+                <span><slot /></span>
+            </p>
         </Transition>
     </div>
 </template>
