@@ -24,13 +24,9 @@ const ouija = useOuijaBoard({
         time="2022"
     >
         <div class="-m-8 self-stretch flex justify-center overscroll-none">
-            <div class="max-w-3xl w-full aspect-w-1 aspect-h-1 relative">
-                <OuijaSVG class="p-8" />
-                <canvas
-                    ref="canvas"
-                    class="block absolute top-0 left-0 w-full h-full cursor-crosshair select-none"
-                />
-            </div>
+            <OuijaSVG class="absolute top-0 left-0 w-full h-full" />
+            <!-- canvas height set in code -->
+            <canvas ref="canvas" class="relative block w-full cursor-crosshair select-none" />
         </div>
 
         <button
