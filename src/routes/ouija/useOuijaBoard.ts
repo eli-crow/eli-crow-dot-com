@@ -1,4 +1,4 @@
-import * as debounce from "debounce"
+import { debounce } from "debounce"
 import { Ref, onMounted, onUnmounted, watch } from "vue"
 import { OuijaBoard } from "./OuijaBoard"
 
