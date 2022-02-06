@@ -18,7 +18,7 @@ export class BezierCurve {
         public p1y: number
 
     ) {
-        this._initLengths()
+        this.measure()
     }
 
     getLength() {
@@ -212,7 +212,7 @@ export class BezierCurve {
     }
 
     // Cache a number of roughly equidistant lengths
-    private _initLengths() {
+    measure() {
         const tLengths: [t: number, length: number][] = [[0, 0]]
 
         const minLength = 0.05
@@ -251,14 +251,14 @@ export class BezierSpline {
     private _length = 0
     constructor(curveDescription: SplineDescription) {
         this._initCurves(curveDescription)
-        this._measure()
+        this.measure()
     }
 
     static fromCurves(curves: BezierCurve[]) {
         // @ts-ignore
         const spline = new BezierSpline([])
         spline.curves = curves
-        spline._measure()
+        spline.measure()
         return spline
     }
 
@@ -398,7 +398,7 @@ export class BezierSpline {
         })
     }
 
-    private _measure() {
+    measure() {
         this._length = 0
 
         this.curves.forEach(c => {

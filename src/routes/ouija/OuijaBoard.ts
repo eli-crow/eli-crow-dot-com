@@ -1,5 +1,4 @@
-import { BezierCurve } from "../../lib/bezier"
-import { lerp } from "../../lib/utilities"
+import { catmull, lerp } from "../../lib/utilities"
 import { angleDifference, Vec } from "../../lib/v"
 import { io, Socket } from 'socket.io-client'
 
@@ -32,16 +31,14 @@ type OuijaEventArgs<E extends OuijaEvent> = OuijaEventPayloads[E] extends undefi
 export class OuijaBoard {
     readonly loaded: Promise<void>
     private canvas: HTMLCanvasElement | null = null
-    private buffer: HTMLCanvasElement = document.createElement('canvas')
+    private bufferCanvas: HTMLCanvasElement = document.createElement('canvas')
     private context: CanvasRenderingContext2D | null = null
     private brushImage: HTMLImageElement
     private brushDownListener: ((e: PointerEvent) => void) | null = null
     private listeners: { [E in keyof OuijaEventPayloads]: Set<(...args: OuijaEventArgs<E>) => void> } = {
         "brush-end": new Set()
     }
-    private smoothingCurve: BezierCurve = new BezierCurve(0, 0, 0, 0, 0, 0, 0, 0)
     private smoothingFactor = 0.5
-    private smoothingSpacing = 3
     private minSquaredPixelDist = 5 ** 2
     private brushScaleMin = 0.22
     private brushScaleSpeedFactor = 0.06
@@ -52,6 +49,7 @@ export class OuijaBoard {
     private recordedStroke: Stroke = {
         points: []
     }
+    private smoothingPoints: [Vec, Vec, Vec, Vec] = [[0, 0], [0, 0], [0, 0], [0, 0]]
 
     constructor() {
         this.brushImage = new Image();
@@ -77,15 +75,15 @@ export class OuijaBoard {
     setSize(width: number, height: number) {
         if (!this.context || !this.canvas) throw new Error("Need to call setCanvas first")
 
-        this.buffer.width = this.canvas.width
-        this.buffer.height = this.canvas.height
-        this.buffer.getContext("2d")!.drawImage(this.canvas, 0, 0)
+        this.bufferCanvas.width = this.canvas.width
+        this.bufferCanvas.height = this.canvas.height
+        this.bufferCanvas.getContext("2d")!.drawImage(this.canvas, 0, 0)
 
         const ratio = width / this.canvas.width
 
         this.canvas.width = width
         this.canvas.height = height
-        this.context.drawImage(this.buffer, 0, 0, width, this.buffer.height * ratio)
+        this.context.drawImage(this.bufferCanvas, 0, 0, width, this.bufferCanvas.height * ratio)
     }
 
     resizeToClientWidth() {
@@ -153,39 +151,49 @@ export class OuijaBoard {
     }
 
     private strokeDown(x: number, y: number) {
-        const c = this.smoothingCurve
+        const p = this.smoothingPoints
         this.lastScale = this.brushScaleMin
         this.drawBrush(x, y, this.brushScaleMin)
-        c.p0x = c.c0x = c.c1x = c.p1x = x;
-        c.p0y = c.c0y = c.c1y = c.p1y = y;
+        p[0][0] = p[1][0] = p[2][0] = p[3][0] = x;
+        p[0][1] = p[1][1] = p[2][1] = p[3][1] = y;
+    }
+
+    private * getSmoothPoints(n: number) {
+        console.log(n.toFixed(0))
+        const p = this.smoothingPoints
+        for (var i = 0; i < n; i++) {
+            const t = i / (n - 1)
+            yield [
+                catmull(t, p[3][0], p[2][0], p[1][0], p[0][0]),
+                catmull(t, p[3][1], p[2][1], p[1][1], p[0][1]),
+            ] as Vec
+        }
     }
 
     private strokeMove(x: number, y: number) {
-        const c = this.smoothingCurve
+        const p = this.smoothingPoints
         const t = this.smoothingFactor
         // HACK: shouldn't use normalized coordinates here, but it's okay since it's square.
-        const speed = ((x - c.p0x) ** 2 + (y - c.p0y) ** 2) ** 0.5
-        const strokeAngle = Math.atan2(y - c.p0y, x - c.p0x)
+        const speed = ((x - p[0][0]) ** 2 + (y - p[0][1]) ** 2) ** 0.5
+        const strokeAngle = Math.atan2(y - p[0][1], x - p[0][0])
         const angleMatch = (1 - Math.abs(angleDifference(strokeAngle, this.downAngle) / Math.PI)) ** 2
         const scale =
             this.brushScaleMin +
             speed * this.brushScaleSpeedFactor +
             angleMatch * this.brushScaleAngleFactor
 
-        // TODO: something isn't right here. Curve is wonky
+        p[3][0] = p[2][0]
+        p[2][0] = p[1][0]
+        p[1][0] = p[0][0]
+        p[0][0] = lerp(p[0][0], x, t)
 
-        c.p1x = c.c1x
-        c.c1x = c.c0x
-        c.c0x = c.p0x
-        c.p0x = lerp(c.p0x, x, t)
-
-        c.p1y = c.c1y
-        c.c1y = c.c0y
-        c.c0y = c.p0y
-        c.p0y = lerp(c.p0y, y, t)
+        p[3][1] = p[2][1]
+        p[2][1] = p[1][1]
+        p[1][1] = p[0][1]
+        p[0][1] = lerp(p[0][1], y, t)
 
         // HACK: won't work if canvas is not square
-        const points = Array.from(c.getPoints(this.canvas!.clientWidth * 0.06))
+        const points = Array.from(this.getSmoothPoints((speed * 500) ** 0.85))
         points.forEach((point, i, a) => {
             const [x, y] = point!
             const interpolatedScale = lerp(this.lastScale, scale, i / (a.length - 1))
