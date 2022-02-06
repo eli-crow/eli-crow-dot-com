@@ -23,7 +23,7 @@ const ouija = useOuijaBoard({
         tools="HTML Canvas, WebSockets?"
         time="2022"
     >
-        <div class="-m-8 self-stretch flex justify-center">
+        <div class="-m-8 self-stretch flex justify-center overscroll-none">
             <div class="max-w-3xl w-full aspect-w-1 aspect-h-1 relative">
                 <OuijaSVG class="p-8" />
                 <canvas
