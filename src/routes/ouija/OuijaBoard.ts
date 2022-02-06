@@ -159,7 +159,6 @@ export class OuijaBoard {
     }
 
     private * getSmoothPoints(n: number) {
-        console.log(n.toFixed(0))
         const p = this.smoothingPoints
         for (var i = 0; i < n; i++) {
             const t = i / (n - 1)
