@@ -8,7 +8,7 @@ import "./global.css";
 
 if (import.meta.env.DEV) {
     // @ts-ignore
-    window['ga-disable-UA-91287800-1'] = true;
+    window['ga-disable-G-VJ6EPKW4FM'] = true;
 }
 
 const app = createApp(App)
