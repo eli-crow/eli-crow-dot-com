@@ -8,7 +8,8 @@ html {
   @apply text-gray-500 h-full;
 }
 
-html:not(.dark) {
+html:not(.dark),
+.light-theme {
   --red: rgba(245, 79, 68, 1);
   --yellow: rgba(254, 187, 15, 1);
   --teal: rgba(15, 213, 189, 1);
@@ -26,7 +27,8 @@ html:not(.dark) {
   --gray-900: rgba(24, 27, 32, 1);
 }
 
-html.dark {
+html.dark,
+.dark-theme {
   --red: rgba(245, 79, 68, 1);
   --yellow: rgba(248, 190, 42, 1);
   --teal: rgba(3, 208, 183, 1);

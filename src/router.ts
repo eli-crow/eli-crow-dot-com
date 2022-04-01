@@ -8,6 +8,7 @@ const router = createRouter({
         { path: '/bead', component: () => import('./routes/bead/bead.vue') },
         { path: '/ouija', component: () => import('./routes/ouija/ouija.vue') },
         { path: '/losing-sleep', component: () => import('./routes/losing-sleep.vue') },
+        { path: '/guerilla-quiz-results', component: () => import('./routes/guerilla-quiz-results/guerilla-quiz-results.vue') },
     ]
 })
 
