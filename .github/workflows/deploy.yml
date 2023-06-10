@@ -29,6 +29,11 @@ jobs:
       - name: Copy index to 404
         run: cp ./dist/index.html ./dist/404.html
 
+      - name: Upload Github Pages Artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: dist
+
       - name: Merge Deploy into Develop
         uses: devmasx/merge-branch@v1.3.1
         with:
