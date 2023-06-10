@@ -288,9 +288,46 @@ export class BezierSpline3D {
     }
 }
 
+export type SplineStartSegment3D = [
+    p0x: number,
+    p0y: number,
+    p0z: number,
+    c0x: number,
+    c0y: number,
+    c0z: number,
+    c1x: number,
+    c1y: number,
+    c1z: number,
+    p1x: number,
+    p1y: number,
+    p1z: number,
+]
+
+export type SplineMiddleSegment3D = [
+    c0x: number,
+    c0y: number,
+    c0z: number,
+    c1x: number,
+    c1y: number,
+    c1z: number,
+    p1x: number,
+    p1y: number,
+    p1z: number,
+]
+
+/** for use when the final point is implicit */
+export type SplineEndSegment3D = [
+    c0x: number,
+    c0y: number,
+    c0z: number,
+    c1x: number,
+    c1y: number,
+    c1z: number,
+]
+
 export type SplineDescription3D = [
-    [p0x: number, p0y: number, p0z: number, c0x: number, c0y: number, c0z: number, c1x: number, c1y: number, c1z: number, p1x: number, p1y: number, p1z: number],
-    ...Array<[c0x: number, c0y: number, c0z: number, c1x: number, c1y: number, c1z: number, p1x: number, p1y: number, p1z: number]>
+    SplineStartSegment3D,
+    ...SplineMiddleSegment3D[]
 ]
 
 interface CurveLocation3D {

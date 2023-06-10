@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import TheSVGFilters from './components/TheSVGFilters.vue';
 import Transition from './components/Transition.vue';
 </script>

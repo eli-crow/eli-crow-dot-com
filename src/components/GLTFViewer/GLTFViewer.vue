@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
-import { onMounted, watchEffect, watch, onUnmounted } from "vue"
+import { onMounted, onUnmounted, ref, watch, watchEffect } from "vue";
 
-import theme from '../../store/theme'
+import theme from '../../store/theme';
 
 const {
     gltf,
@@ -44,9 +44,9 @@ const scene = new GLTFViewerScene({
 })
 await scene.load()
 
-const container = $ref<HTMLElement>()
+const container = ref<HTMLElement>()
 onMounted(() => {
-    scene.init(container)
+    scene.init(container.value!)
 })
 onUnmounted(() => {
     // wait for any transitions to complete

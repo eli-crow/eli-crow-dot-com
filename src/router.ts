@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -8,7 +8,6 @@ const router = createRouter({
         { path: '/bead', name: 'Bead Maze', component: () => import('./routes/bead/bead.vue') },
         { path: '/ouija', name: 'Ouija', component: () => import('./routes/ouija/ouija.vue') },
         { path: '/losing-sleep', name: 'Losing Sleep', component: () => import('./routes/losing-sleep.vue') },
-        { path: '/guerilla-quiz-results', name: 'Quiz Results', component: () => import('./routes/guerilla-quiz-results/guerilla-quiz-results.vue') },
     ]
 })
 
