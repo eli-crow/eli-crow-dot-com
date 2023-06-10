@@ -21,7 +21,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_OUIJA_SERVER_URL: https://ouija-nzahuayy2a-uc.a.run.app
+          VITE_OUIJA_SERVER_URL: https://ouija-nzahuayy2a-uc.a.run.app:8080
 
       - name: Add Required Files
         run: echo "elicrow.com" > ./dist/CNAME && touch .nojekyll
