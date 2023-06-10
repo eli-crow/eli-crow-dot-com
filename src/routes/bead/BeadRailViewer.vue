@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, watch } from 'vue';
-import theme from '../../store/theme'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import theme from '../../store/theme';
 
 const LIGHT_ENVIRONMENT = '/assets/studio-light.exr'
 const DARK_ENVIRONMENT = '/assets//studio.exr'
@@ -13,8 +13,8 @@ const scene = new BeadScene({
     environment: theme.theme === 'light' ? LIGHT_ENVIRONMENT : DARK_ENVIRONMENT
 })
 await scene.load()
-const container = $ref<HTMLElement>()
-onMounted(() => scene.init(container))
+const container = ref<HTMLElement>()
+onMounted(() => scene.init(container.value!))
 onBeforeUnmount(() => window.setTimeout(scene.dispose, 500))
 watch(() => theme.theme, () => {
     if (theme.theme === 'light') {

@@ -1,11 +1,11 @@
-import { watch } from "vue"
+import { ref, watch } from "vue"
 
 type Theme = 'light' | 'dark'
 
 function createThemeStore() {
     const preferred: Theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    let theme = $ref<Theme>(localStorage.theme ?? preferred ?? 'dark')
-    watch(() => theme, theme => {
+    let theme = ref<Theme>(localStorage.theme ?? preferred ?? 'dark')
+    watch(theme, theme => {
         localStorage.theme = theme
         if (theme === 'dark') {
             document.documentElement.classList.add('dark')
@@ -15,16 +15,16 @@ function createThemeStore() {
     })
 
     function toggle() {
-        if (theme === 'dark') {
-            theme = 'light'
+        if (theme.value === 'dark') {
+            theme.value = 'light'
         } else {
-            theme = 'dark'
+            theme.value = 'dark'
         }
     }
 
     return {
-        get theme() { return theme },
-        set theme(v: Theme) { theme = v },
+        get theme() { return theme.value },
+        set theme(v: Theme) { theme.value = v },
         toggle
     }
 }
