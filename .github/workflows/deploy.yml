@@ -20,12 +20,11 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          VITE_OUIJA_SERVER_URL: https://ouija-nzahuayy2a-uc.a.run.app:8080
 
       - name: Add Required Files
         run: echo "elicrow.com" > ./dist/CNAME && touch .nojekyll
 
+      # hack to get around routing problems with GitHub Pages
       - name: Copy index to 404
         run: cp ./dist/index.html ./dist/404.html
 
@@ -34,6 +33,7 @@ jobs:
         with:
           path: dist
 
+      # I often forget to work on the develop branch
       - name: Merge Deploy into Develop
         uses: devmasx/merge-branch@v1.3.1
         with:

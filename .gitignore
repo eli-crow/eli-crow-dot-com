@@ -1,9 +1,8 @@
 node_modules
 .DS_Store
-dist
-dist-ssr
-*.local
 .env*
 !.env*.sample
-
 cypress/videos
+.nuxt
+.output
+dist
