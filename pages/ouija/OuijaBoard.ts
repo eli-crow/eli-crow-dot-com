@@ -54,9 +54,7 @@ export class OuijaBoard {
   private brushScaleSpeedFactor = 0.06;
   private brushScaleAngleFactor = 0.4;
   private downAngle = 0.6 * Math.PI;
-  private socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-    import.meta.env.NUXT_OUIJA_SERVER_URL!
-  );
+  private socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
   private lastScale = 0;
   private recordedStroke: Stroke = {
     points: [],

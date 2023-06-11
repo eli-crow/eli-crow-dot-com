@@ -17,16 +17,19 @@
     "pixi.js": "^7.2.4",
     "postcss": "^8.4.5",
     "simplex-noise": "^3.0.1",
-    "socket.io-client": "^4.4.1",
+    "socket.io": "^4.6.2",
+    "socket.io-client": "^4.6.2",
     "tailwindcss": "^3.0.18",
     "three": "^0.137.5"
   },
   "devDependencies": {
+    "@nuxt/kit": "^3.5.3",
+    "@tailwindcss/aspect-ratio": "^0.4.0",
     "@types/debounce": "^1.2.1",
     "@types/gtag.js": "^0.0.10",
+    "@types/socket.io-client": "^3.0.0",
     "@types/three": "^0.137.0",
     "@vue/compiler-sfc": "^3.3.4",
-    "@tailwindcss/aspect-ratio": "^0.4.0",
     "cypress": "^9.3.1",
     "eslint-plugin-vue": "^8.4.0",
     "nuxt": "^3.5.3"
