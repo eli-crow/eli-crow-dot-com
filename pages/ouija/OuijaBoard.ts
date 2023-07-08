@@ -54,7 +54,7 @@ export class OuijaBoard {
   private brushScaleSpeedFactor = 0.06;
   private brushScaleAngleFactor = 0.4;
   private downAngle = 0.6 * Math.PI;
-  private socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
+  private socket: Socket<ServerToClientEvents, ClientToServerEvents>;
   private lastScale = 0;
   private recordedStroke: Stroke = {
     points: [],
@@ -69,12 +69,15 @@ export class OuijaBoard {
   constructor() {
     this.brushImage = new Image();
     this.brushImage.src = BRUSH_IMAGE_SRC;
+
     this.loaded = new Promise((resolve) => {
       this.brushImage.onload = () => resolve();
     });
 
+    this.socket = io();
+
     this.socket.on("connect", () => {
-      console.log("connected");
+      console.log(`connected at port ${this.socket.io.opts.port}`);
     });
 
     this.socket.onAny((event, ...args) => {

@@ -6,7 +6,9 @@ declare global {
 }
 
 export default defineNuxtPlugin((nuxtContext) => {
-  if (process.env.NUXT_DISABLE_ANALYTICS && typeof window !== "undefined") {
+  const config = useRuntimeConfig();
+
+  if (!config.public.disableAnalytics && typeof window !== "undefined") {
     window["ga-disable-G-VJ6EPKW4FM"] = true;
   }
 

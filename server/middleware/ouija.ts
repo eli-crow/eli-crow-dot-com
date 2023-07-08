@@ -1,5 +1,4 @@
-import { defineNuxtModule } from "@nuxt/kit";
-import type { Server as HTTPServer } from "http";
+import { type Server as HTTPServer } from "http";
 import { Server as SocketIoServer } from "socket.io";
 import { ClientToServerEvents, ServerToClientEvents } from "~/types/ouijaTypes";
 
@@ -16,10 +15,13 @@ class Ouija {
   }
 }
 
-export default defineNuxtModule({
-  setup: (_moduleOptions, nuxt) => {
-    nuxt.hook("listen", (server) => {
-      new Ouija(server);
-    });
-  },
+let ouija: Ouija | null = null;
+
+export default defineEventHandler((event) => {
+  //@ts-ignore
+  if (!ouija && event.node.req.socket?.server) {
+    //@ts-ignore
+    ouija = new Ouija(event.node.req.socket?.server);
+    console.log("Started socket.io server");
+  }
 });
