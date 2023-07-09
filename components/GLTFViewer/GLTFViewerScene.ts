@@ -55,9 +55,7 @@ export class GLTFViewerScene {
 
     if (this.options.clearColor)
       this.renderer.setClearColor(new THREE.Color(this.options.clearColor));
-    this.renderer.physicallyCorrectLights = true;
     this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.outputEncoding = THREE.sRGBEncoding;
 
     this.scene = new THREE.Scene();
   }

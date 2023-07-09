@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import * as THREE from 'three';
 import { reactive } from "vue";
 import GLTFViewer from '../components/GLTFViewer/GLTFViewer.vue';
 import InteractionHint from '../components/InteractionHint.vue';
@@ -7,6 +8,16 @@ import TheShowoffPage from '../components/TheShowoffPage.vue';
 const state = reactive({
   showHint: true
 })
+
+function afterInit(scene: THREE.Scene) {
+  // lost the source files, and they've since fixed the lighting issues in three, so just undoing the original hack
+  scene.traverse((obj) => {
+    if (obj instanceof THREE.Light) {
+      obj.intensity *= 0.25
+    }
+  })
+}
+
 </script>
 
 <template>
@@ -20,7 +31,8 @@ const state = reactive({
                 auto-rotate
                 rotatable
                 class="w-full h-full md:max-w-[40rem] md:max-h-[40rem] min-w-0 min-h-0"
-                @interacted="state.showHint = false" />
+                @interacted="state.showHint = false"
+                @after-init="afterInit" />
     <InteractionHint :visible="state.showHint" icon="threeD" class="absolute bottom-0">
       <span class="coarse:hidden">Drag</span>
       <span class="fine:hidden">Swipe</span> to rotate

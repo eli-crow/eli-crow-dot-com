@@ -1,5 +1,6 @@
 {
   "type": "module",
+  "private": true,
   "engines": {
     "node": "18.x.x"
   },
@@ -15,28 +16,28 @@
     "cypress:open": "cypress open"
   },
   "dependencies": {
-    "autoprefixer": "^10.4.2",
     "debounce": "^1.2.1",
-    "focus-trap": "^6.7.2",
-    "focus-trap-vue": "^3.2.1",
-    "gsap": "^3.9.1",
+    "focus-trap": "^7.5.2",
+    "focus-trap-vue": "^4.0.2",
+    "gsap": "^3.12.2",
     "pixi.js": "^7.2.4",
-    "postcss": "^8.4.5",
-    "simplex-noise": "^3.0.1",
-    "socket.io": "^4.6.2",
-    "socket.io-client": "^4.6.2",
-    "tailwindcss": "^3.0.18",
-    "three": "^0.137.5"
+    "simplex-noise": "^4.0.1",
+    "socket.io": "^4.7.1",
+    "socket.io-client": "^4.7.1",
+    "three": "^0.154.0"
   },
   "devDependencies": {
-    "@nuxt/kit": "^3.5.3",
-    "@tailwindcss/aspect-ratio": "^0.4.0",
+    "@nuxt/kit": "^3.6.2",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/debounce": "^1.2.1",
-    "@types/gtag.js": "^0.0.10",
-    "@types/three": "^0.137.0",
+    "@types/gtag.js": "^0.0.12",
+    "@types/three": "^0.153.0",
     "@vue/compiler-sfc": "^3.3.4",
-    "cypress": "^9.3.1",
-    "eslint-plugin-vue": "^8.4.0",
-    "nuxt": "^3.5.3"
+    "autoprefixer": "^10.4.14",
+    "cypress": "^12.17.0",
+    "eslint-plugin-vue": "^9.15.1",
+    "nuxt": "^3.6.2",
+    "postcss": "^8.4.25",
+    "tailwindcss": "^3.3.2"
   }
 }

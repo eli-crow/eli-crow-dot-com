@@ -12,7 +12,14 @@ const state = reactive({
 let road: THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>
 
 function afterInit(scene: THREE.Scene) {
-  const roadTexture = THREE.ImageUtils.loadTexture("/assets/road.webp")
+  // lost the source files, and they've since fixed the lighting issues in three, so just undoing the original hack
+  scene.traverse((obj) => {
+    if (obj instanceof THREE.Light) {
+      obj.intensity *= 0.008
+    }
+  })
+
+  const roadTexture = new THREE.TextureLoader().load("/assets/road.webp")
   roadTexture.wrapS = THREE.RepeatWrapping
   roadTexture.wrapT = THREE.RepeatWrapping
   const roadGeometery = new THREE.PlaneGeometry(4, 16)
