@@ -1,8 +1,5 @@
 name: Deploy
 
-env:
-  CNAME: elicrow.com
-
 on:
   push:
     branches:
