@@ -69,11 +69,6 @@ a {
   @apply text-teal hover:underline;
 }
 
-b,
-strong {
-  @apply font-light;
-}
-
 #overlay {
   position: fixed;
   inset: 0;

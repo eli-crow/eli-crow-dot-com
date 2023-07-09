@@ -14,7 +14,7 @@ import OuijaSVG from './ouija/OuijaSVG.vue'
     <header class="px-8 pb-12 sm:py-0">
       <div class="sm:sticky sm:top-12">
         <h1 class="font-light text-2xl leading-[1.42] text-gray-800">
-          <strong class="block">
+          <strong class="block font-light">
             Eli Crow is a
             <span class="block my-[0.7ch]">
               <span class="gooey-text">
