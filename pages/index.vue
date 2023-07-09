@@ -100,6 +100,7 @@ import OuijaSVG from './ouija/OuijaSVG.vue'
         </NuxtLink>
       </Card>
 
+      <!--
       <Card pressable link class="p-8 group" tag="article">
         <Icon class="text-[8rem] w-auto mb-10 self-start text-purple dark:text-gray-900"
               icon="bonesDotLive" />
@@ -109,6 +110,7 @@ import OuijaSVG from './ouija/OuijaSVG.vue'
           <Icon icon="externalLink">Visit Site</Icon>
         </a>
       </Card>
+      -->
 
       <LightboxCard title="Yikes Dog – Blender"
                     :images="[
