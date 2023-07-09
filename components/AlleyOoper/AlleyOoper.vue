@@ -124,7 +124,7 @@ function handleThumbDown(e: PointerEvent) {
           :stroke-dashoffset="progressDashOffset" />
 
     <!-- thumb -->
-    <circle class="fill-white drop-shadow-lg dark:drop-shadow-none dark:stroke-[2px] stroke-gray-100 active:!stroke-[hsla(209,73%,59%,1)]"
+    <circle class="fill-white drop-shadow-lg dark:drop-shadow-none dark:stroke-[2px] stroke-gray-100 active:!stroke-[hsla(209_73%_59%_1)]"
             :cx="thumbPosition[0]"
             :cy="thumbPosition[1]"
             :r="thumbRadius"

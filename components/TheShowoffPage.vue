@@ -52,7 +52,10 @@ onMounted(() => {
             </p>
         </header>
 
-        <main class="sticky top-6 flex flex-[1,0,20rem] flex-col order-first justify-center m-6 my-6 min-h-0 min-w-0 md:flex-shrink md:h-auto md:m-0 md:p-8 md:top-auto md:flex-grow md:bg-white md:dark:bg-gray-100 md:relative md:rounded-sm md:order-none">
+        <main class="
+        sticky top-6 flex flex-[1_0_24rem] flex-col order-first justify-center m-6 my-6 min-h-0 min-w-0 
+        md:flex-shrink md:h-auto md:m-0 md:p-8 md:top-auto md:flex-grow md:bg-white md:dark:bg-gray-100 md:relative md:rounded-sm md:order-none
+        ">
             <ClientOnly>
                 <Suspense>
                     <template #default>
