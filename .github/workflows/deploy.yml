@@ -1,4 +1,4 @@
-name: CI
+name: Deploy
 
 env:
   CNAME: elicrow.com
@@ -6,7 +6,7 @@ env:
 on:
   push:
     branches:
-      - deploy
+      - main
 
 jobs:
   build:
@@ -21,37 +21,22 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Add Required Files
-        run: echo "elicrow.com" > ./dist/CNAME && touch .nojekyll
-
-      # hack to get around routing problems with GitHub Pages
-      - name: Copy index to 404
-        run: cp ./dist/index.html ./dist/404.html
-
-      - name: Upload Github Pages Artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: dist
-
-      # I often forget to work on the develop branch
-      - name: Merge Deploy into Develop
-        uses: devmasx/merge-branch@v1.3.1
-        with:
-          type: now
-          from_branch: deploy
-          target_branch: develop
-          github_token: ${{ github.token }}
-
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      contents: "read"
+      id-token: "write"
+
     steps:
-      - name: Deploy to Github Pages
-        uses: actions/deploy-pages@v2
-        id: deployment
+      - uses: "actions/checkout@v3"
+
+      - id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.SERVICE_ACCOUNT_KEY }}"
+
+      - id: "deploy"
+        uses: "google-github-actions/deploy-appengine@v1"
+        with:
+          project_id: "elicrow-com"
