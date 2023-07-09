@@ -6,11 +6,15 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
       - name: Install Packages
         run: npm install
@@ -18,22 +22,12 @@ jobs:
       - name: Build
         run: npm run build
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      contents: "read"
-      id-token: "write"
-
-    steps:
-      - uses: "actions/checkout@v3"
-
-      - id: "auth"
-        uses: "google-github-actions/auth@v1"
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
         with:
           credentials_json: "${{ secrets.SERVICE_ACCOUNT_KEY }}"
 
-      - id: "deploy"
-        uses: "google-github-actions/deploy-appengine@v1"
+      - name: Deploy to App Engine
+        uses: google-github-actions/deploy-appengine@v1
         with:
           project_id: "elicrow-com"
