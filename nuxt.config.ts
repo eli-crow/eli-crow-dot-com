@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from "nuxt/config";
+import { markdown } from "./rollupPlugins";
 
 export default defineNuxtConfig({
   css: ["~/global.css"],
@@ -7,6 +8,15 @@ export default defineNuxtConfig({
       tailwindcss: {},
       autoprefixer: {},
     },
+  },
+  nitro: {
+    rollupConfig: {
+      //@ts-ignore
+      plugins: [markdown()],
+    },
+  },
+  vite: {
+    plugins: [markdown()],
   },
   runtimeConfig: {
     public: {
