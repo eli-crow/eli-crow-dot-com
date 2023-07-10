@@ -26,8 +26,10 @@ module.exports = {
         "Arial",
         "sans-serif",
       ],
+      mono: ['"Source Code Pro"', "monospace"],
     },
     fontSize: {
+      sm: "0.875rem",
       base: "1.0625rem",
       lg: "1.3125rem",
       xl: "1.6875rem",

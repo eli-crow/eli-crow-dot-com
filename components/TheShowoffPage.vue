@@ -38,8 +38,7 @@ onMounted(() => {
                           class="icon-button text-gray-800 flex items-center justify-center p-4 -m-4 -mr-2 text-lg">
                     <Icon icon="chevronLeft" />
                 </NuxtLink>
-                <h1
-                    class="font-light text-2xl text-gray-800 leading-[1.42] flex-1">{{ props.title }}</h1>
+                <h1 class="font-light text-2xl text-gray-800 leading-[1.42] flex-1">{{ props.title }}</h1>
             </div>
 
             <p class="!mb-3 gooey-text text-lg">

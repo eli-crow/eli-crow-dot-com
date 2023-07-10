@@ -14,7 +14,7 @@ import OuijaSVG from './ouija/OuijaSVG.vue'
     <header class="px-8 pb-12 sm:py-0">
       <div class="sm:sticky sm:top-12">
         <h1 class="font-light text-2xl leading-[1.42] text-gray-800">
-          <strong class="block">
+          <strong class="block font-light">
             Eli Crow is a
             <span class="block my-[0.7ch]">
               <span class="gooey-text">
@@ -36,6 +36,17 @@ import OuijaSVG from './ouija/OuijaSVG.vue'
 
     <main class="card-group">
       <CrowCard :style="{ gridColumn: '1 / -2' }" />
+
+      <Card pressable link tag="article">
+        <div class="p-8">
+          <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">How to Design and Build Shared Element Transitions</h2>
+          <p><time>2023</time></p>
+        </div>
+        <NuxtLink to="/view-transitions" class="card-icon flex items-center" title="Read Article">
+          <span class="mr-3 sm:hidden">Read</span>
+          <Icon icon="blog" />
+        </NuxtLink>
+      </Card>
 
       <Card pressable link tag="article">
         <div class="relative p-8 pb-0 pr-0 cursor-default">
@@ -100,6 +111,7 @@ import OuijaSVG from './ouija/OuijaSVG.vue'
         </NuxtLink>
       </Card>
 
+      <!--
       <Card pressable link class="p-8 group" tag="article">
         <Icon class="text-[8rem] w-auto mb-10 self-start text-purple dark:text-gray-900"
               icon="bonesDotLive" />
@@ -109,6 +121,7 @@ import OuijaSVG from './ouija/OuijaSVG.vue'
           <Icon icon="externalLink">Visit Site</Icon>
         </a>
       </Card>
+      -->
 
       <LightboxCard title="Yikes Dog – Blender"
                     :images="[

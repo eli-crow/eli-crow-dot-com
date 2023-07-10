@@ -52,9 +52,12 @@ export class GLTFViewerScene {
       antialias: true,
       alpha: !(this.options.environmentIsBackground || this.options.clearColor),
     });
+    this.renderer.useLegacyLights = false;
 
-    if (this.options.clearColor)
+    if (this.options.clearColor) {
       this.renderer.setClearColor(new THREE.Color(this.options.clearColor));
+    }
+
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
     this.scene = new THREE.Scene();

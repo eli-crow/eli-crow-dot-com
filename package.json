@@ -16,10 +16,12 @@
     "cypress:open": "cypress open"
   },
   "dependencies": {
+    "@types/he": "^1.2.0",
     "debounce": "^1.2.1",
     "focus-trap": "^7.5.2",
     "focus-trap-vue": "^4.0.2",
     "gsap": "^3.12.2",
+    "highlight.js": "^11.8.0",
     "pixi.js": "^7.2.4",
     "simplex-noise": "^4.0.1",
     "socket.io": "^4.7.1",
@@ -28,16 +30,21 @@
   },
   "devDependencies": {
     "@nuxt/kit": "^3.6.2",
+    "@rollup/pluginutils": "^5.0.2",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/debounce": "^1.2.1",
     "@types/gtag.js": "^0.0.12",
+    "@types/marked": "^5.0.0",
     "@types/three": "^0.153.0",
     "@vue/compiler-sfc": "^3.3.4",
     "autoprefixer": "^10.4.14",
     "cypress": "^12.17.0",
     "eslint-plugin-vue": "^9.15.1",
+    "marked": "^5.1.1",
+    "marked-highlight": "^2.0.1",
     "nuxt": "^3.6.2",
     "postcss": "^8.4.25",
+    "postcss-nesting": "^12.0.0",
     "tailwindcss": "^3.3.2"
   }
 }
