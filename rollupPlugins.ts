@@ -4,10 +4,19 @@ import { marked } from "marked";
 const FILE_MATCH_REGEX = /.md$/;
 
 marked.setOptions({
+  mangle: false,
+  headerIds: false,
   highlight(code, lang) {
     const language = hljs.getLanguage(lang) ? lang : "plaintext";
     const highlighted = hljs.highlight(code, { language }).value;
     return highlighted;
+  },
+});
+marked.use({
+  renderer: {
+    image(href, title, text) {
+      return `<figure><img src="${href}" alt="${text}" title="${title}" class="rounded-lg"></figure>`;
+    },
   },
 });
 

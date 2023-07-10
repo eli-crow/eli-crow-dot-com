@@ -1,6 +1,6 @@
 Shared Element Transitions are animations that move elements from one screen to another within an app. They help users understand how the interface changes when navigating between screens. They are particularly effective when users are browsing diverse content and frequently switching back and forth between screens. These transitions can be simple to design, prototype, and build in code.
 
-## Design It
+## Design the Transition
 
 As with all nuanced or uncommon interactions, we want to start in design so we can visualize what we want to happen before pulling our hair out in code. Figma’s Smart Animate feature is perfect for prototyping shared element transitions.
 
@@ -24,7 +24,7 @@ Here’s a version that is clearer and less distracting, keeping users focused o
 
 - Consider creating a separate prototype specifically for demoing this transition. It can be difficult to make Smart Animate work with components, AutoLayout, and other Figma features since the layer structure and naming has to match exactly.
 
-## Build It
+## Build the Transition
 
 You might be thinking, how can I export my awesome transition from Figma? Unfortunately there isn’t a reliable way to go from Figma to code on anything but the simplest projects. However, Implementing shared element transitions can be straightforward. Most platforms provide an API for this purpose. We’ll take a brief look at how to implement this transition style on each.
 
@@ -231,7 +231,9 @@ Shared Element Transitions in Android can be implemented in quite a few ways. It
 
 #### Set up Navigation
 
-First, set up your navigation graph. A navigation graph describes how users can navigate between screens in your app. I have two screens that users can navigate between, a list view and a detail view. The navigation graph looks like this in Android Studio:![nav_graph.xml in Android studio](https://sep.imgix.net/wp-content/uploads/2023/06/29112752/android-nav-graph.jpg)
+First, set up your navigation graph. A navigation graph describes how users can navigate between screens in your app. I have two screens that users can navigate between, a list view and a detail view. The navigation graph looks like this in Android Studio:
+
+![nav_graph.xml in Android studio](https://sep.imgix.net/wp-content/uploads/2023/06/29112752/android-nav-graph.jpg)
 
 #### The Article Class
 

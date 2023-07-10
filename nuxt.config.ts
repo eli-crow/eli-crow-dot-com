@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   css: ["~/global.css"],
   postcss: {
     plugins: {
+      "tailwindcss/nesting": "postcss-nesting",
       tailwindcss: {},
       autoprefixer: {},
     },

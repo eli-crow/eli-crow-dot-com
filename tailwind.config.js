@@ -7,10 +7,7 @@ module.exports = {
     "./nuxt.config.{js,ts}",
   ],
   darkMode: "class",
-  plugins: [
-    require("@tailwindcss/aspect-ratio"),
-    require("@tailwindcss/typography"),
-  ],
+  plugins: [require("@tailwindcss/aspect-ratio")],
   theme: {
     extend: {
       screens: {

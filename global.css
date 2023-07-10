@@ -75,6 +75,144 @@ a {
   z-index: 1000;
 }
 
+.prose {
+  @apply text-gray-700;
+
+  @property --m {
+    syntax: "<length>";
+    initial-value: 1rem;
+    inherits: false;
+  }
+
+  @property --m-start {
+    syntax: "<length>";
+    initial-value: 1rem;
+    inherits: false;
+  }
+
+  @property --m-end {
+    syntax: "<length>";
+    initial-value: 1rem;
+    inherits: false;
+  }
+
+  /* blocks */
+  div,
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  ul,
+  ol,
+  li,
+  dl,
+  dt,
+  dd,
+  blockquote,
+  pre,
+  hr,
+  table,
+  tr,
+  td,
+  th,
+  thead,
+  tbody,
+  tfoot,
+  figure,
+  form {
+    &:not(:first-child) {
+      margin-block-start: var(--m, var(--m-start, 1rem));
+    }
+    &:not(:last-child) {
+      margin-block-end: var(--m, var(--m-end, 1rem));
+    }
+  }
+
+  img {
+    @apply mx-auto;
+  }
+
+  figure {
+    --m: 2rem;
+  }
+
+  /* code */
+
+  pre {
+    --m: 2rem;
+    @apply text-sm rounded-lg bg-gray-100 px-5 py-4 overflow-x-auto;
+  }
+
+  code:not(pre code) {
+    @apply font-mono text-gray-900 rounded bg-gray-200 pt-0.5 pb-0.5 px-[0.75ch] text-sm;
+  }
+
+  /* inline */
+
+  b,
+  strong {
+    @apply font-semibold text-gray-800;
+  }
+
+  /* lists */
+
+  ul,
+  ol {
+    --m: 1.5rem;
+  }
+
+  ul {
+    list-style: disc;
+  }
+
+  ol {
+    list-style: decimal;
+  }
+
+  /* headings */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-gray-800 font-semibold;
+    --m-start: 1.5em;
+    --m-end: 0.3333333em;
+  }
+
+  h2 {
+    @apply text-2xl leading-tight;
+  }
+
+  h3 {
+    @apply text-xl leading-snug;
+  }
+
+  h4 {
+    @apply text-lg;
+  }
+
+  h5 {
+    @apply text-base;
+  }
+
+  h6 {
+    @apply text-base;
+  }
+
+  /* misc */
+
+  hr {
+    @apply border-b-2 border-gray-300;
+    --m: 4rem;
+  }
+}
+
 @layer transitions {
   @keyframes fade-in {
     from {
