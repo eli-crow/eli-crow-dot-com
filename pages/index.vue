@@ -38,6 +38,17 @@ import OuijaSVG from './ouija/OuijaSVG.vue'
       <CrowCard :style="{ gridColumn: '1 / -2' }" />
 
       <Card pressable link tag="article">
+        <div class="p-8">
+          <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">How to Design and Build Shared Element Transitions</h2>
+          <p><time>2023</time></p>
+        </div>
+        <NuxtLink to="/view-transitions" class="card-icon flex items-center" title="Read Article">
+          <span class="mr-3 sm:hidden">Read</span>
+          <Icon icon="blog" />
+        </NuxtLink>
+      </Card>
+
+      <Card pressable link tag="article">
         <div class="relative p-8 pb-0 pr-0 cursor-default">
           <img class="object-contain object-right h-72 ml-[-2rem] max-w-none w-[calc(100%+2rem)]"
                src="/assets/bead-maze-thumb.webp"
