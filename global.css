@@ -76,7 +76,7 @@ a {
 }
 
 .prose {
-  @apply text-gray-700;
+  @apply text-gray-800;
 
   @property --m {
     syntax: "<length>";
@@ -193,7 +193,7 @@ a {
   h4,
   h5,
   h6 {
-    @apply text-gray-800 font-semibold;
+    @apply text-gray-900 font-semibold;
     --m-start: 1.5em;
     --m-end: 0.3333333em;
   }
