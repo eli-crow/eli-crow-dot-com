@@ -5,16 +5,6 @@ const props = defineProps<{
     title: string,
     time: string,
 }>();
-
-// const intersectionObserver = new IntersectionObserver((entries, observer) => {
-//     for (const entry of entries) {
-//         if (entry.isIntersecting) {
-//         }
-//     }
-// })
-// onMounted(() => {
-//     intersectionObserver = 
-// })
 </script>
 
 <template>
