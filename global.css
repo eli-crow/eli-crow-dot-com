@@ -122,6 +122,8 @@ a {
   tbody,
   tfoot,
   figure,
+  video,
+  details,
   form {
     &:not(:first-child) {
       margin-block-start: var(--m, var(--m-start, 1rem));
@@ -135,8 +137,18 @@ a {
     @apply mx-auto;
   }
 
+  video {
+    @apply mx-auto;
+    --m: 2rem;
+  }
+
   figure {
     --m: 2rem;
+
+    img,
+    video {
+      height: 28rem;
+    }
   }
 
   /* code */
@@ -157,11 +169,10 @@ a {
     @apply font-semibold text-gray-800;
   }
 
-  /* lists */
-
   ul,
   ol {
     --m: 1.5rem;
+    padding-inline-start: 1.5rem;
   }
 
   ul {
@@ -172,7 +183,9 @@ a {
     list-style: decimal;
   }
 
-  /* headings */
+  li {
+    --m: 1rem;
+  }
 
   h1,
   h2,

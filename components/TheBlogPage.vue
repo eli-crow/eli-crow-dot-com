@@ -4,6 +4,16 @@ import "highlight.js/styles/github-dark.css";
 const props = defineProps<{
     title: string,
 }>();
+
+// const intersectionObserver = new IntersectionObserver((entries, observer) => {
+//     for (const entry of entries) {
+//         if (entry.isIntersecting) {
+//         }
+//     }
+// })
+// onMounted(() => {
+//     intersectionObserver = 
+// })
 </script>
 
 <template>
