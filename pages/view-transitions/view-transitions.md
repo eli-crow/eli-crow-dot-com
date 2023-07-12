@@ -8,7 +8,9 @@ As with all nuanced or uncommon interactions, we want to start in design so we c
 1.  Add a “Navigate to” interaction between the elements
 1.  Set the animation to “Smart Animate”
 
-![A slow bouncy Shared Element Transition with elements moving in different directions](https://sep.imgix.net/wp-content/uploads/2023/06/29110607/transition-design-before.gif)
+<figure>
+    <video data-lazy preload="medadata" src="/blog/view-transition-design-before.mp4" muted autoplay loop playsinline></video>
+</figure>
 
 That was easy! However, there are a few changes we can make to improve this transition
 
@@ -18,7 +20,9 @@ That was easy! However, there are a few changes we can make to improve this tran
 
 Here’s a version that is clearer and less distracting, keeping users focused on the content.
 
-![A smooth and and quick Shared Element Transition with elements with the blog title and image moving in the same direction.](https://sep.imgix.net/wp-content/uploads/2023/06/29111346/transition-design-after-1.gif)
+<figure>
+    <video data-lazy preload="medadata" src="/blog/view-transition-design-after.mp4" muted autoplay loop playsinline></video>
+</figure>
 
 ### Tips
 
@@ -88,7 +92,9 @@ document.startViewTransition(() => changeTheDocumentSomehow());
 
 Now, when we click on the article:
 
-![Website showing a blog article expanding using the Web Transitions API to achieve a Shared Element Transition](https://sep.imgix.net/wp-content/uploads/2023/06/29132458/transition-web.gif)
+<figure>
+    <video data-lazy preload="medadata" src="/blog/view-transition-web.mp4" muted autoplay loop playsinline></video>
+</figure>
 
 That’s it! As long as the shared elements share the same unique `view-transition-name` on both screens, they will transition smoothly. It’s not even necessary for the screens to have a similar structure. If desired, you can [customize the transition](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API#customizing_your_animations), but the default animation is suitable for many use cases.
 
@@ -111,7 +117,9 @@ View Transitions are simple, performant, and concise. They are low-risk [progres
 - Give transitioned images a similar aspect ratio in both views. The default animation for view transitions is more of a cross-fade than a blend. Matching aspect ratios will look smoother during the transition.
 - For smoother text transitions, consider utilizing the CSS properties `width: max-content;` and `max-width: 100%;` Depending on the length and style of text, this approach can result in a more seamless blend. Additionally, animating text that has the same or similar number of lines in both views will further contribute to a smoother and more cohesive transition.
 
-### iOS and Other Apple Platforms
+---
+
+### Apple Platforms (iOS, Mac, etc.)
 
 A SwiftUI View Modifier called [matchedGeometryEffect](https://www.hackingwithswift.com/quick-start/swiftui/how-to-synchronize-animations-from-one-view-to-another-with-matchedgeometryeffect) provides a process for animating between views very similar to the web’s View Transitions API. It’s a declarative API that is flexible in terms of layout structure.
 
@@ -131,7 +139,7 @@ class Article: Identifiable {
 }
 ```
 
-Note `titleId` and `imageId`. These will give us ids for shared elements that are unique per article. This is needed to distinguish between articles.
+Note `titleId` and `imageId`. These will give us ids for shared elements that are unique per article. This is needed to distinguish between articles during the transition.
 
 #### Create The List and Detail Views
 
@@ -210,7 +218,9 @@ case .normal:
 
 Now, when we tap on the article:
 
-![iPhone showing a blog article expanding in a Shared Element Transition](https://sep.imgix.net/wp-content/uploads/2023/06/29132829/transition-mobile.gif)
+<figure>
+    <video data-lazy preload="medadata" src="/blog/view-transition-mobile.mp4" muted autoplay loop playsinline></video>
+</figure>
 
 In theory, the process is concise and straightforward. However, in practice, these transitions can require lots of trial-and-error to get right, particularly when combining them with other SwiftUI modifiers like `.edgesIgnoringSafeArea`. If you intend to use this API, I suggest starting your experimentation in code before choosing a design. It could save you a lot of frustration.
 

@@ -38,6 +38,7 @@ import OuijaSVG from './ouija/OuijaSVG.vue'
       <CrowCard :style="{ gridColumn: '1 / -2' }" />
 
       <Card pressable link tag="article">
+        <video preload="metadata" muted autoplay loop src="/blog/view-transition-design-after.mp4" />
         <div class="p-8">
           <h2 class="text-xl leading-snug font-light text-gray-900 mb-2">How to Design and Build Shared Element Transitions</h2>
           <p><time>2023</time></p>

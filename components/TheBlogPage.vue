@@ -3,18 +3,27 @@ import "highlight.js/styles/github-dark.css";
 
 const props = defineProps<{
     title: string,
+    time: string,
 }>();
 </script>
 
 <template>
-    <header class="max-w-3xl px-5 pt-12 pb-10 w-full font-light">
-        <div class="flex text-3xl items-start text-gray-800">
+    <header class="max-w-3xl px-5 pt-12 pb-10 w-full font-light text-gray-800">
+        <div class="flex items-start">
             <NuxtLink to="/"
                       title="Back to Home"
-                      class="icon-button flex p-4 text-[inherit] -mx-4 mr-3 text-lg hover:bg-gray-100 rounded">
-                <Icon icon="chevronLeft" />
+                      class="icon-button flex p-4 -mx-4 mr-3 hover:bg-gray-100 rounded text-gray-800">
+                <Icon icon="chevronLeft" class="h-6" />
             </NuxtLink>
-            <h1 class="leading-tight">{{ title }}</h1>
+            <div>
+                <h1 class="leading-tight text-3xl text-teal mb-4">{{ title }}</h1>
+                <div class="flex">
+                    <p class="mb-2">
+                        <Icon icon="clock">Created:</Icon>&nbsp;
+                        <time>{{ props.time }}</time>
+                    </p>
+                </div>
+            </div>
         </div>
     </header>
 
