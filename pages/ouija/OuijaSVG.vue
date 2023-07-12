@@ -1,9 +1,8 @@
 <template>
     <svg
-        viewBox="-40 -40 801 485.05"
-        preserveAspectRatio="xMidYMid meet"
-        class="pointer-events-none select-none"
-    >
+         viewBox="-40 -40 801 485.05"
+         preserveAspectRatio="xMidYMid meet"
+         class="pointer-events-none select-none">
         <g font-size="67" class="font-sans font-bold" fill="currentColor">
             <text transform="matrix(0.93, -0.36, 0.36, 0.93, 25.66, 194.55)">A</text>
             <text transform="translate(78.47 174.91) rotate(-16.41)">B</text>
@@ -33,7 +32,8 @@
             <text transform="translate(660.9 277.21) rotate(24.19)">Z</text>
         </g>
         <g class="font-sans font-bold" font-size="41.41" fill="currentColor">
-            <text class="tracking-[0.5em]" transform="translate(146.43 305.21)">1234567890</text>
+            <text class="tracking-[0.5em]" transform="translate(146.43 305.21)">12345</text>
+            <text class="tracking-[0.5em]" transform="translate(366 305.21)">67890</text>
             <text class="tracking-[0.15em]" transform="translate(236.01 401.88)">GOOD BYE</text>
             <text class="tracking-[0.15em]" transform="translate(191.61 31.92)">YES</text>
             <text class="tracking-[0.15em]" transform="translate(458.13 31.92)">NO</text>
