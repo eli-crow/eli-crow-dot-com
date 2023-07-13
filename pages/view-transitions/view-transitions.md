@@ -1,3 +1,7 @@
+This article was [originally posted](https://sep.com/blog/shared-element-transitions/) on sep.com
+
+## What is a Shared Element Transition?
+
 Shared Element Transitions are animations that move elements from one screen to another within an app. They help users understand how the interface changes when navigating between screens. They are particularly effective when users are browsing diverse content and frequently switching back and forth between screens. These transitions can be simple to design, prototype, and build in code.
 
 ## Design the Transition
